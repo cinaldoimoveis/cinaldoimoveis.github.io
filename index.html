@@ -28,29 +28,31 @@
   <meta name="twitter:image" content="https://cinaldoimoveis.com.br/assets/og-cinaldo.png" />
 
   <style>
-    <style>
-  /* Fundo branco apenas na seção de imóveis */
-  #imoveis {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 40px 0;
-    box-shadow: 0 0 20px rgba(0,0,0,0.04);
+  /* Fundo geral suave */
+  :root{
+    --bg:#f8f3ec;      /* bege suave */
+    --fg:#111;
+    --muted:#555;
+    --accent:#c7a24b;
+    --card:#f3eee8;    /* cor dos cartões padrão */
+    --line:#eaeaea;
   }
 
-  /* Faz o container não “colar” nas bordas do fundo bege */
-  #imoveis .container {
-    background: #ffffff;
+  /* Fundo branco apenas na seção de imóveis */
+  #imoveis {
+    background:#ffffff;
+    border-radius:20px;
+    padding:40px 0;
+    box-shadow:0 0 20px rgba(0,0,0,0.04);
+  }
+
+  /* Cards dos imóveis sempre brancos */
+  #imoveis .card {
+    background:#ffffff;
+    box-shadow:0 1px 0 rgba(0,0,0,.04),0 6px 24px rgba(0,0,0,.04);
   }
 </style>
 
-    :root{
-  --bg:#f8f3ec;
-  --fg:#111;
-  --muted:#555;
-  --accent:#c7a24b;
-  --card:#f3eee8;    /* cartões um tom mais escuro */
-  --line:#eaeaea;
-}
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--fg)}
