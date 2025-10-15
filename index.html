@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cinaldo Imóveis – Linhares/ES</title>
+  <meta name="description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#ffffff;--fg:#111;--muted:#555;--accent:#c7a24b;--card:#f7f7f7;--line:#eaeaea;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--fg)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(150%) blur(8px);border-bottom:1px solid var(--line)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px}
+    .brand-logo{width:36px;height:36px;border-radius:10px;background:#000;display:grid;place-items:center;color:#fff;font-weight:800}
+    .brand small{display:block;font-weight:600;font-size:12px;color:var(--muted);letter-spacing:.4px}
+    .menu{display:flex;gap:18px}
+    .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--fg);transition:.2s ease-in-out;font-weight:600}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-whats{background:#25D366;border-color:#25D366;color:#0b3c1b}
+    .hero{padding:64px 0 32px;border-bottom:1px solid var(--line)}
+    .hero-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center}
+    @media (max-width:900px){.hero-inner{grid-template-columns:1fr}}
+    .title{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0 0 8px}
+    .subtitle{color:var(--muted);font-size:clamp(14px,2.2vw,16px);margin:0 0 20px}
+    .call{display:flex;gap:12px;flex-wrap:wrap}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);padding:8px 12px;border-radius:999px;font-size:13px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--bg);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+    .thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#111,#333);display:grid;place-items:center;color:#fff;font-weight:800;font-size:18px}
+    .content{padding:16px}
+    .price{font-weight:800;font-size:18px;margin:10px 0}
+    .ul{margin:8px 0 0;padding:0 0 0 18px;color:#333}
+    .pill{display:inline-block;background:var(--card);border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:#444}
+    section{padding:28px 0}
+    footer{border-top:1px solid var(--line);padding:28px 0;color:#666}
+    .accent{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="#inicio" class="brand">
+        <div class="brand-logo">CI</div>
+        <div>
+          Cinaldo Imóveis
+          <small>Linhares – ES</small>
+        </div>
+      </a>
+      <nav class="menu">
+        <a href="#imoveis">Imóveis</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+        <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener">💬 WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio" class="hero">
+    <div class="container hero-inner">
+      <div>
+        <div class="badge">🏡 Imóveis selecionados • Negócios com transparência</div>
+        <h1 class="title">Seu novo imóvel em <span class="accent">Linhares – ES</span></h1>
+        <p class="subtitle">Atendimento direto com o corretor. Segurança, clareza e as melhores oportunidades da região.</p>
+        <div class="call">
+          <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20um%20im%C3%B3vel%20em%20Linhares." target="_blank" rel="noopener">Fale agora no WhatsApp</a>
+          <a class="btn" href="#imoveis">Ver imóveis em destaque</a>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="thumb">Cinaldo Imóveis</div>
+          <div class="content">
+            <strong>Destaques de hoje</strong>
+            <ul class="ul">
+              <li>Casa pronta em Alphaville</li>
+              <li>Casa no Jardim Laguna</li>
+              <li>Lote comercial em Alphaville</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="imoveis">
+    <div class="container">
+      <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="thumb">Alphaville – Casa</div>
+          <div class="content">
+            <h3 style="margin:0 0 6px">Casa pronta em Alphaville – Linhares/ES</h3>
+            <div class="pill">3 quartos (2 suítes) • 217 m²</div>
+            <p class="price">R$ 1.900.000,00</p>
+            <ul class="ul">
+              <li>Sala integrada à cozinha, área gourmet</li>
+              <li>Quintal com espaço para piscina</li>
+              <li>Terreno 420 m² • Sol da manhã</li>
+            </ul>
+            <p style="margin-top:12px">
+              <a class="btn" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20Casa%20em%20Alphaville." target="_blank" rel="noopener">Quero mais detalhes</a>
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb">Jardim Laguna – Casa</div>
+          <div class="content">
+            <h3 style="margin:0 0 6px">Casa Linear no Jardim Laguna 2 – Linhares/ES</h3>
+            <div class="pill">2 quartos (1 suíte) • 100 m²</div>
+            <p class="price">R$ 700.000,00</p>
+            <ul class="ul">
+              <li>Lote 380 m² (10m x 38m)</li>
+              <li>Casa de laje coberta com telhas coloniais</li>
+              <li>Ampla varanda frontal e área de serviço</li>
+              <li>Toda gradeada, inclusive portas de acesso</li>
+              <li>Toldos nas janelas expostas</li>
+              <li>Área livre na frente: 190 m²</li>
+              <li>Portão de acesso de 4,7m</li>
+              <li>Bairro tranquilo e seguro</li>
+              <li>Ônibus circular passa na porta</li>
+              <li>Próximo a padarias, materiais de construção, restaurantes e feiras</li>
+            </ul>
+            <p style="margin-top:12px">
+              <a class="btn" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20Casa%20Linear%20no%20Jardim%20Laguna." target="_blank" rel="noopener">Quero mais detalhes</a>
+            </p>
+            <small class="muted" style="color:#777">Venda somente à vista. Sem financiamento, sem permuta e sem aluguel.</small>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb">Alphaville – Lote Comercial</div>
+          <div class="content">
+            <h3 style="margin:0 0 6px">Lote comercial em Terras Alphaville – Linhares/ES</h3>
+            <div class="pill">437,19 m² • Sol da manhã</div>
+            <p class="price">R$ 200.000,00 <span class="pill" style="margin-left:8px">abaixo do valor de mercado</span></p>
+            <ul class="ul">
+              <li>Dimensões: 13,52m (frente) × 13,53m (fundo) × 32,01m (lado esquerdo) × 32,59m (lado direito)</li>
+              <li>Área Total: 437,19 m²</li>
+              <li>Lote exclusivamente comercial (não permite residências)</li>
+            </ul>
+            <p style="margin-top:12px">
+              <a class="btn" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20Lote%20comercial%20em%20Terras%20Alphaville." target="_blank" rel="noopener">Quero mais detalhes</a>
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre">
+    <div class="container">
+      <h2 class="title" style="font-size:28px">Sobre</h2>
+      <p style="color:#444;max-width:70ch">Sou <strong>Cinaldo O. Ferreira</strong>, corretor de imóveis em Linhares – ES. Trabalho com foco total em segurança, clareza e atendimento direto. Aqui você encontra imóveis selecionados, com todas as informações que importam para decidir com tranquilidade.</p>
+    </div>
+  </section>
+
+  <section id="contato">
+    <div class="container">
+      <h2 class="title" style="font-size:28px">Contato</h2>
+      <p style="margin:8px 0">📲 <strong>WhatsApp:</strong> <a href="https://wa.me/5527999567000" target="_blank" rel="noopener">(27) 99956-7000</a></p>
+      <p style="margin:8px 0">✉️ <strong>E-mail:</strong> <a href="mailto:cinaldo@cinaldoimoveis.com.br">cinaldo@cinaldoimoveis.com.br</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>© <span id="y"></span> Cinaldo Imóveis • Linhares – ES</div>
+      <div style="color:#777">Negócios com transparência e segurança</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
