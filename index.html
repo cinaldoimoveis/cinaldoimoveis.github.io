@@ -5,9 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cinaldo Imóveis – Linhares/ES</title>
   <meta name="description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Open Graph / WhatsApp / Facebook -->
+  <meta property="og:title" content="Cinaldo Imóveis – Linhares/ES" />
+  <meta property="og:description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
+  <meta property="og:type" content="website" />
+  <!-- Se já tiver domínio, coloque a URL final abaixo -->
+  <meta property="og:url" content="https://cinaldoimoveis.com.br/" />
+  <meta property="og:image" content="https://cinaldoimoveis.com.br/assets/og-cinaldo.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cinaldo Imóveis – Linhares/ES" />
+  <meta name="twitter:description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
+  <meta name="twitter:image" content="https://cinaldoimoveis.com.br/assets/og-cinaldo.png" />
+
   <style>
     :root{
       --bg:#ffffff;--fg:#111;--muted:#555;--accent:#c7a24b;--card:#f7f7f7;--line:#eaeaea;
@@ -97,7 +115,6 @@
   <header>
     <div class="container nav">
       <a href="#inicio" class="brand">
-        <!-- Logo real em SVG -->
         <img class="brand-logo-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
         <div>
           Cinaldo Imóveis
@@ -126,26 +143,26 @@
       </div>
       <div>
         <div class="card">
-          <div class="thumb"><strong style="opacity:.9">Cinaldo Imóveis</strong></div>
+          <!-- cabe uma imagem aqui, mantive com logo para dar presença de marca -->
+          <div class="thumb">
+            <img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis" style="object-fit:contain;background:#fff">
+          </div>
           <div class="content">
             <strong>Destaques de hoje</strong>
-
-            <!-- Mini cards com imagem -->
             <div class="mini-list">
-              <a class="mini-item" href="#galeria-alphaville">
+              <a class="mini-item" href="#casa-alphaville">
                 <img src="assets/alphaville-casa-01.jpeg" alt="Alphaville">
-                <b>Casa pronta em Alphaville</b>
+                <b>Casa 3Q (2 Suítes) • Alphaville</b>
               </a>
               <a class="mini-item" href="#laguna">
                 <img src="assets/casa-rua-italia-01.jpeg" alt="Jardim Laguna 2">
-                <b>Casa Linear • Jardim Laguna 2</b>
+                <b>Casa 2Q (1 Suíte) • Jardim Laguna 2</b>
               </a>
               <a class="mini-item" href="#lote-alphaville">
                 <img src="assets/lote-alphaville-01.jpeg" alt="Lote Comercial Alphaville">
-                <b>Lote comercial em Alphaville</b>
+                <b>Lote Comercial • Alphaville</b>
               </a>
             </div>
-
           </div>
         </div>
       </div>
@@ -156,65 +173,59 @@
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
       <div class="grid">
-        <!-- 1) Casa pronta em Alphaville -->
+        <!-- Casa em Alphaville -->
         <article class="card" id="casa-alphaville">
           <div class="thumb">
-            <img class="thumb-img" src="assets/alphaville-casa-01.jpeg" alt="Casa pronta em Alphaville, Linhares/ES" loading="lazy">
+            <img class="thumb-img" src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy">
           </div>
           <div class="content">
-            <h3 style="margin:0 0 6px">Casa pronta em Alphaville – Linhares/ES</h3>
-            <div class="pill">3 quartos (2 suítes) • 217 m²</div>
-            <p class="price">R$ 1.900.000,00</p>
+            <h3 style="margin:0 0 6px">Casa 3Q (2 Suítes) – Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+              <span class="pill">217 m² const.</span>
+              <span class="pill">Lote 420 m²</span>
+              <span class="pill">3Q • 2 suítes</span>
+              <span class="pill">2 vagas</span>
+              <span class="pill">Sol da manhã</span>
+            </div>
+            <p class="price">R$ 1.9 milhões</p>
             <ul class="ul">
-              <li>Sala integrada à cozinha, área gourmet</li>
+              <li>Área gourmet integrada</li>
               <li>Quintal com espaço para piscina</li>
-              <li>Terreno 420 m² • Sol da manhã</li>
             </ul>
             <p style="margin-top:12px">
               <a class="btn" href="#galeria-alphaville">Ver fotos</a>
-              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20Casa%20em%20Alphaville." target="_blank" rel="noopener">Agendar visita</a>
+              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20na%20Casa%20em%20Alphaville" target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
         </article>
 
-        <!-- 2) Casa no Jardim Laguna (com fotos e botão) -->
+        <!-- Casa Linear – Jardim Laguna 2 (com fotos no modal) -->
         <article class="card" id="laguna">
           <div class="thumb">
-            <!-- usa a 01 como capa -->
             <img class="thumb-img" src="assets/casa-rua-italia-01.jpeg" alt="Casa Linear - Jardim Laguna 2, Linhares/ES" loading="lazy">
           </div>
           <div class="content">
-            <h3 style="margin:0 0 6px">Vendo Casa Linear - 2 Quartos (1 Suíte) - Jardim Laguna 2 - Linhares/ES</h3>
-            <div class="pill">2 quartos (1 suíte) • 100 m²</div>
+            <h3 style="margin:0 0 6px">Casa Linear 2Q (1 Suíte) – Jardim Laguna 2</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+              <span class="pill">100 m² const.</span>
+              <span class="pill">Lote 380 m²</span>
+              <span class="pill">2Q • 1 suíte</span>
+              <span class="pill">1 vaga coberta</span>
+            </div>
             <p class="price">R$ 700.000,00</p>
-
-            <p>Casa pronta para morar.</p>
             <ul class="ul">
-              <li>Área construída: 100 m²</li>
-              <li>Lote: 380 m² (10 m de frente/fundo e 38 m nas laterais)</li>
-              <li>Casa com 2 Quartos (sendo 1 suíte)</li>
-              <li>Casa de laje, coberta com telhas coloniais</li>
-              <li>Ampla varanda na frente e na área de serviço</li>
-              <li>Toda gradeada (inclusive portas de acesso), toldos nas janelas expostas</li>
-              <li>Área livre na frente: 190 m²</li>
-              <li>Portão de acesso: 4,7 m</li>
+              <li>Laje + telha colonial</li>
+              <li>Varanda frontal e área de serviço</li>
+              <li>Gradeada + toldos nas janelas</li>
             </ul>
-
-            <h4 style="margin:14px 0 6px;font-size:14px">Destaques da localização</h4>
-            <ul class="ul">
-              <li>Bairro tranquilo e seguro</li>
-              <li>Ônibus circular passa na porta</li>
-              <li>Próximo a padarias, material de construção, restaurantes, lanchonetes e feiras itinerantes</li>
-              <li>Fácil acesso a praças e outros pontos de lazer</li>
-            </ul>
-
-            <small class="muted" style="color:#777;display:block;margin:8px 0 12px">
-              Observações: não comporta financiamento habitacional e não realizamos financiamento próprio.
-              Venda somente à vista, sem permuta. Somente venda, não alugo.
-            </small>
-
+            <details style="margin-top:10px">
+              <summary style="cursor:pointer">Ver detalhes</summary>
+              <ul class="ul" style="margin-top:8px">
+                <li>Terreno 10 × 38 m • 190 m² livres na frente</li>
+                <li style="color:#777">Não comporta financiamento (somente à vista)</li>
+              </ul>
+            </details>
             <p style="margin-top:12px">
-              <!-- Botão Ver Fotos (usa as 7 imagens já enviadas) -->
               <button class="btn-fotos"
                       data-gallery-prefix="casa-rua-italia-"
                       data-gallery-count="7"
@@ -222,27 +233,28 @@
                 Ver fotos
               </button>
               <a class="btn btn-whats"
-                 href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20Casa%20Linear%20no%20Jardim%20Laguna%202%20(2%20quartos%2C%201%20su%C3%ADte)."
+                 href="https://wa.me/5527999567000?text=Tenho%20interesse%20na%20Casa%20Linear%20no%20Jardim%20Laguna%202"
                  target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
         </article>
 
-        <!-- 3) Lote comercial em Terras Alphaville -->
+        <!-- Lote Comercial – Terras Alphaville -->
         <article class="card" id="lote-alphaville">
           <div class="thumb">
-            <!-- capa: 01 -->
             <img class="thumb-img" src="assets/lote-alphaville-01.jpeg" alt="Lote comercial em Terras Alphaville, Linhares/ES" loading="lazy">
           </div>
           <div class="content">
-            <h3 style="margin:0 0 6px">Lote comercial em Terras Alphaville – Linhares/ES</h3>
-            <div class="pill">437,19 m² • Sol da manhã</div>
+            <h3 style="margin:0 0 6px">Lote Comercial 437 m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+              <span class="pill">437 m²</span>
+              <span class="pill">13,53 × 32,30 m</span>
+              <span class="pill">Sol da manhã</span>
+            </div>
             <p class="price">R$ 200.000,00</p>
             <ul class="ul">
-              <li>Dimensões: 13,52m (frente) × 13,53m (fundo) × 32,01m (LE) × 32,59m (LD)</li>
-              <li>Área total: 437,19 m²</li>
-              <li>Posição solar: Sol da manhã</li>
-              <li><strong>Exclusivamente comercial</strong> (não permite residências)</li>
+              <li>13,53 m frente/fundo • 32,30 m profundidade</li>
+              <li><strong>Uso exclusivamente comercial</strong> (sem residências)</li>
             </ul>
             <p style="margin-top:12px">
               <button class="btn-fotos"
@@ -251,11 +263,12 @@
                       data-gallery-ext=".jpeg">
                 Ver fotos
               </button>
-              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20Lote%20Comercial%20em%20Terras%20Alphaville%20(437%2C19%20m%C2%B2)." target="_blank" rel="noopener">Agendar visita</a>
+              <a class="btn btn-whats"
+                 href="https://wa.me/5527999567000?text=Tenho%20interesse%20no%20Lote%20Comercial%20em%20Terras%20Alphaville%20(437%20m%C2%B2)"
+                 target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
         </article>
-
       </div>
     </div>
   </section>
@@ -282,13 +295,15 @@
         <div class="gal-item"><img src="assets/alphaville-casa-15.jpeg" alt="Alphaville - foto 15" loading="lazy"></div>
         <div class="gal-item"><img src="assets/alphaville-casa-16.jpeg" alt="Alphaville - foto 16" loading="lazy"></div>
       </div>
-      <p style="margin-top:14px"><a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20quero%20agendar%20visita%20para%20a%20Casa%20em%20Alphaville." target="_blank" rel="noopener">💬 Agendar visita pelo WhatsApp</a></p>
+      <p style="margin-top:14px">
+        <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Quero%20agendar%20visita%20para%20a%20Casa%20em%20Alphaville" target="_blank" rel="noopener">💬 Agendar visita pelo WhatsApp</a>
+      </p>
     </div>
   </section>
 
   <section id="sobre">
     <div class="container">
-      <h2 class="title" style="font-size:28px)">Sobre</h2>
+      <h2 class="title" style="font-size:28px">Sobre</h2>
       <p style="color:#444;max-width:70ch">Sou <strong>Cinaldo O. Ferreira</strong>, corretor de imóveis em Linhares – ES. Trabalho com foco total em segurança, clareza e atendimento direto. Aqui você encontra imóveis selecionados, com todas as informações que importam para decidir com tranquilidade.</p>
     </div>
   </section>
