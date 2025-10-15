@@ -10,13 +10,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-  <!-- Open Graph / WhatsApp / Facebook -->
+  <!-- Open Graph (use a URL pública absoluta para o og:image) -->
   <meta property="og:title" content="Cinaldo Imóveis – Linhares/ES" />
   <meta property="og:description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
   <meta property="og:type" content="website" />
-  <!-- Se já tiver domínio, coloque a URL final abaixo -->
+  <!-- Ajuste og:url e og:image para a URL pública atual (GitHub Pages ou domínio) -->
   <meta property="og:url" content="https://cinaldoimoveis.com.br/" />
   <meta property="og:image" content="https://cinaldoimoveis.com.br/assets/og-cinaldo.png" />
+  <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
@@ -101,21 +102,20 @@
     .gallery-grid img{width:100%;height:200px;object-fit:cover;display:block}
   </style>
 
-  <!-- CSS dos "Destaques de hoje" com imagem -->
+  <!-- CSS dos "Destaques de hoje" (mini-fotos apenas) + logo menor no topo -->
   <style>
     .mini-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
     @media (max-width:900px){.mini-list{grid-template-columns:1fr 1fr}}
     @media (max-width:520px){.mini-list{grid-template-columns:1fr}}
-    .mini-item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px}
-    .mini-item img{width:72px;height:48px;object-fit:cover;border-radius:8px}
-    .mini-item b{font-size:13px;line-height:1.2}
-    <style>
-  /* Esconde as descrições dos mini-cards */
-  .mini-item b{display:none}
-  /* Deixa as miniaturas um pouquinho maiores e bem alinhadas */
-  .mini-item{padding:6px}
-  .mini-item img{width:96px;height:64px}
-</style>
+    .mini-item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:6px}
+    .mini-item img{width:96px;height:64px;object-fit:cover;border-radius:8px}
+
+    /* Opção A — reduzir e centralizar a logo do card do topo */
+    .hero .card .thumb{aspect-ratio:auto;height:auto;padding:16px;}
+    .hero .card .thumb img{
+      width:160px;height:auto;margin:0 auto;
+      object-fit:contain;background:#fff;border-radius:12px;
+    }
   </style>
 </head>
 <body>
@@ -150,24 +150,22 @@
       </div>
       <div>
         <div class="card">
-          <!-- cabe uma imagem aqui, mantive com logo para dar presença de marca -->
           <div class="thumb">
-            <img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis" style="object-fit:contain;background:#fff">
+            <!-- Logo menor (Opção A) -->
+            <img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
           </div>
           <div class="content">
             <strong>Destaques de hoje</strong>
+            <!-- Mini-fotos sem textos -->
             <div class="mini-list">
               <a class="mini-item" href="#casa-alphaville">
                 <img src="assets/alphaville-casa-01.jpeg" alt="Alphaville">
-                <b>Casa 3Q (2 Suítes) • Alphaville</b>
               </a>
               <a class="mini-item" href="#laguna">
                 <img src="assets/casa-rua-italia-01.jpeg" alt="Jardim Laguna 2">
-                <b>Casa 2Q (1 Suíte) • Jardim Laguna 2</b>
               </a>
               <a class="mini-item" href="#lote-alphaville">
                 <img src="assets/lote-alphaville-01.jpeg" alt="Lote Comercial Alphaville">
-                <b>Lote Comercial • Alphaville</b>
               </a>
             </div>
           </div>
