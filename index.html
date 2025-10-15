@@ -47,7 +47,7 @@
     footer{border-top:1px solid var(--line);padding:28px 0;color:#666}
     .accent{color:var(--accent)}
 
-    /* Galeria */
+    /* Galeria fixa (Alphaville) */
     .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
     @media (max-width:1000px){.gallery{grid-template-columns:repeat(3,1fr)}}
     @media (max-width:700px){.gallery{grid-template-columns:repeat(2,1fr)}}
@@ -55,13 +55,40 @@
     .gal-item{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fafafa}
     .gal-item img{aspect-ratio:4/3;object-fit:cover}
   </style>
+
+  <!-- Estilos do botão "Ver fotos" + Modal (compartilhado) -->
+  <style>
+    .btn-fotos{
+      display:inline-block;padding:.75rem 1rem;border:0;border-radius:.5rem;
+      background:#111;color:#fff;cursor:pointer;font-weight:600
+    }
+    .btn-fotos:hover{opacity:.9}
+
+    .gallery-modal{position:fixed;inset:0;display:none;z-index:1000}
+    .gallery-modal.open{display:block}
+    .gallery-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+    .gallery-content{
+      position:relative;inset:auto;margin:4vh auto 0 auto;max-width:1100px;background:#fff;
+      border-radius:.75rem;padding:1rem;max-height:92vh;overflow:auto
+    }
+    .gallery-close{
+      position:sticky;top:0;right:0;margin-left:auto;border:0;background:transparent;
+      font-size:2rem;line-height:1;cursor:pointer
+    }
+    .gallery-grid{
+      display:grid;gap:.75rem;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    }
+    .gallery-grid a{display:block;border-radius:.5rem;overflow:hidden;border:1px solid #eee}
+    .gallery-grid img{width:100%;height:200px;object-fit:cover;display:block}
+  </style>
 </head>
 <body>
   <header>
     <div class="container nav">
       <a href="#inicio" class="brand">
         <!-- Logo real em SVG -->
-        <img class="brand-logo-img" <img src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
+        <img class="brand-logo-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
         <div>
           Cinaldo Imóveis
           <small>Linhares – ES</small>
@@ -128,48 +155,94 @@
           </div>
         </article>
 
-        <!-- 2) Casa no Jardim Laguna -->
+        <!-- 2) Casa no Jardim Laguna (com o seu texto completo) -->
         <article class="card">
           <div class="thumb">
             <div style="padding:24px;text-align:center;color:#666">Fotos em breve</div>
           </div>
           <div class="content">
-            <h3 style="margin:0 0 6px">Casa Linear no Jardim Laguna 2 – Linhares/ES</h3>
+            <h3 style="margin:0 0 6px">Vendo Casa Linear - 2 Quartos (1 Suíte) - Jardim Laguna 2 - Linhares/ES</h3>
             <div class="pill">2 quartos (1 suíte) • 100 m²</div>
             <p class="price">R$ 700.000,00</p>
+
+            <p>Casa pronta para morar.</p>
             <ul class="ul">
-              <li>Lote 380 m² (10m x 38m)</li>
-              <li>Casa de laje coberta com telhas coloniais</li>
-              <li>Ampla varanda frontal e área de serviço</li>
-              <li>Toda gradeada, inclusive portas de acesso</li>
-              <li>Toldos nas janelas expostas</li>
+              <li>Área construída: 100 m²</li>
+              <li>Lote: 380 m² (10 m de frente/fundo e 38 m nas laterais)</li>
+              <li>Casa com 2 Quartos (sendo 1 suíte)</li>
+              <li>Casa de laje, coberta com telhas coloniais</li>
+              <li>Ampla varanda na frente e na área de serviço</li>
+              <li>Toda gradeada (inclusive portas de acesso), toldos nas janelas expostas</li>
               <li>Área livre na frente: 190 m²</li>
-              <li>Portão de acesso de 4,7m</li>
-              <li>Bairro tranquilo e seguro • Ônibus na porta</li>
-              <li>Próximo a padarias, materiais de construção, restaurantes e feiras</li>
+              <li>Portão de acesso: 4,7 m</li>
             </ul>
+
+            <h4 style="margin:14px 0 6px;font-size:14px">Destaques da localização</h4>
+            <ul class="ul">
+              <li>Bairro tranquilo e seguro</li>
+              <li>Ônibus circular passa na porta</li>
+              <li>Próximo a padarias, material de construção, restaurantes, lanchonetes e feiras itinerantes</li>
+              <li>Fácil acesso a praças e outros pontos de lazer da região</li>
+            </ul>
+
+            <small class="muted" style="color:#777;display:block;margin:8px 0 12px">
+              Observações: não comporta financiamento habitacional e não realizamos financiamento próprio.
+              Venda somente à vista, sem permuta. Somente venda, não alugo.
+            </small>
+
             <p style="margin-top:12px">
-              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20Casa%20no%20Jardim%20Laguna%202." target="_blank" rel="noopener">Agendar visita</a>
+              <a class="btn btn-whats"
+                 href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20Casa%20Linear%20no%20Jardim%20Laguna%202%20(2%20quartos%2C%201%20su%C3%ADte)."
+                 target="_blank" rel="noopener">Agendar visita</a>
             </p>
-            <small class="muted" style="color:#777">Venda somente à vista. Sem financiamento, sem permuta e sem aluguel.</small>
           </div>
         </article>
 
-        <!-- 3) Lote comercial em Alphaville -->
+        <!-- 3) Lote comercial em Terras Alphaville -->
         <article class="card">
           <div class="thumb">
-            <div style="padding:24px;text-align:center;color:#666">Fotos em breve</div>
+            <!-- Capa: use a 01 como thumb -->
+            <img class="thumb-img" src="assets/lote-alphaville-01.jpeg" alt="Lote comercial em Terras Alphaville, Linhares/ES" loading="lazy">
           </div>
           <div class="content">
             <h3 style="margin:0 0 6px">Lote comercial em Terras Alphaville – Linhares/ES</h3>
             <div class="pill">437,19 m² • Sol da manhã</div>
-            <p class="price">R$ 200.000,00 <span class="pill" style="margin-left:8px">abaixo do mercado</span></p>
+            <p class="price">R$ 200.000,00</p>
             <ul class="ul">
               <li>Dimensões: 13,52m (frente) × 13,53m (fundo) × 32,01m (LE) × 32,59m (LD)</li>
-              <li>Uso exclusivamente comercial (não permite residências)</li>
+              <li>Área total: 437,19 m²</li>
+              <li>Posição solar: Sol da manhã</li>
+              <li><strong>Exclusivamente comercial</strong> (não permite residências)</li>
             </ul>
             <p style="margin-top:12px">
-              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20Lote%20comercial%20em%20Terras%20Alphaville." target="_blank" rel="noopener">Agendar visita</a>
+              <button class="btn-fotos"
+                      data-gallery-prefix="lote-alphaville-"
+                      data-gallery-count="4"
+                      data-gallery-ext=".jpeg">
+                Ver fotos
+              </button>
+              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20Lote%20Comercial%20em%20Terras%20Alphaville%20(437%2C19%20m%C2%B2)." target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- 4) Casa – Rua Itália (com fotos no modal) -->
+        <article class="card">
+          <div class="thumb">
+            <img class="thumb-img" src="assets/casa-rua-italia-01.jpeg" alt="Casa – Rua Itália, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3 style="margin:0 0 6px">Casa – Rua Itália, Linhares/ES</h3>
+            <div class="pill">Detalhes em breve</div>
+            <ul class="ul"><li>Veja as fotos do imóvel</li></ul>
+            <p style="margin-top:12px">
+              <button class="btn-fotos"
+                      data-gallery-prefix="casa-rua-italia-"
+                      data-gallery-count="7"
+                      data-gallery-ext=".jpeg">
+                Ver fotos
+              </button>
+              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20Casa%20da%20Rua%20It%C3%A1lia." target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
         </article>
@@ -177,7 +250,7 @@
     </div>
   </section>
 
-  <!-- Galeria da casa em Alphaville -->
+  <!-- Galeria da casa em Alphaville (estática como você já tinha) -->
   <section id="galeria-alphaville">
     <div class="container">
       <h2 class="title" style="font-size:26px">Galeria — Casa em Alphaville</h2>
@@ -198,14 +271,6 @@
         <div class="gal-item"><img src="assets/alphaville-casa-14.jpeg" alt="Alphaville - foto 14" loading="lazy"></div>
         <div class="gal-item"><img src="assets/alphaville-casa-15.jpeg" alt="Alphaville - foto 15" loading="lazy"></div>
         <div class="gal-item"><img src="assets/alphaville-casa-16.jpeg" alt="Alphaville - foto 16" loading="lazy"></div>
-
-        <!-- Botão Ver Fotos - Casa Rua Itália -->
-<button class="btn-fotos" 
-        data-gallery-prefix="casa-rua-italia-" 
-        data-gallery-count="7" 
-        data-gallery-ext=".jpeg">
-  Ver fotos
-</button>
       </div>
       <p style="margin-top:14px"><a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20quero%20agendar%20visita%20para%20a%20Casa%20em%20Alphaville." target="_blank" rel="noopener">💬 Agendar visita pelo WhatsApp</a></p>
     </div>
@@ -235,6 +300,63 @@
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Modal de galeria (compartilhado) -->
+  <div id="gallery-modal" class="gallery-modal" aria-hidden="true">
+    <div class="gallery-backdrop" data-close></div>
+    <div class="gallery-content" role="dialog" aria-modal="true" aria-label="Galeria de fotos">
+      <button class="gallery-close" title="Fechar" data-close>&times;</button>
+      <div id="gallery-grid" class="gallery-grid"></div>
+    </div>
+  </div>
+
+  <!-- Script da galeria (botões .btn-fotos) -->
+  <script>
+  (function(){
+    const modal = document.getElementById('gallery-modal');
+    const grid  = document.getElementById('gallery-grid');
+
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.btn-fotos');
+      if(!btn) return;
+
+      const prefix = btn.dataset.galleryPrefix;      // ex: "casa-rua-italia-"
+      const count  = parseInt(btn.dataset.galleryCount || '0', 10);
+      const ext    = btn.dataset.galleryExt || '.jpeg';
+
+      grid.innerHTML = '';
+      for(let i=1;i<=count;i++){
+        const nn = String(i).padStart(2,'0'); // 01, 02...
+        const src = `assets/${prefix}${nn}${ext}`;
+        const a = document.createElement('a');
+        a.href = src; a.target = '_blank'; a.rel='noopener';
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = `Foto ${i} - ${prefix.replace(/-$/,'')}`;
+        img.src = src;
+        a.appendChild(img);
+        grid.appendChild(a);
+      }
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    });
+
+    modal.addEventListener('click',(e)=>{
+      if(e.target.hasAttribute('data-close')) closeModal();
+    });
+    document.addEventListener('keydown',(e)=>{
+      if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+      grid.innerHTML='';
+    }
+  })();
   </script>
 </body>
 </html>
