@@ -70,20 +70,16 @@
     .price{font-weight:800;font-size:18px;margin:10px 0}
     .ul{margin:8px 0 0;padding:0 0 0 18px;color:#333}
     .pill{display:inline-block;background:var(--card);border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:#444}
-
-    /* Galeria fixa (Alphaville) */
-    .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    @media (max-width:1000px){.gallery{grid-template-columns:repeat(3,1fr)}}
-    @media (max-width:700px){.gallery{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:480px){.gallery{grid-template-columns:1fr}}
-    .gal-item{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fafafa}
-    .gal-item img{aspect-ratio:4/3;object-fit:cover}
   </style>
 
   <!-- Botão "Ver fotos" + Modal -->
   <style>
-    .btn-fotos{display:inline-block;padding:.75rem 1rem;border:0;border-radius:.5rem;background:#111;color:#fff;cursor:pointer;font-weight:600}
+    .btn-fotos{
+      display:inline-block;padding:.75rem 1rem;border:0;border-radius:.5rem;
+      background:#111;color:#fff;cursor:pointer;font-weight:600
+    }
     .btn-fotos:hover{opacity:.9}
+
     .gallery-modal{position:fixed;inset:0;display:none;z-index:1000}
     .gallery-modal.open{display:block}
     .gallery-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6)}
@@ -102,18 +98,19 @@
     .mini-item{display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:6px}
     .mini-item img{width:96px;height:64px;object-fit:cover;border-radius:8px}
 
-    /* Opção A — reduzir e centralizar a logo do card do topo */
+    /* Logo menor no card do topo */
     .hero .card .thumb{aspect-ratio:auto;height:auto;padding:16px;}
     .hero .card .thumb img{width:160px;height:auto;margin:0 auto;object-fit:contain;background:#fff;border-radius:12px;}
   </style>
 
-  <!-- Overrides da seção de imóveis para fundo branco -->
+  <!-- Overrides: apenas os CARDS dos imóveis brancos (seção continua bege) -->
   <style>
-    /* Seção branca destacada */
-    #imoveis{background:#ffffff;border-radius:20px;padding:40px 0;box-shadow:0 0 20px rgba(0,0,0,0.04)}
-    /* Cards dentro de #imoveis ficam brancos */
-    #imoveis .card{background:#ffffff;box-shadow:0 1px 0 rgba(0,0,0,.04),0 6px 24px rgba(0,0,0,.04)}
-    /* Pílulas dentro de #imoveis usam o bege claro para manter contraste */
+    #imoveis{background:transparent}
+    #imoveis .card{
+      background:#ffffff;
+      box-shadow:0 1px 0 rgba(0,0,0,.04), 0 6px 24px rgba(0,0,0,.04);
+      border-color:var(--line);
+    }
     #imoveis .pill{background:#f6f1ea}
   </style>
 </head>
@@ -131,7 +128,7 @@
         <a href="#imoveis">Imóveis</a>
         <a href="#sobre">Sobre</a>
         <a href="#contato">Contato</a>
-        <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1,%20vi%20seu%20site%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener">💬 WhatsApp</a>
       </nav>
     </div>
   </header>
@@ -143,19 +140,15 @@
         <h1 class="title">Seu novo imóvel em <span class="accent">Linhares – ES</span></h1>
         <p class="subtitle">Atendimento direto com o corretor. Segurança, clareza e as melhores oportunidades da região.</p>
         <div class="call">
-          <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20um%20im%C3%B3vel%20em%20Linhares." target="_blank" rel="noopener">Fale agora no WhatsApp</a>
+          <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1,%20tenho%20interesse%20em%20um%20im%C3%B3vel%20em%20Linhares." target="_blank" rel="noopener">Fale agora no WhatsApp</a>
           <a class="btn" href="#imoveis">Ver imóveis em destaque</a>
         </div>
       </div>
       <div>
         <div class="card">
-          <div class="thumb">
-            <!-- Logo menor (Opção A) -->
-            <img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
-          </div>
+          <div class="thumb"><img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis"></div>
           <div class="content">
             <strong>Destaques de hoje</strong>
-            <!-- Mini-fotos sem textos -->
             <div class="mini-list">
               <a class="mini-item" href="#casa-alphaville"><img src="assets/alphaville-casa-01.jpeg" alt="Alphaville"></a>
               <a class="mini-item" href="#laguna"><img src="assets/casa-rua-italia-01.jpeg" alt="Jardim Laguna 2"></a>
@@ -191,7 +184,12 @@
               <li>Quintal com espaço para piscina</li>
             </ul>
             <p style="margin-top:12px">
-              <a class="btn" href="#galeria-alphaville">Ver fotos</a>
+              <button class="btn-fotos"
+                      data-gallery-prefix="alphaville-casa-"
+                      data-gallery-count="16"
+                      data-gallery-ext=".jpeg">
+                Ver fotos
+              </button>
               <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20na%20Casa%20em%20Alphaville" target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
@@ -224,7 +222,12 @@
               </ul>
             </details>
             <p style="margin-top:12px">
-              <button class="btn-fotos" data-gallery-prefix="casa-rua-italia-" data-gallery-count="7" data-gallery-ext=".jpeg">Ver fotos</button>
+              <button class="btn-fotos"
+                      data-gallery-prefix="casa-rua-italia-"
+                      data-gallery-count="7"
+                      data-gallery-ext=".jpeg">
+                Ver fotos
+              </button>
               <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20na%20Casa%20Linear%20no%20Jardim%20Laguna%202" target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
@@ -248,40 +251,17 @@
               <li><strong>Uso exclusivamente comercial</strong> (sem residências)</li>
             </ul>
             <p style="margin-top:12px">
-              <button class="btn-fotos" data-gallery-prefix="lote-alphaville-" data-gallery-count="4" data-gallery-ext=".jpeg">Ver fotos</button>
+              <button class="btn-fotos"
+                      data-gallery-prefix="lote-alphaville-"
+                      data-gallery-count="4"
+                      data-gallery-ext=".jpeg">
+                Ver fotos
+              </button>
               <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20no%20Lote%20Comercial%20em%20Terras%20Alphaville%20(437%20m%C2%B2)" target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
         </article>
       </div>
-    </div>
-  </section>
-
-  <!-- Galeria da casa em Alphaville (estática) -->
-  <section id="galeria-alphaville">
-    <div class="container">
-      <h2 class="title" style="font-size:26px">Galeria — Casa em Alphaville</h2>
-    <div class="gallery">
-      <div class="gal-item"><img src="assets/alphaville-casa-01.jpeg" alt="Alphaville - foto 1" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-02.jpeg" alt="Alphaville - foto 2" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-03.jpeg" alt="Alphaville - foto 3" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-04.jpeg" alt="Alphaville - foto 4" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-05.jpeg" alt="Alphaville - foto 5" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-06.jpeg" alt="Alphaville - foto 6" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-07.jpeg" alt="Alphaville - foto 7" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-08.jpeg" alt="Alphaville - foto 8" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-09.jpeg" alt="Alphaville - foto 9" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-10.jpeg" alt="Alphaville - foto 10" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-11.jpeg" alt="Alphaville - foto 11" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-12.jpeg" alt="Alphaville - foto 12" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-13.jpeg" alt="Alphaville - foto 13" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-14.jpeg" alt="Alphaville - foto 14" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-15.jpeg" alt="Alphaville - foto 15" loading="lazy"></div>
-      <div class="gal-item"><img src="assets/alphaville-casa-16.jpeg" alt="Alphaville - foto 16" loading="lazy"></div>
-    </div>
-      <p style="margin-top:14px">
-        <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Quero%20agendar%20visita%20para%20a%20Casa%20em%20Alphaville" target="_blank" rel="noopener">💬 Agendar visita pelo WhatsApp</a>
-      </p>
     </div>
   </section>
 
@@ -324,29 +304,47 @@
     const modal = document.getElementById('gallery-modal');
     const grid  = document.getElementById('gallery-grid');
 
+    // abre a galeria
     document.addEventListener('click', (e)=>{
       const btn = e.target.closest('.btn-fotos');
       if(!btn) return;
-      const prefix = btn.dataset.galleryPrefix;
+
+      const prefix = btn.dataset.galleryPrefix;      // ex: "alphaville-casa-"
       const count  = parseInt(btn.dataset.galleryCount || '0', 10);
       const ext    = btn.dataset.galleryExt || '.jpeg';
 
       grid.innerHTML = '';
       for(let i=1;i<=count;i++){
-        const nn = String(i).padStart(2,'0');
+        const nn = String(i).padStart(2,'0'); // 01, 02...
         const src = `assets/${prefix}${nn}${ext}`;
         const a = document.createElement('a');
         a.href = src; a.target = '_blank'; a.rel='noopener';
         const img = document.createElement('img');
-        img.loading = 'lazy'; img.alt = `Foto ${i} - ${prefix.replace(/-$/,'')}`; img.src = src;
-        a.appendChild(img); grid.appendChild(a);
+        img.loading = 'lazy';
+        img.alt = `Foto ${i} - ${prefix.replace(/-$/,'')}`;
+        img.src = src;
+        a.appendChild(img);
+        grid.appendChild(a);
       }
-      modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
     });
 
-    modal.addEventListener('click',(e)=>{ if(e.target.hasAttribute('data-close')) closeModal(); });
-    document.addEventListener('keydown',(e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
-    function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; grid.innerHTML=''; }
+    // fecha a galeria
+    modal.addEventListener('click',(e)=>{
+      if(e.target.hasAttribute('data-close')) closeModal();
+    });
+    document.addEventListener('keydown',(e)=>{
+      if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+      grid.innerHTML='';
+    }
   })();
   </script>
 </body>
