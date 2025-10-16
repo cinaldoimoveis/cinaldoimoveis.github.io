@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-  <!-- Open Graph (ajuste og:url e og:image se necessário) -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Cinaldo Imóveis – Linhares/ES" />
   <meta property="og:description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
   <meta property="og:type" content="website" />
@@ -39,12 +39,21 @@
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     .container{max-width:1150px;margin:0 auto;padding:0 20px}
+
     header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(150%) blur(8px);border-bottom:1px solid var(--line)}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
     .brand-logo-img{width:44px;height:44px;object-fit:contain;border-radius:10px}
     .brand small{display:block;font-weight:600;font-size:12px;color:var(--muted);letter-spacing:.4px}
-    .menu{display:flex;gap:18px}
+    .menu{display:flex;gap:18px;align-items:center}
+
+    /* Responsivo do topo: evita sobrepor no celular */
+    @media (max-width:640px){
+      .nav{flex-wrap:wrap}
+      .brand-logo-img{width:36px;height:36px}
+      .menu{width:100%;justify-content:flex-end;gap:12px}
+    }
+
     .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--fg);transition:.2s ease-in-out;font-weight:600}
     .btn:hover{transform:translateY(-1px)}
     .btn-whats{background:#25D366;border-color:#25D366;color:#0b3c1b}
@@ -174,7 +183,7 @@
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
       <div class="grid">
-        <!-- Casa em Alphaville -->
+        <!-- Casa em Alphaville (já existente) -->
         <article class="card" id="casa-alphaville">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
@@ -191,7 +200,7 @@
           </div>
         </article>
 
-        <!-- Casa Jardim Laguna -->
+        <!-- Casa Jardim Laguna (já existente) -->
         <article class="card" id="laguna">
           <div class="thumb"><img src="assets/casa-rua-italia-01.jpeg" alt="Casa Linear - Jardim Laguna 2" loading="lazy"></div>
           <div class="content">
@@ -208,7 +217,7 @@
           </div>
         </article>
 
-        <!-- Lote Comercial -->
+        <!-- Lote Comercial (já existente) -->
         <article class="card" id="lote-alphaville">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
           <div class="content">
@@ -224,6 +233,91 @@
             </p>
           </div>
         </article>
+
+        <!-- Fazenda – NOVO -->
+        <article class="card" id="fazenda-linhares">
+          <div class="thumb"><img src="assets/fazenda-linhares-01.jpg" alt="Fazenda em Linhares ES" loading="lazy"></div>
+          <div class="content">
+            <h3>Fazenda – 290 ha (60 alq) – Linhares ES</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">290 ha</span><span class="pill">Poço 100 m</span><span class="pill">Caixa 30 mil L</span><span class="pill">Curral p/ 500 bois</span>
+            </div>
+            <p class="price">R$ 18.000.000,00</p>
+            <ul class="ul">
+              <li>3 km do asfalto • Próx. à agrovila</li>
+              <li>70% terra argilosa • 8 casas • 2 trafos</li>
+              <li>2 poços perfurados pela Petrobras (lacrados)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="fazenda-linhares-" data-gallery-count="19" data-gallery-ext=".jpg">Ver fotos</button>
+              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20na%20Fazenda%20de%20290%20hectares%20em%20Linhares" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Apartamento Três Barras – NOVO -->
+        <article class="card" id="apto-tres-barras">
+          <div class="thumb"><img src="assets/apt-tres-barras-01.jpg" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
+          <div class="content">
+            <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">90,76 m²</span><span class="pill">Varanda c/ gourmet</span><span class="pill">2 vagas</span>
+            </div>
+            <p class="price">R$ 759.000,00</p>
+            <ul class="ul">
+              <li>Luminárias • Armários na cozinha/banhos • Box blindex</li>
+              <li>Condomínio com academia, piscinas, sauna, festa, brinquedoteca</li>
+              <li>Condomínio aprox. R$ 420/mês</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="apt-tres-barras-" data-gallery-count="16" data-gallery-ext=".jpg">Ver fotos</button>
+              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20no%20Apartamento%20no%20Tr%C3%AAs%20Barras" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Residencial 360 m² – NOVO -->
+        <article class="card" id="lote-residencial-360">
+          <div class="thumb"><img src="assets/lote-alphaville-360-01.jpg" alt="Lote residencial 360 m²" loading="lazy"></div>
+          <div class="content">
+            <h3>Lote Residencial 360 m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">360 m²</span><span class="pill">12 × 30 m</span><span class="pill">Quitado e escriturado</span>
+            </div>
+            <p class="price">R$ 470.000,00</p>
+            <ul class="ul">
+              <li>Aprox. 50 m do clube • Murado pelos vizinhos</li>
+              <li>Condomínio alto padrão: portaria 24h, lazer completo</li>
+              <li>2,5 km do Bairro Aviso (sent. Pontal do Ipiranga)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="lote-alphaville-360-" data-gallery-count="3" data-gallery-ext=".jpg">Ver fotos</button>
+              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20no%20Lote%20Residencial%20360m%C2%B2%20em%20Terras%20Alphaville" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Residencial 420 m² – NOVO -->
+        <article class="card" id="lote-residencial-420">
+          <div class="thumb"><img src="assets/lote-alphaville-420-01.jpg" alt="Lote residencial 420 m²" loading="lazy"></div>
+          <div class="content">
+            <h3>Lote Residencial 420 m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">420 m²</span><span class="pill">14 × 30 m</span><span class="pill">Sol da manhã</span><span class="pill">Vista parcial lagoa</span>
+            </div>
+            <p class="price">R$ 440.000,00</p>
+            <ul class="ul">
+              <li>Quitado e livre de pendências</li>
+              <li>Lazer completo: clube, academia, festas, piscinas, quadras</li>
+              <li>2,5 km do Bairro Aviso (sent. Pontal do Ipiranga)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="lote-alphaville-420-" data-gallery-count="3" data-gallery-ext=".jpg">Ver fotos</button>
+              <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Tenho%20interesse%20no%20Lote%20Residencial%20420m%C2%B2%20em%20Terras%20Alphaville" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
@@ -248,7 +342,7 @@
     </div>
   </div>
 
-  <!-- Script da galeria -->
+  <!-- Script da galeria com fallback .jpg -> .jpeg -->
   <script>
   (function(){
     const modal = document.getElementById('gallery-modal');
@@ -261,18 +355,28 @@
 
       const prefix = btn.dataset.galleryPrefix;
       const count  = parseInt(btn.dataset.galleryCount || '0', 10);
-      const ext    = btn.dataset.galleryExt || '.jpeg';
+      const ext    = btn.dataset.galleryExt || '.jpg'; // padrão .jpg
 
       grid.innerHTML = '';
       for(let i=1;i<=count;i++){
         const nn = String(i).padStart(2,'0'); // 01, 02...
-        const src = `assets/${prefix}${nn}${ext}`;
+        const base = `assets/${prefix}${nn}`;
         const a = document.createElement('a');
-        a.href = src; a.target = '_blank'; a.rel='noopener';
+        a.href = `${base}${ext}`;
+        a.target = '_blank'; a.rel='noopener';
         const img = document.createElement('img');
         img.loading = 'lazy';
         img.alt = `Foto ${i} - ${prefix.replace(/-$/,'')}`;
-        img.src = src;
+
+        // tenta .jpg e cai para .jpeg se falhar
+        img.src = `${base}${ext}`;
+        img.onerror = function(){
+          if(ext === '.jpg') {
+            img.src = `${base}.jpeg`;
+            a.href  = `${base}.jpeg`;
+          }
+        };
+
         a.appendChild(img);
         grid.appendChild(a);
       }
