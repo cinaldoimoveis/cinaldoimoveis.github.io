@@ -27,13 +27,11 @@
   <!-- ===== CSS BASE ===== -->
   <style>
     :root{
-      --bg:#f8f3ec;
-      --fg:#111;
-      --muted:#555;
-      --accent:#c7a24b;
-      --card:#f3eee8;
-      --line:#eaeaea;
-    }
+  --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
+  --side: 20px; /* distância lateral padrão */
+}
+.container{max-width:1150px;margin:0 auto;padding:0 var(--side)}
+
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--fg)}
     a{color:inherit;text-decoration:none}
@@ -53,12 +51,17 @@
 
     /* Responsivo do topo: evita sobrepor e dá respiro no WhatsApp (direita) */
     @media (max-width:640px){
-      .nav{flex-wrap:wrap}
-      .brand-logo-img{width:36px;height:36px}
-      .menu{width:100%;justify-content:flex-end;gap:12px;padding-right:8px} /* respiro à direita */
-      .btn{padding:10px 14px;border-radius:10px} /* botão um pouco menor no mobile */
-      .btn-whats{font-size:14px;line-height:1}   /* tipografia mais contida */
-    }
+  .nav{flex-wrap:wrap}
+  .brand-logo-img{width:36px;height:36px}
+  .menu{
+    width:100%;
+    justify-content:flex-end;
+    gap:12px;
+    padding-inline-end: var(--side); /* igual à margem da esquerda */
+  }
+  .btn{padding:10px 14px;border-radius:10px}
+  .btn-whats{font-size:14px;line-height:1}
+}
 
     .hero{padding:64px 0 32px;border-bottom:1px solid var(--line)}
     .hero-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center}
