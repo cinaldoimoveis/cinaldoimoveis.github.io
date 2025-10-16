@@ -167,6 +167,28 @@
       background-repeat: no-repeat;
     }
   </style>
+  
+  <style id="fix-sides">
+  :root{ --side: 20px; }
+
+  /* Força o mesmo respiro esquerdo/direito em todo lugar que usa .container */
+  header .container,
+  main .container,
+  section .container,
+  footer .container {
+    padding-left:  max(var(--side), env(safe-area-inset-left)) !important;
+    padding-right: max(var(--side), env(safe-area-inset-right)) !important;
+  }
+
+  /* No topo, não adicionamos nenhum padding extra além do .container */
+  @media (max-width: 640px){
+    .menu{ padding:0 !important; }
+  }
+  @media (orientation: landscape) and (max-width: 900px){
+    .menu{ padding:0 !important; }
+  }
+</style>
+
 </head>
 <body>
   <header>
