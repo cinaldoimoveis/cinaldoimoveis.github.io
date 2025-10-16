@@ -26,18 +26,18 @@
 
   <!-- ===== CSS BASE ===== -->
   <style>
-   :root{
-  --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
-  --side: 20px; /* margem lateral padrão */
-}
+    :root{
+      --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
+      --side: 20px; /* margem lateral padrão */
+    }
 
-/* Troque sua .container por esta */
-.container{
-  max-width:1150px;
-  margin:0 auto;
-  padding-left: max(var(--side), env(safe-area-inset-left));
-  padding-right: max(var(--side), env(safe-area-inset-right));
-}
+    /* Container com safe area simétrica nas laterais */
+    .container{
+      max-width:1150px;
+      margin:0 auto;
+      padding-left:  max(var(--side), env(safe-area-inset-left));
+      padding-right: max(var(--side), env(safe-area-inset-right));
+    }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--fg)}
@@ -55,30 +55,20 @@
     .btn:hover{transform:translateY(-1px)}
     .btn-whats{background:#25D366;border-color:#25D366;color:#0b3c1b}
 
-    /* Responsivo do topo: evita sobrepor e dá respiro no WhatsApp (direita) */
-  /* Mobile em pé (portrait) */
-@media (max-width:640px){
-  .nav{flex-wrap:wrap}
-  .brand-logo-img{width:36px;height:36px}
-  .menu{
-    width:100%;
-    justify-content:flex-end;
-    gap:12px;
-    padding:0;             /* <- sem extra: container já cuida do respiro */
-  }
-  .btn{padding:10px 14px;border-radius:10px}
-  .btn-whats{font-size:14px;line-height:1}
-}
-
-/* Celular na horizontal (landscape) */
-@media (orientation: landscape) and (max-width: 900px){
-  .menu{
-    gap:12px;
-    padding:0;             /* <- idem: nada de padding a mais */
-  }
-  .btn{padding:10px 14px;border-radius:10px}
-  .btn-whats{font-size:14px;line-height:1}
-}
+    /* Responsivo do topo: sem padding extra na .menu (container cuida do respiro) */
+    @media (max-width:640px){
+      .nav{flex-wrap:wrap}
+      .brand-logo-img{width:36px;height:36px}
+      .menu{width:100%;justify-content:flex-end;gap:12px;padding:0}
+      .btn{padding:10px 14px;border-radius:10px}
+      .btn-whats{font-size:14px;line-height:1}
+    }
+    /* Landscape em telas baixas (iPhone horizontal) */
+    @media (orientation: landscape) and (max-width: 900px){
+      .menu{gap:12px;padding:0}
+      .btn{padding:10px 14px;border-radius:10px}
+      .btn-whats{font-size:14px;line-height:1}
+    }
 
     .hero{padding:64px 0 32px;border-bottom:1px solid var(--line)}
     .hero-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center}
