@@ -47,16 +47,19 @@
     .brand small{display:block;font-weight:600;font-size:12px;color:var(--muted);letter-spacing:.4px}
     .menu{display:flex;gap:18px;align-items:center}
 
-    /* Responsivo do topo: evita sobrepor no celular */
-    @media (max-width:640px){
-      .nav{flex-wrap:wrap}
-      .brand-logo-img{width:36px;height:36px}
-      .menu{width:100%;justify-content:flex-end;gap:12px}
-    }
-
     .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--fg);transition:.2s ease-in-out;font-weight:600}
     .btn:hover{transform:translateY(-1px)}
     .btn-whats{background:#25D366;border-color:#25D366;color:#0b3c1b}
+
+    /* Responsivo do topo: evita sobrepor e dá respiro no WhatsApp (direita) */
+    @media (max-width:640px){
+      .nav{flex-wrap:wrap}
+      .brand-logo-img{width:36px;height:36px}
+      .menu{width:100%;justify-content:flex-end;gap:12px;padding-right:8px} /* respiro à direita */
+      .btn{padding:10px 14px;border-radius:10px} /* botão um pouco menor no mobile */
+      .btn-whats{font-size:14px;line-height:1}   /* tipografia mais contida */
+    }
+
     .hero{padding:64px 0 32px;border-bottom:1px solid var(--line)}
     .hero-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center}
     @media (max-width:900px){.hero-inner{grid-template-columns:1fr}}
@@ -135,6 +138,25 @@
     }
     #imoveis .pill{background:#f6f1ea}
   </style>
+
+  <!-- Mobile: dificultar salvar/selecionar na galeria -->
+  <style>
+    .gallery-content, .gallery-grid, .gallery-grid * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    /* célula visual no modo mobile (sem <img>) */
+    .gallery-grid .gcell {
+      height: 200px;
+      border: 1px solid #eee;
+      border-radius: .5rem;
+      overflow: hidden;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -185,7 +207,7 @@
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
       <div class="grid">
-        <!-- Casa em Alphaville (já existente) -->
+        <!-- Casa em Alphaville -->
         <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
@@ -203,7 +225,7 @@
           </div>
         </article>
 
-        <!-- Casa Jardim Laguna (já existente) -->
+        <!-- Casa Jardim Laguna -->
         <article class="card" id="laguna" data-code="CI-CA-LAG-100">
           <div class="thumb"><img src="assets/casa-rua-italia-01.jpeg" alt="Casa Linear - Jardim Laguna 2" loading="lazy"></div>
           <div class="content">
@@ -221,7 +243,7 @@
           </div>
         </article>
 
-        <!-- Lote Comercial (já existente) -->
+        <!-- Lote Comercial -->
         <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
           <div class="content">
@@ -239,7 +261,7 @@
           </div>
         </article>
 
-        <!-- Fazenda – NOVO -->
+        <!-- Fazenda -->
         <article class="card" id="fazenda-linhares" data-code="CI-FZ-LIN-290">
           <div class="thumb"><img src="assets/fazenda-linhares-01.jpeg" alt="Fazenda em Linhares ES" loading="lazy"></div>
           <div class="content">
@@ -261,7 +283,7 @@
           </div>
         </article>
 
-        <!-- Apartamento Três Barras – NOVO -->
+        <!-- Apartamento Três Barras -->
         <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90">
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
@@ -283,7 +305,7 @@
           </div>
         </article>
 
-        <!-- Lote Residencial 360 m² – NOVO -->
+        <!-- Lote Residencial 360 m² -->
         <article class="card" id="lote-residencial-360" data-code="CI-LO-ALPH-360">
           <div class="thumb"><img src="assets/lote-alphaville-360-01.jpeg" alt="Lote residencial 360 m²" loading="lazy"></div>
           <div class="content">
@@ -305,7 +327,7 @@
           </div>
         </article>
 
-        <!-- Lote Residencial 420 m² – NOVO -->
+        <!-- Lote Residencial 420 m² -->
         <article class="card" id="lote-residencial-420" data-code="CI-LO-ALPH-420">
           <div class="thumb"><img src="assets/lote-alphaville-420-01.jpeg" alt="Lote residencial 420 m²" loading="lazy"></div>
           <div class="content">
@@ -351,54 +373,94 @@
     </div>
   </div>
 
-  <!-- Script da galeria com fallback de extensões -->
+  <!-- Galeria: comportamento diferente para mobile/desktop -->
   <script>
   (function(){
     const modal = document.getElementById('gallery-modal');
     const grid  = document.getElementById('gallery-grid');
-
-    // ordem de tentativas de extensão (inclui maiúsculas)
     const EXT_ORDER = ['.jpeg','.jpg','.png','.JPEG','.JPG','.PNG'];
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
 
-    // abrir modal
     document.addEventListener('click', (e)=>{
       const btn = e.target.closest('.btn-fotos');
       if(!btn) return;
 
-      const prefix = btn.dataset.galleryPrefix;   // ex: "fazenda-linhares-"
+      const prefix = btn.dataset.galleryPrefix;
       const count  = parseInt(btn.dataset.galleryCount || '0', 10);
 
       grid.innerHTML = '';
+
       for(let i=1;i<=count;i++){
-        const nn = String(i).padStart(2,'0'); // 01, 02...
+        const nn   = String(i).padStart(2,'0');
         const base = `assets/${prefix}${nn}`;
 
-        const a   = document.createElement('a');
-        const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.alt = `Foto ${i} - ${prefix.replace(/-$/,'')}`;
+        if (isCoarse) {
+          // MOBILE: div com background (dificulta salvar)
+          const cell = document.createElement('div');
+          cell.className = 'gcell';
+          cell.setAttribute('role','img');
+          cell.setAttribute('aria-label', `Foto ${i} - ${prefix.replace(/-$/,'')}`);
 
-        let idx = 0;
-        const tryNext = ()=>{
-          if(idx >= EXT_ORDER.length){
-            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
-              `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#777" font-family="Arial" font-size="20">Imagem não encontrada: ${base}</text></svg>`
-            );
-            a.href = '#';
-            a.removeAttribute('target');
-            return;
-          }
-          const ext = EXT_ORDER[idx++];
-          const src = `${base}${ext}`;
-          img.src = src;
-          img.onload = ()=>{ a.href = src; };
-          img.onerror = tryNext;
-        };
-        tryNext();
+          let idx = 0;
+          const tryNext = ()=>{
+            if(idx >= EXT_ORDER.length){
+              cell.style.backgroundImage =
+                `url('data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+                  `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+                    <rect width="100%" height="100%" fill="#eee"/>
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                          fill="#777" font-family="Arial" font-size="20">
+                      Imagem não encontrada: ${base}
+                    </text>
+                  </svg>`
+                )}')`;
+              return;
+            }
+            const ext = EXT_ORDER[idx++];
+            const src = `${base}${ext}`;
+            const testImg = new Image();
+            testImg.onload  = ()=>{ cell.style.backgroundImage = `url('${src}')`; };
+            testImg.onerror = tryNext;
+            testImg.src = src;
+          };
+          tryNext();
+          grid.appendChild(cell);
 
-        a.target = '_blank'; a.rel='noopener';
-        a.appendChild(img);
-        grid.appendChild(a);
+        } else {
+          // DESKTOP: <a target=_blank><img></a>
+          const a   = document.createElement('a');
+          const img = document.createElement('img');
+          img.loading = 'lazy';
+          img.alt = `Foto ${i} - ${prefix.replace(/-$/,'')}`;
+
+          let idx = 0;
+          const tryNext = ()=>{
+            if(idx >= EXT_ORDER.length){
+              img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+                  <rect width="100%" height="100%" fill="#eee"/>
+                  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                        fill="#777" font-family="Arial" font-size="20">
+                    Imagem não encontrada: ${base}
+                  </text>
+                </svg>`
+              );
+              a.removeAttribute('href');
+              a.removeAttribute('target');
+              return;
+            }
+            const ext = EXT_ORDER[idx++];
+            const src = `${base}${ext}`;
+            img.src = src;
+            img.onload  = ()=>{ a.href = src; };
+            img.onerror = tryNext;
+          };
+          tryNext();
+
+          a.target = '_blank'; a.rel='noopener';
+          a.appendChild(img);
+          grid.appendChild(a);
+        }
       }
 
       modal.classList.add('open');
@@ -419,10 +481,15 @@
       document.body.style.overflow='';
       grid.innerHTML='';
     }
+
+    // Bloqueia menu de contexto dentro da galeria (ajuda em alguns mobiles)
+    document.addEventListener('contextmenu', e => {
+      if (e.target.closest('.gallery-content')) e.preventDefault();
+    });
   })();
   </script>
 
-  <!-- Script para montar automaticamente os links do WhatsApp por card -->
+  <!-- WhatsApp automático por card (usa título, preço e data-code) -->
   <script>
   (function(){
     const WHATS_BASE = 'https://wa.me/5527999567000?text=';
