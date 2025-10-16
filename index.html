@@ -193,6 +193,22 @@
   }
 </style>
 
+  <style id="header-fine-tune">
+  /* Ajuste fino apenas para o HEADER */
+  header .container {
+    padding-left:  var(--head-left, 22px);
+    padding-right: var(--head-right, 24px);
+  }
+
+  /* Opcional: valores adaptativos */
+  @media (max-width: 900px) {
+    header .container {
+      padding-left:  var(--head-left-mobile, 20px);
+      padding-right: var(--head-right-mobile, 22px);
+    }
+  }
+</style>
+
 </head>
 <body>
   <header>
