@@ -169,18 +169,22 @@
   </style>
   
   <style id="fix-sides">
-  :root{ --side: 14px; }
+  /* Ajustes finos independentes */
+  :root{
+    --side-left: 22px;   /* ajuste fino ESQUERDA */
+    --side-right: 24px;  /* ajuste fino DIREITA  */
+  }
 
-  /* Força o mesmo respiro esquerdo/direito em todo lugar que usa .container */
+  /* Soma o seu ajuste + safe area do iOS (em vez de max) */
   header .container,
   main .container,
   section .container,
   footer .container {
-    padding-left:  max(var(--side), env(safe-area-inset-left)) !important;
-    padding-right: max(var(--side), env(safe-area-inset-right)) !important;
+    padding-left:  calc(var(--side-left)  + env(safe-area-inset-left));
+    padding-right: calc(var(--side-right) + env(safe-area-inset-right));
   }
 
-  /* No topo, não adicionamos nenhum padding extra além do .container */
+  /* No topo não damos padding extra na .menu; o .container resolve tudo */
   @media (max-width: 640px){
     .menu{ padding:0 !important; }
   }
