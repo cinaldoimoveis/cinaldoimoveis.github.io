@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Cinaldo Imóveis – Linhares/ES</title>
   <meta name="description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
 
@@ -28,7 +28,7 @@
   <style>
     :root{
   --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
-  --side: 20px; /* distância lateral padrão */
+  --side: 20px; /* distância lateral padrão (mesma da esquerda) */
 }
 .container{max-width:1150px;margin:0 auto;padding:0 var(--side)}
 
@@ -50,14 +50,26 @@
     .btn-whats{background:#25D366;border-color:#25D366;color:#0b3c1b}
 
     /* Responsivo do topo: evita sobrepor e dá respiro no WhatsApp (direita) */
-    @media (max-width:640px){
+    /* ===== Mobile em pé (portrait) ===== */
+@media (max-width:640px){
   .nav{flex-wrap:wrap}
   .brand-logo-img{width:36px;height:36px}
   .menu{
     width:100%;
     justify-content:flex-end;
     gap:12px;
-    padding-inline-end: var(--side); /* igual à margem da esquerda */
+    /* mesmo respiro da esquerda + área segura do iOS */
+    padding-inline-end: max(var(--side), env(safe-area-inset-right));
+  }
+  .btn{padding:10px 14px;border-radius:10px}
+  .btn-whats{font-size:14px;line-height:1}
+}
+    /* ===== Celular na horizontal (landscape) =====
+   Entra quando a altura fica baixinha, mesmo com largura >640px */
+@media (orientation: landscape) and (max-width: 900px){
+  .menu{
+    gap:12px;
+    padding-inline-end: max(var(--side), env(safe-area-inset-right));
   }
   .btn{padding:10px 14px;border-radius:10px}
   .btn-whats{font-size:14px;line-height:1}
