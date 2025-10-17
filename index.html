@@ -30,15 +30,12 @@
       --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
       --side: 20px; /* margem lateral padrão global */
     }
-
-    /* Container com safe area simétrica nas laterais (base) */
     .container{
       max-width:1150px;
       margin:0 auto;
       padding-left:  max(var(--side), env(safe-area-inset-left));
       padding-right: max(var(--side), env(safe-area-inset-right));
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--fg)}
     a{color:inherit;text-decoration:none}
@@ -55,7 +52,6 @@
     .btn:hover{transform:translateY(-1px)}
     .btn-whats{background:#25D366;border-color:#25D366;color:#0b3c1b}
 
-    /* Responsivo do topo: sem padding extra na .menu (container cuida do respiro) */
     @media (max-width:640px){
       .nav{flex-wrap:wrap}
       .brand-logo-img{width:36px;height:36px}
@@ -63,7 +59,6 @@
       .btn{padding:10px 14px;border-radius:10px}
       .btn-whats{font-size:14px;line-height:1}
     }
-    /* Landscape em telas baixas (iPhone horizontal) */
     @media (orientation: landscape) and (max-width: 900px){
       .menu{gap:12px;padding:0}
       .btn{padding:10px 14px;border-radius:10px}
@@ -149,7 +144,7 @@
     #imoveis .pill{background:#f6f1ea}
   </style>
 
-  <!-- Mobile: dificultar salvar/selecionar na galeria -->
+  <!-- Mobile/desktop: ajustes extras para a galeria -->
   <style>
     .gallery-content, .gallery-grid, .gallery-grid * {
       -webkit-touch-callout: none;
@@ -165,6 +160,7 @@
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
+      cursor: zoom-in;
     }
   </style>
 
@@ -203,6 +199,25 @@
     }
   </style>
 
+  <!-- VISOR (zoom) — usado em mobile e desktop -->
+  <style>
+    .viewer[hidden]{display:none}
+    .viewer{position:fixed;inset:0;z-index:2000;background:#000}
+    .viewer .toolbar{position:absolute;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;gap:12px;background:rgba(0,0,0,.5)}
+    .viewer .btn-close{position:absolute;right:10px;background:transparent;border:0;color:#fff;font-size:28px;line-height:1;cursor:pointer}
+    .viewer .btn-open{position:absolute;left:10px;background:rgba(255,255,255,.85);border:0;border-radius:10px;padding:6px 10px;cursor:pointer;font-weight:600}
+    .viewer .viewport{position:absolute;inset:0;top:56px;overflow:hidden;touch-action:none}
+    .viewer .stage{position:absolute;inset:0;display:grid;place-items:center;transition:transform .12s ease-out}
+    .viewer .pic{max-width:100vw;max-height:calc(100vh - 56px);object-fit:contain;display:block;will-change:transform}
+    .viewer .arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.35);border:0;color:#fff;font-size:28px;padding:10px 14px;border-radius:10px;cursor:pointer}
+    .viewer .left{left:12px}
+    .viewer .right{right:12px}
+    .viewer .count{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);opacity:.8;font-weight:700}
+    @media (hover:hover){
+      .viewer .stage{cursor:grab}
+      .viewer .stage:active{cursor:grabbing}
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -215,7 +230,6 @@
         <a href="#imoveis">Imóveis</a>
         <a href="#sobre">Sobre</a>
         <a href="#contato">Contato</a>
-        <!-- WhatsApp (menu) - texto genérico melhorado -->
         <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20quero%20falar%20sobre%20im%C3%B3veis%20em%20Linhares.%0AMeu%20nome%20%C3%A9%20_____%20e%20tenho%20interesse%20em%3A" target="_blank" rel="noopener">💬 WhatsApp</a>
       </nav>
     </div>
@@ -228,7 +242,6 @@
         <h1 class="title">Seu novo imóvel em <span class="accent">Linhares ES e Região</span></h1>
         <p class="subtitle">Atendimento direto com o corretor. Segurança, clareza e as melhores oportunidades da região.</p>
         <div class="call">
-          <!-- WhatsApp (herói) - texto com quebra de linha -->
           <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20quero%20falar%20sobre%20im%C3%B3veis%20em%20Linhares.%0AMeu%20nome%20%C3%A9%20_____%20e%20tenho%20interesse%20em%3A" target="_blank" rel="noopener">Fale agora no WhatsApp</a>
           <a class="btn" href="#imoveis">Ver imóveis em destaque</a>
         </div>
@@ -238,7 +251,6 @@
           <div class="thumb"><img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis"></div>
           <div class="content">
             <strong>Destaques de hoje</strong>
-            <!-- lista preenchida automaticamente -->
             <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje"></div>
           </div>
         </div>
@@ -420,148 +432,37 @@
           </div>
         </article>
 
-       <!-- Área Comercial 20.000 m² – Bairro Planalto (NOVO) -->
-<article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000">
-  <div class="thumb">
-    <img src="assets/area-2000-planalto-01.jpeg" alt="Área 20.000m² no Bairro Planalto, Linhares/ES" loading="lazy">
-  </div>
-  <div class="content">
-    <h3>Área Comercial 20.000m² – Bairro Planalto</h3>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <span class="pill">20.000m²</span>
-      <span class="pill">100m × 200m</span>
-      <span class="pill">650m da BR-101 (Km 142)</span>
-      <span class="pill">Terraplanado</span>
-      <span class="pill">Acesso asfaltado</span>
-      <span class="pill">Ref: CI-AR-PLAN-20000</span>
-    </div>
-    <p class="price">R$ 4.000.000,00 </small></p>
-    <ul class="ul">
-      <li>À 650m da BR-101 (Km 142), estrada da Lasa</li>
-      <li>À 6km da Fábrica da Cacau Show</li>
-      <li>À 2km do Aeroporto de Linhares/ES</li>
-      <li>À 1,5km do Shopping PátioMix</li>
-      <li>À 250m da UGBP Produção e Exportação • À 150m da Norte Recicla</li>
-      <li>Terreno todo terraplanado, pronto para construção</li>
-      <li>Documentação toda ok</li>
-    </ul>
-    <p>
-      <button class="btn-fotos" data-gallery-prefix="area-2000-planalto-" data-gallery-count="7">Ver fotos</button>
-      <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
-    </p>
-  </div>
-</article>
-
-
-<!-- === GALERIA MODAL (tela cheia) === -->
-<div class="gallery-modal" id="gal-area-2000-planalto" hidden>
-  <div class="gallery-modal__backdrop" data-close-gallery></div>
-  <div class="gallery-modal__dialog" role="dialog" aria-label="Galeria de fotos – Área 20.000m²" aria-modal="true">
-    <button class="gallery-modal__close" title="Fechar" aria-label="Fechar" data-close-gallery>&times;</button>
-    <div class="gallery-modal__viewport">
-      <!-- Ajuste a quantidade conforme suas imagens (01 a 07) -->
-      <img data-g-item src="assets/area-2000-planalto-01.jpeg" alt="Foto 1 – Área 20.000m²" loading="lazy">
-      <img data-g-item src="assets/area-2000-planalto-02.jpeg" alt="Foto 2 – Área 20.000m²" loading="lazy" hidden>
-      <img data-g-item src="assets/area-2000-planalto-03.jpeg" alt="Foto 3 – Área 20.000m²" loading="lazy" hidden>
-      <img data-g-item src="assets/area-2000-planalto-04.jpeg" alt="Foto 4 – Área 20.000m²" loading="lazy" hidden>
-      <img data-g-item src="assets/area-2000-planalto-05.jpeg" alt="Foto 5 – Área 20.000m²" loading="lazy" hidden>
-      <img data-g-item src="assets/area-2000-planalto-06.jpeg" alt="Foto 6 – Área 20.000m²" loading="lazy" hidden>
-      <img data-g-item src="assets/area-2000-planalto-07.jpeg" alt="Foto 7 – Área 20.000m²" loading="lazy" hidden>
-    </div>
-    <div class="gallery-modal__controls">
-      <button class="g-prev" aria-label="Foto anterior" data-g-prev>&larr;</button>
-      <span class="g-count"><b data-g-index>1</b>/<span data-g-total>7</span></span>
-      <button class="g-next" aria-label="Próxima foto" data-g-next>&rarr;</button>
-    </div>
-  </div>
-</div>
-
-<!-- === CSS mínimo opcional (pode adaptar aos seus utilitários) === -->
-<style>
-  .imovel-card{border:1px solid #e7e7e7;border-radius:16px;padding:16px;background:#fff;display:grid;gap:12px}
-  .imovel-card__head{display:grid;gap:4px}
-  .imovel-card__title{margin:0;font-size:1.05rem;line-height:1.35}
-  .imovel-card__subtitle{margin:0;color:#666;font-size:.9rem}
-  .imovel-card__media img{width:100%;height:auto;border-radius:12px;display:block;object-fit:cover}
-  .imovel-card__bullets{margin:0;padding-left:18px;color:#333;line-height:1.45}
-  .imovel-card__foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .imovel-card__price strong{font-size:1.05rem}
-  .imovel-card__price small{display:block;color:#666}
-  .btn{border:0;cursor:pointer;border-radius:999px;padding:10px 16px;font-weight:600}
-  .btn-black{background:#000;color:#fff}
-  /* Modal */
-  .gallery-modal[hidden]{display:none}
-  .gallery-modal{position:fixed;inset:0;z-index:9999}
-  .gallery-modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72)}
-  .gallery-modal__dialog{position:relative;inset:0;display:grid;place-items:center;height:100%;padding:24px}
-  .gallery-modal__viewport{position:relative;max-width:min(1200px,95vw);max-height:80vh;display:grid}
-  .gallery-modal__viewport img{width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px}
-  .gallery-modal__close{position:absolute;top:22px;right:28px;font-size:32px;line-height:1;background:transparent;border:0;color:#fff;cursor:pointer}
-  .gallery-modal__controls{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px}
-  .g-prev,.g-next{border:0;padding:10px 14px;border-radius:10px;background:#fff;cursor:pointer;font-weight:700}
-  .g-count{color:#fff;font-weight:600}
-</style>
-
-<!-- === JS da galeria (isolado; não conflita) === -->
-<script>
-  (function () {
-    // Abrir modal
-    document.querySelectorAll('[data-open-gallery="area-2000-planalto"]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const modal = document.getElementById('gal-area-2000-planalto');
-        if(!modal) return;
-        modal.hidden = false;
-        const imgs = [...modal.querySelectorAll('[data-g-item]')];
-        const total = imgs.length;
-        let idx = 0;
-        const idxEl = modal.querySelector('[data-g-index]');
-        const totalEl = modal.querySelector('[data-g-total]');
-        totalEl.textContent = total.toString();
-
-        function show(i){
-          idx = (i + total) % total;
-          imgs.forEach((im,k)=> im.hidden = (k!==idx));
-          idxEl.textContent = (idx+1).toString();
-        }
-        show(0);
-
-        // Controles
-        const prev = modal.querySelector('[data-g-prev]');
-        const next = modal.querySelector('[data-g-next]');
-        const backdrop = modal.querySelector('[data-close-gallery]');
-        const closeBtn = modal.querySelector('.gallery-modal__close');
-
-        const onPrev = ()=> show(idx - 1);
-        const onNext = ()=> show(idx + 1);
-        const onClose = ()=> modal.hidden = true;
-        const onKeys = (ev)=>{
-          if(modal.hidden) return;
-          if(ev.key==='Escape') onClose();
-          if(ev.key==='ArrowLeft') onPrev();
-          if(ev.key==='ArrowRight') onNext();
-        };
-
-        prev.addEventListener('click', onPrev, { once:false });
-        next.addEventListener('click', onNext, { once:false });
-        backdrop.addEventListener('click', onClose, { once:false });
-        closeBtn.addEventListener('click', onClose, { once:false });
-        window.addEventListener('keydown', onKeys);
-
-        // remove listener ao fechar por botão/overlay
-        const cleanup = ()=>{
-          window.removeEventListener('keydown', onKeys);
-        };
-        // Observa fechamento para limpar
-        const obs = new MutationObserver(()=>{
-          if(modal.hidden) { cleanup(); obs.disconnect(); }
-        });
-        obs.observe(modal, { attributes:true, attributeFilter:['hidden'] });
-      });
-    });
-  })();
-</script>
-
-
+        <!-- Área Comercial 20.000 m² – Bairro Planalto (NOVO) -->
+        <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000">
+          <div class="thumb">
+            <img src="assets/area-2000-planalto-01.jpeg" alt="Área 20.000m² no Bairro Planalto, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Área Comercial 20.000m² – Bairro Planalto</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">20.000m²</span>
+              <span class="pill">100m × 200m</span>
+              <span class="pill">650m da BR-101 (Km 142)</span>
+              <span class="pill">Terraplanado</span>
+              <span class="pill">Acesso asfaltado</span>
+              <span class="pill">Ref: CI-AR-PLAN-20000</span>
+            </div>
+            <p class="price">R$ 4.000.000,00</p>
+            <ul class="ul">
+              <li>À 650m da BR-101 (Km 142), estrada da Lasa</li>
+              <li>À 6km da Fábrica da Cacau Show</li>
+              <li>À 2km do Aeroporto de Linhares/ES</li>
+              <li>À 1,5km do Shopping PátioMix</li>
+              <li>À 250m da UGBP Produção e Exportação • À 150m da Norte Recicla</li>
+              <li>Terreno todo terraplanado, pronto para construção</li>
+              <li>Documentação toda ok</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="area-2000-planalto-" data-gallery-count="7">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -577,7 +478,7 @@
 
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 
-  <!-- Modal de galeria -->
+  <!-- Modal da galeria (grade empilhada) -->
   <div id="gallery-modal" class="gallery-modal" aria-hidden="true">
     <div class="gallery-backdrop" data-close></div>
     <div class="gallery-content" role="dialog" aria-modal="true" aria-label="Galeria de fotos">
@@ -586,350 +487,216 @@
     </div>
   </div>
 
-  <!-- Galeria: comportamento diferente para mobile/desktop -->
-  <script>
-  (function(){
-    const modal = document.getElementById('gallery-modal');
-    const grid  = document.getElementById('gallery-grid');
-    const EXT_ORDER = ['.jpeg','.jpg','.png','.JPEG','.JPG','.PNG'];
-    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  <!-- VISOR (zoom/pinch/rodinha + setas/swipe) -->
+  <div class="viewer" id="viewer" hidden>
+    <div class="toolbar">
+      <button class="btn-open" id="openNew" title="Abrir esta imagem em nova aba">↗ abrir em nova aba</button>
+      <span class="count"><b id="vi">1</b>/<span id="vt">1</span></span>
+      <button class="btn-close" title="Fechar" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="viewport" id="vp">
+      <div class="stage" id="stg">
+        <img id="ph" class="pic" alt="">
+      </div>
+    </div>
+    <button class="arrow left" aria-label="Anterior">&#8592;</button>
+    <button class="arrow right" aria-label="Próxima">&#8594;</button>
+  </div>
 
-    document.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.btn-fotos');
-      if(!btn) return;
-
-      const prefix = btn.dataset.galleryPrefix;
-      const count  = parseInt(btn.dataset.galleryCount || '0', 10);
-
-      grid.innerHTML = '';
-
-      for(let i=1;i<=count;i++){
-        const nn   = String(i).padStart(2,'0');
-        const base = `assets/${prefix}${nn}`;
-
-        if (isCoarse) {
-          // MOBILE: div com background (dificulta salvar)
-          const cell = document.createElement('div');
-          cell.className = 'gcell';
-          cell.setAttribute('role','img');
-          cell.setAttribute('aria-label', `Foto ${i} - ${prefix.replace(/-$/,'')}`);
-
-          let idx = 0;
-          const tryNext = ()=>{
-            if(idx >= EXT_ORDER.length){
-              cell.style.backgroundImage =
-                `url('data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-                  `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
-                    <rect width="100%" height="100%" fill="#eee"/>
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                          fill="#777" font-family="Arial" font-size="20">
-                      Imagem não encontrada: ${base}
-                    </text>
-                  </svg>`
-                )}')`;
-              return;
-            }
-            const ext = EXT_ORDER[idx++];
-            const src = `${base}${ext}`;
-            const testImg = new Image();
-            testImg.onload  = ()=>{ cell.style.backgroundImage = `url('${src}')`; };
-            testImg.onerror = tryNext;
-            testImg.src = src;
-          };
-          tryNext();
-          grid.appendChild(cell);
-
-        } else {
-          // DESKTOP: <a target=_blank><img></a>
-          const a   = document.createElement('a');
-          const img = document.createElement('img');
-          img.loading = 'lazy';
-          img.alt = `Foto ${i} - ${prefix.replace(/-$/,'')}`;
-
-          let idx = 0;
-          const tryNext = ()=>{
-            if(idx >= EXT_ORDER.length){
-              img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
-                `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
-                  <rect width="100%" height="100%" fill="#eee"/>
-                  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        fill="#777" font-family="Arial" font-size="20">
-                    Imagem não encontrada: ${base}
-                  </text>
-                </svg>`
-              );
-              a.removeAttribute('href');
-              a.removeAttribute('target');
-              return;
-            }
-            const ext = EXT_ORDER[idx++];
-            const src = `${base}${ext}`;
-            img.src = src;
-            img.onload  = ()=>{ a.href = src; };
-            img.onerror = tryNext;
-          };
-          tryNext();
-
-          a.target = '_blank'; a.rel='noopener';
-          a.appendChild(img);
-          grid.appendChild(a);
-        }
-      }
-
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden','false');
-      document.body.style.overflow='hidden';
-    });
-
-    // fechar modal
-    modal.addEventListener('click',(e)=>{
-      if(e.target.hasAttribute('data-close')) closeModal();
-    });
-    document.addEventListener('keydown',(e)=>{
-      if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-    });
-    function closeModal(){
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      document.body.style.overflow='';
-      grid.innerHTML='';
-    }
-
-    // Bloqueia menu de contexto dentro da galeria (ajuda em alguns mobiles)
-    document.addEventListener('contextmenu', e => {
-      if (e.target.closest('.gallery-content')) e.preventDefault();
-    });
-  })();
-  </script>
-
-  <!-- WhatsApp automático por card (usa título, preço e data-code) -->
+  <!-- WhatsApp automático por card -->
   <script>
   (function(){
     const WHATS_BASE = 'https://wa.me/5527999567000?text=';
-
     document.querySelectorAll('article.card[data-code]').forEach(card => {
       const code  = card.getAttribute('data-code') || '';
       const title = (card.querySelector('h3')?.textContent || '').trim();
       const price = (card.querySelector('.price')?.textContent || '').trim();
       const a     = card.querySelector('a.btn.btn-whats.js-wa');
-
       if(!a) return;
-
       const msg = `Olá, tenho interesse em ${title} (${price}).\nRef: ${code}`;
       a.href = WHATS_BASE + encodeURIComponent(msg);
     });
   })();
   </script>
 
-  <!-- Destaques do dia com itens fixos (featured) -->
-  <script>
-(function(){
-  const box = document.getElementById('mini-highlights');
-  if (!box) return;
-
-  // Coleta todos os cards da seção "Imóveis"
-  const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
-
-  // Mapeia pra {href, src, alt}
-  const items = cards.map(card => {
-    const id  = card.id || '';
-    const img = card.querySelector('.thumb img');
-    const h3  = card.querySelector('h3');
-    if (!img) return null;
-    return {
-      href: id ? `#${id}` : '#',
-      src: img.getAttribute('src') || img.src || '',
-      alt: h3 ? h3.textContent.trim() : 'Imóvel'
-    };
-  }).filter(Boolean);
-
-  if (!items.length) return;
-
-  // índice diário determinístico (muda 1x por dia)
-  const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
-  const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
-
-  const rotated = rotate(items, dayNumber % items.length);
-  const slots = 3; // quantos mostrar
-  const picks = rotated.slice(0, Math.min(slots, rotated.length));
-
-  // Renderiza os 3 do dia
-  box.innerHTML = picks.map(it => `
-    <a class="mini-item" href="${it.href}">
-      <img src="${it.src}" alt="${it.alt}" loading="lazy">
-    </a>
-  `).join('');
-
-  // Efeito de entrada suave
-  box.style.opacity = '0';
-  box.style.transform = 'translateY(4px)';
-  requestAnimationFrame(() => {
-    box.style.transition = 'opacity .25s ease, transform .25s ease';
-    box.style.opacity = '1';
-    box.style.transform = 'translateY(0)';
-  });
-})();
-</script>
-  
-  </script>
-
-  // Util: cria slides por prefixo+count (usa background-image)
-  function buildSlides(prefix, count) {
-    vp.innerHTML = '';
-    slides = [];
-    for (let i = 1; i <= count; i++) {
-      const n = i.toString().padStart(2,'0'); // 01..09
-      const url = `assets/${prefix}${n}.jpeg`;
-      const d = document.createElement('div');
-      d.className = 'lb__slide no-save';
-      d.style.backgroundImage = `url('${url}')`;
-      d.setAttribute('aria-hidden','true');
-      vp.appendChild(d);
-      slides.push(d);
-    }
-    totEl.textContent = slides.length.toString();
-  }
-  function show(i){
-    if (!slides.length) return;
-    idx = (i + slides.length) % slides.length;
-    slides.forEach((s,k)=> s.classList.toggle('is-active', k===idx));
-    idxEl.textContent = (idx+1).toString();
-  }
-  function open(prefix, count){
-    buildSlides(prefix, count);
-    show(0);
-    lb.hidden = false;
-    document.documentElement.style.overflow = 'hidden';
-  }
-  function close(){
-    lb.hidden = true;
-    document.documentElement.style.overflow = '';
-  }
-
-  // Navegação
-  lb.querySelector('[data-lb-prev]').addEventListener('click', ()=>show(idx-1));
-  lb.querySelector('[data-lb-next]').addEventListener('click', ()=>show(idx+1));
-  lb.querySelectorAll('[data-lb-close]').forEach(b=> b.addEventListener('click', close));
-  lb.addEventListener('click', (e)=>{
-    // clicar fora do viewport fecha
-    if (e.target.classList.contains('lb__backdrop')) close();
-  });
-  window.addEventListener('keydown', (e)=>{
-    if (lb.hidden) return;
-    if (e.key==='Escape') close();
-    if (e.key==='ArrowLeft') show(idx-1);
-    if (e.key==='ArrowRight') show(idx+1);
-  });
-
-  // Previna context menu/arrasto (mitigação extra)
-  ['contextmenu','dragstart','gesturestart'].forEach(evt=>{
-    lb.addEventListener(evt, e=> e.preventDefault());
-  });
-
-  // Usa o seu botão padrão .btn-fotos com data-gallery-*
-  document.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.btn-fotos');
-    if (!btn) return;
-    const prefix = btn.getAttribute('data-gallery-prefix') || '';
-    const count = parseInt(btn.getAttribute('data-gallery-count') || '1', 10);
-    // Se seu padrão usa nomes com traço final (ex.: "area-2000-planalto-"), mantenha
-    open(prefix, count);
-  });
-})();
-</script>
-
-<script>
-(function(){
-  document.addEventListener('click', function(e){
-    const btn = e.target.closest('.btn-fotos');
-    if(!btn) return;
-    e.preventDefault();
-
-    const prefix = btn.getAttribute('data-gallery-prefix') || '';
-    const count  = parseInt(btn.getAttribute('data-gallery-count') || '1', 10);
-    const title  = btn.closest('.card')?.querySelector('h3')?.textContent?.trim() || 'Fotos do imóvel';
-
-    // monta lista de imagens: assets/prefix01.jpeg ... 02, 03...
-    const imgs = Array.from({length: count}, (_,i)=> `assets/${prefix}${String(i+1).padStart(2,'0')}.jpeg`);
-
-    const html = `
-<!doctype html><html lang="pt-BR">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title}</title>
-<style>
-  :root { color-scheme: dark; }
-  *{box-sizing:border-box}
-  body{margin:0;background:#000;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-  .toolbar{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;gap:12px;background:rgba(0,0,0,.6);backdrop-filter:saturate(180%) blur(8px);z-index:10}
-  .counter{font-weight:700}
-  .btn{border:0;padding:8px 14px;border-radius:10px;cursor:pointer}
-  .btn-nav{background:#fff}
-  .btn-close{position:absolute;right:10px;background:transparent;color:#fff;font-size:28px;line-height:1}
-  .viewport{position:fixed;inset:0;top:56px;display:grid;place-items:center}
-  img{max-width:100vw;max-height:calc(100vh - 56px);object-fit:contain;display:block}
-  .arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.35);border:0;color:#fff;font-size:28px;padding:10px 14px;border-radius:10px;cursor:pointer}
-  .arrow.left{left:12px}
-  .arrow.right{right:12px}
-</style>
-</head>
-<body>
-  <div class="toolbar">
-    <span class="counter"><b id="i">1</b>/<span id="t">${count}</span></span>
-    <button class="btn btn-close" aria-label="Fechar" title="Fechar">&times;</button>
-  </div>
-
-  <div class="viewport"><img id="ph" alt=""></div>
-  <button class="arrow left" aria-label="Anterior">&#8592;</button>
-  <button class="arrow right" aria-label="Próxima">&#8594;</button>
-
+  <!-- Destaques do dia -->
   <script>
   (function(){
-    const imgs = ${JSON.stringify(imgs)};
-    let idx = 0;
-    const ph = document.getElementById('ph');
-    const iEl = document.getElementById('i');
-    function show(i){
-      idx = (i + imgs.length) % imgs.length;
-      ph.src = imgs[idx];
-      ph.alt = 'Foto ' + (idx+1);
-      iEl.textContent = (idx+1);
-    }
-    show(0);
-
-    document.querySelector('.arrow.left').addEventListener('click', ()=>show(idx-1));
-    document.querySelector('.arrow.right').addEventListener('click', ()=>show(idx+1));
-    document.querySelector('.btn-close').addEventListener('click', ()=>window.close());
-
-    window.addEventListener('keydown', (e)=>{
-      if(e.key==='ArrowLeft')  show(idx-1);
-      if(e.key==='ArrowRight') show(idx+1);
-      if(e.key==='Escape')     window.close();
+    const box = document.getElementById('mini-highlights');
+    if (!box) return;
+    const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
+    const items = cards.map(card => {
+      const id  = card.id || '';
+      const img = card.querySelector('.thumb img');
+      const h3  = card.querySelector('h3');
+      if (!img) return null;
+      return { href: id ? `#${id}` : '#', src: img.getAttribute('src') || img.src || '', alt: h3 ? h3.textContent.trim() : 'Imóvel' };
+    }).filter(Boolean);
+    if (!items.length) return;
+    const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
+    const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
+    const rotated = rotate(items, dayNumber % items.length);
+    const picks = rotated.slice(0, Math.min(3, rotated.length));
+    box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
+    box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
+    requestAnimationFrame(() => {
+      box.style.transition = 'opacity .25s ease, transform .25s ease';
+      box.style.opacity = '1'; box.style.transform = 'translateY(0)';
     });
-
-    // Swipe (mobile)
-    let sx=0, sy=0;
-    window.addEventListener('touchstart', e=>{ const t=e.changedTouches[0]; sx=t.screenX; sy=t.screenY; }, {passive:true});
-    window.addEventListener('touchend', e=>{
-      const t=e.changedTouches[0];
-      const dx=t.screenX-sx, dy=t.screenY-sy;
-      if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){
-        if(dx<0) show(idx+1); else show(idx-1);
-      }
-    }, {passive:true});
-
-    // Evita arrastar imagem (comportamento chato em desktop)
-    ph.addEventListener('dragstart', e=> e.preventDefault());
   })();
   </script>
-</body></html>`;
 
-    const w = window.open('', '_blank');
-    if(!w){ alert('Desbloqueie pop-ups para ver as fotos.'); return; }
-    w.document.open(); w.document.write(html); w.document.close();
-  }, false);
-})();
-</script>
-      
+  <!-- Galeria: grade empilhada + visor com zoom (mobile e desktop) -->
+  <script>
+  (function(){
+    const modal = document.getElementById('gallery-modal');
+    const grid  = document.getElementById('gallery-grid');
+    const viewer = document.getElementById('viewer');
+    const ph = document.getElementById('ph');
+    const stg = document.getElementById('stg');
+    const vp  = document.getElementById('vp');
+    const vi  = document.getElementById('vi');
+    const vt  = document.getElementById('vt');
+    const openNew = document.getElementById('openNew');
+
+    const EXT_ORDER = ['.jpeg','.jpg','.png','.JPEG','.JPG','.PNG'];
+    let imgs = [];
+    let idx=0, scale=1, minScale=1, maxScale=4, tx=0, ty=0, startDist=0, startScale=1, lastTap=0, startX=0, startY=0, isPanning=false;
+    let isDraggingMouse=false, dragSX=0, dragSY=0;
+
+    function setT(){ stg.style.transform = 'translate3d('+tx+'px,'+ty+'px,0) scale('+scale+')'; }
+    function reset(){ scale=1; tx=0; ty=0; setT(); }
+    function show(i){ idx=(i+imgs.length)%imgs.length; const src=imgs[idx]; ph.src=src; ph.alt='Foto '+(idx+1); vi.textContent=(idx+1); openNew.onclick=()=>window.open(src,'_blank','noopener'); reset(); }
+    function openViewer(startIndex){ idx=startIndex; vt.textContent = imgs.length; show(idx); viewer.hidden=false; document.documentElement.style.overflow='hidden'; }
+    function closeViewer(){ viewer.hidden=true; document.documentElement.style.overflow=''; }
+
+    document.querySelector('.viewer .left').addEventListener('click', ()=>show(idx-1));
+    document.querySelector('.viewer .right').addEventListener('click', ()=>show(idx+1));
+    document.querySelector('.viewer .btn-close').addEventListener('click', closeViewer);
+    window.addEventListener('keydown', e=>{ if(viewer.hidden) return; if(e.key==='ArrowLeft')show(idx-1); if(e.key==='ArrowRight')show(idx+1); if(e.key==='Escape')closeViewer(); });
+
+    // Touch: swipe
+    let swipeSX=0, swipeSY=0;
+    vp.addEventListener('touchstart', e=>{ if(e.touches.length===1){ swipeSX=e.touches[0].clientX; swipeSY=e.touches[0].clientY; } }, {passive:true});
+    vp.addEventListener('touchend', e=>{
+      if(e.changedTouches.length){
+        const dx=e.changedTouches[0].clientX-swipeSX, dy=e.changedTouches[0].clientY-swipeSY;
+        if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)){ if(dx<0)show(idx+1); else show(idx-1); }
+      }
+    }, {passive:true});
+    // Pinch & pan (touch)
+    vp.addEventListener('touchstart', e=>{
+      if(e.touches.length===2){
+        const a=e.touches[0], b=e.touches[1];
+        startDist=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+        startScale=scale;
+      } else if(e.touches.length===1){
+        isPanning=true; startX=e.touches[0].clientX-tx; startY=e.touches[0].clientY-ty;
+      }
+    }, {passive:false});
+    vp.addEventListener('touchmove', e=>{
+      if(e.touches.length===2){
+        e.preventDefault();
+        const a=e.touches[0], b=e.touches[1];
+        const dist=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+        scale=Math.min(maxScale, Math.max(minScale, startScale*(dist/startDist))); setT();
+      } else if(e.touches.length===1 && isPanning && scale>1){
+        e.preventDefault(); tx=e.touches[0].clientX-startX; ty=e.touches[0].clientY-startY; setT();
+      }
+    }, {passive:false});
+    vp.addEventListener('touchend', e=>{ if(e.touches.length===0){ isPanning=false; } });
+    // Duplo toque para zoom
+    vp.addEventListener('touchend', e=>{
+      const now=Date.now();
+      if(now-lastTap<300 && e.changedTouches.length===1){
+        if(scale===1){ scale=2; } else { scale=1; tx=0; ty=0; }
+        setT();
+      }
+      lastTap=now;
+    });
+
+    // Desktop: roda do mouse (zoom) + arrastar (pan) + duplo clique
+    vp.addEventListener('wheel', e=>{
+      e.preventDefault();
+      const delta = -e.deltaY;
+      const zoom = delta>0 ? 1.1 : 0.9;
+      const newScale = Math.min(maxScale, Math.max(minScale, scale * zoom));
+      if(newScale !== scale){
+        scale = newScale;
+        setT();
+      }
+    }, {passive:false});
+    stg.addEventListener('mousedown', e=>{
+      if(e.button!==0) return;
+      isDraggingMouse = true;
+      dragSX = e.clientX - tx;
+      dragSY = e.clientY - ty;
+      stg.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', e=>{
+      if(!isDraggingMouse || scale<=1) return;
+      tx = e.clientX - dragSX;
+      ty = e.clientY - dragSY;
+      setT();
+    });
+    window.addEventListener('mouseup', ()=>{
+      isDraggingMouse = false;
+      stg.style.cursor = 'grab';
+    });
+    vp.addEventListener('dblclick', ()=>{
+      if(scale===1){ scale=2; } else { scale=1; tx=0; ty=0; }
+      setT();
+    });
+
+    // Abre a MODAL com a grade empilhada
+    function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; grid.innerHTML=''; }
+
+    modal.addEventListener('click',(e)=>{ if(e.target.hasAttribute('data-close')) closeModal(); });
+    document.addEventListener('keydown',(e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+    // Click em "Ver fotos" — monta grade e permite abrir visor em qualquer tela
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.btn-fotos');
+      if(!btn) return;
+
+      const prefix = btn.dataset.galleryPrefix;
+      const count  = parseInt(btn.dataset.galleryCount || '0', 10);
+      imgs = []; grid.innerHTML = '';
+
+      for(let i=1;i<=count;i++){
+        const nn   = String(i).padStart(2,'0');
+        const base = `assets/${prefix}${nn}`;
+        // escolhe a extensão (aposta em .jpeg/.jpg/.png)
+        let chosen = null;
+        for(const ext of EXT_ORDER){ if(!chosen) chosen = `${base}${ext}`; }
+        imgs.push(chosen);
+
+        // Miniatura clicável (mobile e desktop) -> abre o VISOR
+        const cell = document.createElement('div');
+        cell.className = 'gcell';
+        cell.style.backgroundImage = `url('${chosen}')`;
+        cell.setAttribute('role','img');
+        cell.setAttribute('aria-label', `Foto ${i}`);
+        cell.addEventListener('click', ()=> openViewer(i-1));
+
+        // No desktop, também renderiza <a><img> para qualidade da miniatura (mantém seu estilo)
+        const desktop = document.createElement('a');
+        desktop.href = chosen; desktop.target='_blank'; desktop.rel='noopener';
+        const img = document.createElement('img');
+        img.loading='lazy'; img.alt=`Foto ${i}`; img.src=chosen;
+
+        // Empilha ambos conforme layout desejado (usar só uma das linhas abaixo)
+        // Opção A (somente DIV gcell): grid.appendChild(cell);
+        // Opção B (usa IMG com link estético, mas clique abre visor):
+        desktop.addEventListener('click', (ev)=>{ ev.preventDefault(); openViewer(i-1); });
+        desktop.appendChild(img); grid.appendChild(desktop);
+      }
+
+      openModal();
+    });
+  })();
+  </script>
+
 </body>
 </html>
