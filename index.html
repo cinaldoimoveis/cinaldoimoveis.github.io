@@ -772,6 +772,119 @@
 </script>
   
   </script>
+<!-- Lightbox anti-save (drop-in) -->
+<div id="lb" class="lb no-save" hidden aria-hidden="true">
+  <div class="lb__backdrop" data-lb-close></div>
+  <div class="lb__dialog" role="dialog" aria-modal="true" aria-label="Galeria de fotos">
+    <button class="lb__close no-save" data-lb-close aria-label="Fechar">&times;</button>
+    <div class="lb__viewport no-save" id="lbViewport"></div>
+    <div class="lb__controls no-save">
+      <button class="lb__nav" data-lb-prev aria-label="Anterior">&#8592;</button>
+      <span class="lb__count"><b id="lbIndex">1</b>/<span id="lbTotal">1</span></span>
+      <button class="lb__nav" data-lb-next aria-label="Próxima">&#8594;</button>
+    </div>
+    <!-- Camada que intercepta long-press (não bloqueia a navegação) -->
+    <div class="lb__shield no-save" aria-hidden="true"></div>
+  </div>
+</div>
+
+<style>
+  /* Base */
+  .lb[hidden]{display:none}
+  .lb{position:fixed;inset:0;z-index:9999}
+  .lb__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.8)}
+  .lb__dialog{position:relative;inset:0;height:100%;display:grid;place-items:center;padding:20px}
+  .lb__viewport{position:relative;width:min(96vw,1200px);height:min(80vh,900px);border-radius:12px;overflow:hidden;background:#000}
+  .lb__controls{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center}
+  .lb__nav{border:0;padding:10px 14px;border-radius:10px;background:#fff;cursor:pointer;font-weight:700}
+  .lb__count{color:#fff;font-weight:700}
+  .lb__close{position:absolute;top:16px;right:20px;background:transparent;border:0;color:#fff;font-size:36px;cursor:pointer;line-height:1}
+  /* Slides (sem <img>): reduz “Salvar imagem” no mobile */
+  .lb__slide{position:absolute;inset:0;background-position:center;background-repeat:no-repeat;background-size:contain;opacity:0;transition:opacity .2s}
+  .lb__slide.is-active{opacity:1}
+  /* Camada que captura long-press */
+  .lb__shield{position:absolute;inset:0;pointer-events:auto}
+  /* Anti long-press/seleção/arraste (mitiga, não elimina 100%) */
+  .no-save, .no-save * {
+    -webkit-touch-callout: none;  /* iOS: corta “Toque e segure” */
+    -webkit-user-select: none; user-select: none;
+    -webkit-user-drag: none;
+    touch-action: manipulation;
+  }
+</style>
+
+<script>
+(function(){
+  const lb = document.getElementById('lb');
+  const vp = document.getElementById('lbViewport');
+  const idxEl = document.getElementById('lbIndex');
+  const totEl = document.getElementById('lbTotal');
+  let slides = [], idx = 0;
+
+  // Util: cria slides por prefixo+count (usa background-image)
+  function buildSlides(prefix, count) {
+    vp.innerHTML = '';
+    slides = [];
+    for (let i = 1; i <= count; i++) {
+      const n = i.toString().padStart(2,'0'); // 01..09
+      const url = `assets/${prefix}${n}.jpeg`;
+      const d = document.createElement('div');
+      d.className = 'lb__slide no-save';
+      d.style.backgroundImage = `url('${url}')`;
+      d.setAttribute('aria-hidden','true');
+      vp.appendChild(d);
+      slides.push(d);
+    }
+    totEl.textContent = slides.length.toString();
+  }
+  function show(i){
+    if (!slides.length) return;
+    idx = (i + slides.length) % slides.length;
+    slides.forEach((s,k)=> s.classList.toggle('is-active', k===idx));
+    idxEl.textContent = (idx+1).toString();
+  }
+  function open(prefix, count){
+    buildSlides(prefix, count);
+    show(0);
+    lb.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+  }
+  function close(){
+    lb.hidden = true;
+    document.documentElement.style.overflow = '';
+  }
+
+  // Navegação
+  lb.querySelector('[data-lb-prev]').addEventListener('click', ()=>show(idx-1));
+  lb.querySelector('[data-lb-next]').addEventListener('click', ()=>show(idx+1));
+  lb.querySelectorAll('[data-lb-close]').forEach(b=> b.addEventListener('click', close));
+  lb.addEventListener('click', (e)=>{
+    // clicar fora do viewport fecha
+    if (e.target.classList.contains('lb__backdrop')) close();
+  });
+  window.addEventListener('keydown', (e)=>{
+    if (lb.hidden) return;
+    if (e.key==='Escape') close();
+    if (e.key==='ArrowLeft') show(idx-1);
+    if (e.key==='ArrowRight') show(idx+1);
+  });
+
+  // Previna context menu/arrasto (mitigação extra)
+  ['contextmenu','dragstart','gesturestart'].forEach(evt=>{
+    lb.addEventListener(evt, e=> e.preventDefault());
+  });
+
+  // Usa o seu botão padrão .btn-fotos com data-gallery-*
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.btn-fotos');
+    if (!btn) return;
+    const prefix = btn.getAttribute('data-gallery-prefix') || '';
+    const count = parseInt(btn.getAttribute('data-gallery-count') || '1', 10);
+    // Se seu padrão usa nomes com traço final (ex.: "area-2000-planalto-"), mantenha
+    open(prefix, count);
+  });
+})();
+</script>
 
 </body>
 </html>
