@@ -245,9 +245,10 @@
           <div class="content">
             <strong>Destaques de hoje</strong>
             <div class="mini-list">
-              <a class="mini-item" href="#casa-alphaville"><img src="assets/alphaville-casa-01.jpeg" alt="Alphaville"></a>
-              <a class="mini-item" href="#laguna"><img src="assets/casa-rua-italia-01.jpeg" alt="Jardim Laguna 2"></a>
-              <a class="mini-item" href="#lote-alphaville"><img src="assets/lote-alphaville-01.jpeg" alt="Lote Comercial Alphaville"></a>
+              <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje">
+  <!-- preenchido via JS diariamente -->
+</div>
+
             </div>
           </div>
         </div>
@@ -587,5 +588,54 @@
     });
   })();
   </script>
+  <script>
+/* Destaques do dia (gira 3 itens diariamente, sem backend) */
+(function(){
+  const box = document.getElementById('mini-highlights');
+  if (!box) return;
+
+  // Coleta todos os cards já renderizados na seção "Imóveis"
+  const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
+
+  // Mapeia pra {href, src, alt}, usando a thumb do card
+  const items = cards.map(card => {
+    const id  = card.id || '';
+    const img = card.querySelector('.thumb img');
+    const h3  = card.querySelector('h3');
+    return {
+      href: id ? `#${id}` : '#',
+      src: img ? img.getAttribute('src') : '',
+      alt: h3 ? h3.textContent.trim() : 'Imóvel'
+    };
+  }).filter(x => x.src);
+
+  if (items.length === 0) return;
+
+  // Índice diário determinístico (muda 1 vez por dia)
+  const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
+  const start = dayNumber % items.length;
+
+  // Pega 3 itens (ou menos se não houver) a partir do índice
+  const howMany = Math.min(3, items.length);
+  const picks = Array.from({length: howMany}, (_, i) => items[(start + i) % items.length]);
+
+  // Renderiza
+  box.innerHTML = picks.map(it => `
+    <a class="mini-item" href="${it.href}">
+      <img src="${it.src}" alt="${it.alt}" loading="lazy">
+    </a>
+  `).join('');
+
+  // Efeito de entrada suave (opcional)
+  box.style.opacity = '0';
+  box.style.transform = 'translateY(4px)';
+  requestAnimationFrame(() => {
+    box.style.transition = 'opacity .25s ease, transform .25s ease';
+    box.style.opacity = '1';
+    box.style.transform = 'translateY(0)';
+  });
+})();
+</script>
+
 </body>
 </html>
