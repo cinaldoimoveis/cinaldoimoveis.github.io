@@ -217,12 +217,6 @@
       .viewer .stage{cursor:grab}
       .viewer .stage:active{cursor:grabbing}
     }
-    <style id="hide-open-desktop">
-  /* Esconde o botão no desktop (aparece apenas em telas de toque) */
-  @media (pointer: fine) {
-    #openNew { display: none !important; }
-  }
-</style>
   </style>
 </head>
 <body>
@@ -572,7 +566,14 @@
 
     function setT(){ stg.style.transform = 'translate3d('+tx+'px,'+ty+'px,0) scale('+scale+')'; }
     function reset(){ scale=1; tx=0; ty=0; setT(); }
-    function show(i){ idx=(i+imgs.length)%imgs.length; const src=imgs[idx]; ph.src=src; ph.alt='Foto '+(idx+1); vi.textContent=(idx+1); openNew.onclick=()=>window.open(src,'_blank','noopener'); reset(); }
+    function show(i){
+      idx=(i+imgs.length)%imgs.length;
+      const src=imgs[idx];
+      ph.src=src; ph.alt='Foto '+(idx+1);
+      vi.textContent=(idx+1);
+      openNew.onclick=()=>window.open(src,'_blank','noopener');
+      reset();
+    }
     function openViewer(startIndex){ idx=startIndex; vt.textContent = imgs.length; show(idx); viewer.hidden=false; document.documentElement.style.overflow='hidden'; }
     function closeViewer(){ viewer.hidden=true; document.documentElement.style.overflow=''; }
 
@@ -661,7 +662,7 @@
     modal.addEventListener('click',(e)=>{ if(e.target.hasAttribute('data-close')) closeModal(); });
     document.addEventListener('keydown',(e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
-    // Click em "Ver fotos" — monta grade e permite abrir visor em qualquer tela
+    // Click em "Ver fotos" — monta grade e permite abrir visor
     document.addEventListener('click', (e)=>{
       const btn = e.target.closest('.btn-fotos');
       if(!btn) return;
@@ -678,7 +679,7 @@
         for(const ext of EXT_ORDER){ if(!chosen) chosen = `${base}${ext}`; }
         imgs.push(chosen);
 
-        // Miniatura clicável (mobile e desktop) -> abre o VISOR
+        // Miniatura clicável -> abre o VISOR
         const cell = document.createElement('div');
         cell.className = 'gcell';
         cell.style.backgroundImage = `url('${chosen}')`;
@@ -686,23 +687,31 @@
         cell.setAttribute('aria-label', `Foto ${i}`);
         cell.addEventListener('click', ()=> openViewer(i-1));
 
-        // No desktop, também renderiza <a><img> para qualidade da miniatura (mantém seu estilo)
+        // (opcional) versão com <a><img> estética; clique também abre visor
         const desktop = document.createElement('a');
         desktop.href = chosen; desktop.target='_blank'; desktop.rel='noopener';
         const img = document.createElement('img');
         img.loading='lazy'; img.alt=`Foto ${i}`; img.src=chosen;
-
-        // Empilha ambos conforme layout desejado (usar só uma das linhas abaixo)
-        // Opção A (somente DIV gcell): grid.appendChild(cell);
-        // Opção B (usa IMG com link estético, mas clique abre visor):
         desktop.addEventListener('click', (ev)=>{ ev.preventDefault(); openViewer(i-1); });
-        desktop.appendChild(img); grid.appendChild(desktop);
+        desktop.appendChild(img);
+        grid.appendChild(desktop);
       }
 
       openModal();
     });
   })();
   </script>
+
+  <!-- Oculta o botão "Abrir em nova aba" no desktop -->
+  <style id="hide-open-desktop">
+    @media (pointer: fine) {
+      #openNew {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+      }
+    }
+  </style>
 
 </body>
 </html>
