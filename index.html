@@ -836,5 +836,17 @@
   }
   </style>
 
+  <style id="hide-open-mobile">
+  /* Esconde o botão em telas touch (celulares/tablets) */
+  @media (any-pointer: coarse) {
+    #openNew {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+  }
+</style>
+
+
 </body>
 </html>
