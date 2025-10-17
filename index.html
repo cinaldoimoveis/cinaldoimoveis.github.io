@@ -217,6 +217,12 @@
       .viewer .stage{cursor:grab}
       .viewer .stage:active{cursor:grabbing}
     }
+    <style id="hide-open-desktop">
+  /* Esconde o botão no desktop (aparece apenas em telas de toque) */
+  @media (pointer: fine) {
+    #openNew { display: none !important; }
+  }
+</style>
   </style>
 </head>
 <body>
