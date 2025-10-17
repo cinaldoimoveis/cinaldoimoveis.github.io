@@ -28,10 +28,10 @@
   <style>
     :root{
       --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
-      --side: 20px; /* margem lateral padrão */
+      --side: 20px; /* margem lateral padrão global */
     }
 
-    /* Container com safe area simétrica nas laterais */
+    /* Container com safe area simétrica nas laterais (base) */
     .container{
       max-width:1150px;
       margin:0 auto;
@@ -46,7 +46,7 @@
 
     header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(150%) blur(8px);border-bottom:1px solid var(--line)}
     .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px}
-    .brand{display:flex;align-items:center;gap:0px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
+    .brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
     .brand-logo-img{width:44px;height:44px;object-fit:contain;border-radius:10px}
     .brand small{display:block;font-weight:600;font-size:12px;color:var(--muted);letter-spacing:.4px}
     .menu{display:flex;gap:18px;align-items:center}
@@ -167,47 +167,41 @@
       background-repeat: no-repeat;
     }
   </style>
-  
+
+  <!-- Ajustes finos independentes (páginas e header) -->
   <style id="fix-sides">
-  /* Ajustes finos independentes */
-  :root{
-    --side-left: 16px;   /* ajuste fino ESQUERDA */
-    --side-right: 16px;  /* ajuste fino DIREITA  */
-  }
-
-  /* Soma o seu ajuste + safe area do iOS (em vez de max) */
-  header .container,
-  main .container,
-  section .container,
-  footer .container {
-    padding-left:  calc(var(--side-left)  + env(safe-area-inset-left));
-    padding-right: calc(var(--side-right) + env(safe-area-inset-right));
-  }
-
-  /* No topo não damos padding extra na .menu; o .container resolve tudo */
-  @media (max-width: 640px){
-    .menu{ padding:0 !important; }
-  }
-  @media (orientation: landscape) and (max-width: 900px){
-    .menu{ padding:0 !important; }
-  }
-</style>
-
-  <style id="header-fine-tune">
-  /* Ajuste fino apenas para o HEADER */
-  header .container {
-    padding-left:  var(--head-left, 2px);
-    padding-right: var(--head-right, 10px);
-  }
-
-  /* Opcional: valores adaptativos */
-  @media (max-width: 900px) {
-    header .container {
-      padding-left:  var(--head-left-mobile, 20px);
-      padding-right: var(--head-right-mobile, 22px);
+    :root{
+      --side-left: 16px;   /* ajuste fino ESQUERDA global */
+      --side-right: 16px;  /* ajuste fino DIREITA  global */
     }
-  }
-</style>
+    header .container,
+    main .container,
+    section .container,
+    footer .container {
+      padding-left:  calc(var(--side-left)  + env(safe-area-inset-left));
+      padding-right: calc(var(--side-right) + env(safe-area-inset-right));
+    }
+    @media (max-width: 640px){
+      .menu{ padding:0 !important; }
+    }
+    @media (orientation: landscape) and (max-width: 900px){
+      .menu{ padding:0 !important; }
+    }
+  </style>
+
+  <!-- Ajuste fino apenas do header -->
+  <style id="header-fine-tune">
+    header .container {
+      padding-left:  var(--head-left, 22px);
+      padding-right: var(--head-right, 22px);
+    }
+    @media (max-width: 900px) {
+      header .container {
+        padding-left:  var(--head-left-mobile, 20px);
+        padding-right: var(--head-right-mobile, 22px);
+      }
+    }
+  </style>
 
 </head>
 <body>
@@ -244,10 +238,8 @@
           <div class="thumb"><img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis"></div>
           <div class="content">
             <strong>Destaques de hoje</strong>
-            <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje">
-  <!-- preenchido via JS diariamente -->
-</div>
-
+            <!-- lista preenchida automaticamente -->
+            <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje"></div>
           </div>
         </div>
       </div>
@@ -258,8 +250,8 @@
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
       <div class="grid">
-        <!-- Casa em Alphaville -->
-        <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217">
+        <!-- Casa em Alphaville (FIXA nos destaques) -->
+        <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217" data-featured="true">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
             <h3>Casa 3Q (2 Suítes) – Alphaville</h3>
@@ -294,8 +286,8 @@
           </div>
         </article>
 
-        <!-- Lote Comercial -->
-        <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C">
+        <!-- Lote Comercial (FIXO nos destaques) -->
+        <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C" data-featured="true">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
           <div class="content">
             <h3>Lote Comercial 437 m² – Terras Alphaville</h3>
@@ -400,33 +392,33 @@
           </div>
         </article>
 
-         <!-- Lote Residencial 630 m² – Condomínio Unique (NOVO) -->
-<article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630">
-  <div class="thumb">
-    <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
-  </div>
-  <div class="content">
-    <h3>Lote Residencial 630 m² – Condomínio Unique</h3>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <span class="pill">630 m²</span>
-      <span class="pill">18 × 35 m</span>
-      <span class="pill">Acesso à Lagoa Juparanã</span>
-      <span class="pill">Segurança 24h</span>
-      <span class="pill">Lazer completo</span>
-      <span class="pill">Ref: CI-LO-UNIQ-630</span>
-    </div>
-    <p class="price">R$ 650.000,00</p>
-    <ul class="ul">
-      <li>Quadra poliesportiva e tênis, brinquedoteca, sala de jogos, academia, sauna</li>
-      <li>Piscinas adulto e infantil • Parque infantil</li>
-      <li>Aprox. 10 km do Centro de Linhares</li>
-    </ul>
-    <p>
-      <button class="btn-fotos" data-gallery-prefix="unique-lote-" data-gallery-count="5">Ver fotos</button>
-      <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
-    </p>
-  </div>
-</article>
+        <!-- Lote Residencial 630 m² – Condomínio Unique -->
+        <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630">
+          <div class="thumb">
+            <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Lote Residencial 630 m² – Condomínio Unique</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">630 m²</span>
+              <span class="pill">18 × 35 m</span>
+              <span class="pill">Acesso à Lagoa Juparanã</span>
+              <span class="pill">Segurança 24h</span>
+              <span class="pill">Lazer completo</span>
+              <span class="pill">Ref: CI-LO-UNIQ-630</span>
+            </div>
+            <p class="price">R$ 650.000,00</p>
+            <ul class="ul">
+              <li>Quadra poliesportiva e tênis, brinquedoteca, sala de jogos, academia, sauna</li>
+              <li>Piscinas adulto e infantil • Parque infantil</li>
+              <li>Aprox. 10 km do Centro de Linhares</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="unique-lote-" data-gallery-count="5">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
 
       </div>
     </div>
@@ -586,54 +578,58 @@
     });
   })();
   </script>
+
+  <!-- Destaques do dia com itens fixos (featured) -->
   <script>
-/* Destaques do dia (gira 3 itens diariamente, sem backend) */
-(function(){
-  const box = document.getElementById('mini-highlights');
-  if (!box) return;
+  (function(){
+    const box = document.getElementById('mini-highlights');
+    if (!box) return;
 
-  // Coleta todos os cards já renderizados na seção "Imóveis"
-  const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
-
-  // Mapeia pra {href, src, alt}, usando a thumb do card
-  const items = cards.map(card => {
-    const id  = card.id || '';
-    const img = card.querySelector('.thumb img');
-    const h3  = card.querySelector('h3');
-    return {
-      href: id ? `#${id}` : '#',
-      src: img ? img.getAttribute('src') : '',
-      alt: h3 ? h3.textContent.trim() : 'Imóvel'
+    const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
+    const toItem = (card) => {
+      const id  = card.id || '';
+      const img = card.querySelector('.thumb img');
+      const h3  = card.querySelector('h3');
+      if (!img) return null;
+      return {
+        href: id ? `#${id}` : '#',
+        src: img.getAttribute('src') || img.src || '',
+        alt: h3 ? h3.textContent.trim() : 'Imóvel',
+        featured: card.dataset.featured === 'true'
+      };
     };
-  }).filter(x => x.src);
+    const all = cards.map(toItem).filter(Boolean);
+    if (!all.length) return;
 
-  if (items.length === 0) return;
+    const featured = all.filter(i => i.featured);
+    const others   = all.filter(i => !i.featured);
 
-  // Índice diário determinístico (muda 1 vez por dia)
-  const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
-  const start = dayNumber % items.length;
+    // Rotação diária para "others"
+    const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
+    const rotate = (arr, n) => arr.length ? arr.map((_,i)=>arr[(i+n)%arr.length]) : arr;
+    const rotatedOthers = rotate(others, dayNumber % Math.max(1, others.length));
 
-  // Pega 3 itens (ou menos se não houver) a partir do índice
-  const howMany = Math.min(3, items.length);
-  const picks = Array.from({length: howMany}, (_, i) => items[(start + i) % items.length]);
+    // montar vitrine (3 slots)
+    const slots = 3;
+    const picks = [...featured.slice(0, slots)];
+    for (const it of rotatedOthers) if (picks.length < slots) picks.push(it);
 
-  // Renderiza
-  box.innerHTML = picks.map(it => `
-    <a class="mini-item" href="${it.href}">
-      <img src="${it.src}" alt="${it.alt}" loading="lazy">
-    </a>
-  `).join('');
+    box.innerHTML = picks.map(it => `
+      <a class="mini-item" href="${it.href}">
+        <img src="${it.src}" alt="${it.alt}" loading="lazy">
+      </a>
+    `).join('');
 
-  // Efeito de entrada suave (opcional)
-  box.style.opacity = '0';
-  box.style.transform = 'translateY(4px)';
-  requestAnimationFrame(() => {
-    box.style.transition = 'opacity .25s ease, transform .25s ease';
-    box.style.opacity = '1';
-    box.style.transform = 'translateY(0)';
-  });
-})();
-</script>
+    // animação de entrada
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(4px)';
+    requestAnimationFrame(() => {
+      box.style.transition = 'opacity .25s ease, transform .25s ease';
+      box.style.opacity = '1';
+      box.style.transform = 'translateY(0)';
+    });
+  })();
+  </script>
 
 </body>
 </html>
