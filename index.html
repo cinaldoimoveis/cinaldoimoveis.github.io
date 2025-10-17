@@ -704,14 +704,15 @@
 
   <!-- Oculta o botão "Abrir em nova aba" no desktop -->
   <style id="hide-open-desktop">
-    @media (pointer: fine) {
-      #openNew {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-      }
+  /* Desktop e tablets com mouse/trackpad */
+  @media (any-pointer: fine) {
+    #openNew {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
     }
-  </style>
+  }
+</style>
 
 </body>
 </html>
