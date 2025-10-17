@@ -674,27 +674,64 @@
       for(let i=1;i<=count;i++){
         const nn   = String(i).padStart(2,'0');
         const base = `assets/${prefix}${nn}`;
-        // escolhe a extensão (aposta em .jpeg/.jpg/.png)
-        let chosen = null;
-        for(const ext of EXT_ORDER){ if(!chosen) chosen = `${base}${ext}`; }
-        imgs.push(chosen);
+        // Resolve a extensão real testando .jpeg/.jpg/.png (maiúsc/minúsc)
+function resolveSrc(base, cb){
+  let p = 0;
+  function tryNext(){
+    if(p >= EXT_ORDER.length){ cb(null); return; }
+    const src = base + EXT_ORDER[p++];
+    const test = new Image();
+    test.onload  = ()=> cb(src);
+    test.onerror = tryNext;
+    test.src = src;
+  }
+  tryNext();
+}
 
-        // Miniatura clicável -> abre o VISOR
-        const cell = document.createElement('div');
-        cell.className = 'gcell';
-        cell.style.backgroundImage = `url('${chosen}')`;
-        cell.setAttribute('role','img');
-        cell.setAttribute('aria-label', `Foto ${i}`);
-        cell.addEventListener('click', ()=> openViewer(i-1));
+const k = i - 1; // índice dessa foto na galeria
+imgs[k] = null;  // reserva a posição
 
-        // (opcional) versão com <a><img> estética; clique também abre visor
-        const desktop = document.createElement('a');
-        desktop.href = chosen; desktop.target='_blank'; desktop.rel='noopener';
-        const img = document.createElement('img');
-        img.loading='lazy'; img.alt=`Foto ${i}`; img.src=chosen;
-        desktop.addEventListener('click', (ev)=>{ ev.preventDefault(); openViewer(i-1); });
-        desktop.appendChild(img);
-        grid.appendChild(desktop);
+// Cria os elementos de miniatura (desktop) e célula visual (mobile)
+const desktop = document.createElement('a');
+desktop.target = '_blank';
+desktop.rel = 'noopener';
+const img = document.createElement('img');
+img.loading = 'lazy';
+img.alt = `Foto ${i}`;
+
+desktop.appendChild(img);
+grid.appendChild(desktop);
+
+// Também permite abrir o VISOR clicando na miniatura
+desktop.addEventListener('click', (ev)=>{
+  ev.preventDefault();
+  if (imgs[k]) openViewer(k);
+});
+
+// Resolve a fonte real e preenche tudo quando encontrar
+resolveSrc(base, (src)=>{
+  if(!src){
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+         <rect width="100%" height="100%" fill="#eee"/>
+         <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+               fill="#777" font-family="Arial" font-size="20">
+           Imagem não encontrada: ${base}
+         </text>
+       </svg>`
+    );
+    desktop.removeAttribute('href');
+    return;
+  }
+  // Preenche a miniatura e o link
+  img.src = src;
+  desktop.href = src;
+  // Atualiza a lista de imagens do visor
+  imgs[k] = src;
+  // Clique na imagem também abre o visor
+  img.onclick = ()=> openViewer(k);
+});
+
       }
 
       openModal();
