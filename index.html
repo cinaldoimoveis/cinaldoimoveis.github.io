@@ -152,7 +152,6 @@
       -webkit-user-select: none;
       user-select: none;
     }
-    /* célula visual no modo mobile (sem <img>) */
     .gallery-grid .gcell {
       height: 200px;
       border: 1px solid #eee;
@@ -263,6 +262,7 @@
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
       <div class="grid">
+
         <!-- Casa em Alphaville (FIXA nos destaques) -->
         <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
@@ -339,7 +339,7 @@
           </div>
         </article>
 
-        <!-- Apartamento Três Barras -->
+        <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
         <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90">
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
@@ -355,12 +355,11 @@
               <li>Condomínio aprox. R$ 420/mês</li>
             </ul>
             <p>
-           <button class="btn-fotos"
-        data-gallery-prefix="apto-tres-barras-"
-        data-gallery-count="15"
-        data-gallery-ext=".jpg"
-        data-gallery-ext-first=".PNG">Ver fotos</button>
-
+              <button class="btn-fotos"
+                data-gallery-prefix="apto-tres-barras-"
+                data-gallery-count="15"
+                data-gallery-ext=".jpg"
+                data-gallery-ext-first=".PNG">Ver fotos</button>
               <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
             </p>
           </div>
@@ -565,7 +564,6 @@
     const vt  = document.getElementById('vt');
     const openNew = document.getElementById('openNew');
 
-    const EXT_ORDER = ['.jpeg','.jpg','.png','.JPEG','.JPG','.PNG'];
     let imgs = [];
     let idx=0, scale=1, minScale=1, maxScale=4, tx=0, ty=0, startDist=0, startScale=1, lastTap=0, startX=0, startY=0, isPanning=false;
     let isDraggingMouse=false, dragSX=0, dragSY=0;
@@ -661,54 +659,50 @@
       setT();
     });
 
-    // Abre a MODAL com a grade empilhada
+    // MODAL abrir/fechar
     function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
     function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; grid.innerHTML=''; }
-
     modal.addEventListener('click',(e)=>{ if(e.target.hasAttribute('data-close')) closeModal(); });
     document.addEventListener('keydown',(e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
-    // Click em "Ver fotos" — monta grade e permite abrir visor
-document.addEventListener('click', (e)=>{
-  const btn = e.target.closest('.btn-fotos');
-  if(!btn) return;
+    // CLICK em "Ver fotos" — monta grade e permite abrir visor (com exceção da 1ª foto)
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.btn-fotos');
+      if(!btn) return;
 
-  const prefix = btn.dataset.galleryPrefix;
-  const count  = parseInt(btn.dataset.galleryCount || '0', 10);
-  const ext    = btn.dataset.galleryExt || '.jpeg'; // <- padrão rápido
+      const prefix     = btn.dataset.galleryPrefix;
+      const count      = parseInt(btn.dataset.galleryCount || '0', 10);
+      const extDefault = btn.dataset.galleryExt || '.jpeg';
+      const extFirst   = btn.dataset.galleryExtFirst || extDefault;
 
-  imgs = [];
-  grid.innerHTML = '';
+      imgs = [];
+      grid.innerHTML = '';
 
-  for(let i=1; i<=count; i++){
-    const nn   = String(i).padStart(2,'0');
-    const src  = `assets/${prefix}${nn}${ext}`;
-    const k    = i - 1;
+      for (let i = 1; i <= count; i++) {
+        const nn     = String(i).padStart(2,'0');
+        const extUse = (i === 1 ? extFirst : extDefault);
+        const src    = `assets/${prefix}${nn}${extUse}`;
+        const k      = i - 1;
 
-    imgs.push(src);
+        imgs.push(src);
 
-    // Miniatura (usando <a><img>) — clique abre o VISOR
-    const a = document.createElement('a');
-    a.href = src; a.target = '_blank'; a.rel = 'noopener';
+        const a = document.createElement('a');
+        a.href = src; a.target = '_blank'; a.rel = 'noopener';
 
-    const img = document.createElement('img');
-    img.loading = 'lazy';
-    img.alt = `Foto ${i}`;
-    img.src = src;
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = `Foto ${i}`;
+        img.src = src;
 
-    a.addEventListener('click', (ev)=>{ ev.preventDefault(); openViewer(k); });
-    a.appendChild(img);
-    grid.appendChild(a);
-  }
+        a.addEventListener('click', (ev)=>{ ev.preventDefault(); openViewer(k); });
+        a.appendChild(img);
+        grid.appendChild(a);
+      }
 
-  // Abre a modal da grade empilhada
-modal.classList.add('open');
-modal.setAttribute('aria-hidden','false');
-document.body.style.overflow='hidden';
-});  // <-- fecha o addEventListener
-
-})();  <!-- fecha a IIFE (importantíssimo) -->
-</script>
+      openModal();
+    });
+  })();
+  </script>
 
   <!-- Oculta o botão "Abrir em nova aba" no desktop -->
   <style id="hide-open-desktop">
@@ -720,7 +714,7 @@ document.body.style.overflow='hidden';
       opacity: 0 !important;
     }
   }
-</style>
+  </style>
 
 </body>
 </html>
