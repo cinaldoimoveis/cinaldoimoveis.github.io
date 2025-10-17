@@ -251,7 +251,7 @@
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
       <div class="grid">
         <!-- Casa em Alphaville (FIXA nos destaques) -->
-        <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217" data-featured="true">
+        <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
             <h3>Casa 3Q (2 Suítes) – Alphaville</h3>
@@ -287,7 +287,7 @@
         </article>
 
         <!-- Lote Comercial (FIXO nos destaques) -->
-        <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C" data-featured="true">
+        <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
           <div class="content">
             <h3>Lote Comercial 437m² – Terras Alphaville</h3>
@@ -581,54 +581,54 @@
 
   <!-- Destaques do dia com itens fixos (featured) -->
   <script>
-  (function(){
-    const box = document.getElementById('mini-highlights');
-    if (!box) return;
+(function(){
+  const box = document.getElementById('mini-highlights');
+  if (!box) return;
 
-    const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
-    const toItem = (card) => {
-      const id  = card.id || '';
-      const img = card.querySelector('.thumb img');
-      const h3  = card.querySelector('h3');
-      if (!img) return null;
-      return {
-        href: id ? `#${id}` : '#',
-        src: img.getAttribute('src') || img.src || '',
-        alt: h3 ? h3.textContent.trim() : 'Imóvel',
-        featured: card.dataset.featured === 'true'
-      };
+  // Coleta todos os cards da seção "Imóveis"
+  const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
+
+  // Mapeia pra {href, src, alt}
+  const items = cards.map(card => {
+    const id  = card.id || '';
+    const img = card.querySelector('.thumb img');
+    const h3  = card.querySelector('h3');
+    if (!img) return null;
+    return {
+      href: id ? `#${id}` : '#',
+      src: img.getAttribute('src') || img.src || '',
+      alt: h3 ? h3.textContent.trim() : 'Imóvel'
     };
-    const all = cards.map(toItem).filter(Boolean);
-    if (!all.length) return;
+  }).filter(Boolean);
 
-    const featured = all.filter(i => i.featured);
-    const others   = all.filter(i => !i.featured);
+  if (!items.length) return;
 
-    // Rotação diária para "others"
-    const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
-    const rotate = (arr, n) => arr.length ? arr.map((_,i)=>arr[(i+n)%arr.length]) : arr;
-    const rotatedOthers = rotate(others, dayNumber % Math.max(1, others.length));
+  // índice diário determinístico (muda 1x por dia)
+  const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
+  const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
 
-    // montar vitrine (3 slots)
-    const slots = 3;
-    const picks = [...featured.slice(0, slots)];
-    for (const it of rotatedOthers) if (picks.length < slots) picks.push(it);
+  const rotated = rotate(items, dayNumber % items.length);
+  const slots = 3; // quantos mostrar
+  const picks = rotated.slice(0, Math.min(slots, rotated.length));
 
-    box.innerHTML = picks.map(it => `
-      <a class="mini-item" href="${it.href}">
-        <img src="${it.src}" alt="${it.alt}" loading="lazy">
-      </a>
-    `).join('');
+  // Renderiza os 3 do dia
+  box.innerHTML = picks.map(it => `
+    <a class="mini-item" href="${it.href}">
+      <img src="${it.src}" alt="${it.alt}" loading="lazy">
+    </a>
+  `).join('');
 
-    // animação de entrada
-    box.style.opacity = '0';
-    box.style.transform = 'translateY(4px)';
-    requestAnimationFrame(() => {
-      box.style.transition = 'opacity .25s ease, transform .25s ease';
-      box.style.opacity = '1';
-      box.style.transform = 'translateY(0)';
-    });
-  })();
+  // Efeito de entrada suave
+  box.style.opacity = '0';
+  box.style.transform = 'translateY(4px)';
+  requestAnimationFrame(() => {
+    box.style.transition = 'opacity .25s ease, transform .25s ease';
+    box.style.opacity = '1';
+    box.style.transform = 'translateY(0)';
+  });
+})();
+</script>
+  
   </script>
 
 </body>
