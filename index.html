@@ -697,12 +697,13 @@ document.addEventListener('click', (e)=>{
   }
 
   // Abre a modal da grade empilhada
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden','false');
-  document.body.style.overflow='hidden';
-});
+modal.classList.add('open');
+modal.setAttribute('aria-hidden','false');
+document.body.style.overflow='hidden';
+});  // <-- fecha o addEventListener
 
-  </script>
+})();  <!-- fecha a IIFE (importantíssimo) -->
+</script>
 
   <!-- Oculta o botão "Abrir em nova aba" no desktop -->
   <style id="hide-open-desktop">
