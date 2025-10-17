@@ -420,6 +420,147 @@
           </div>
         </article>
 
+        <!-- === CARD: Área 20.000 m² – Planalto, Linhares/ES === -->
+<article class="imovel-card" data-id="area-2000-planalto">
+  <header class="imovel-card__head">
+    <h3 class="imovel-card__title">Área Comercial – 20.000m² – Bairro Planalto, Linhares/ES</h3>
+    <p class="imovel-card__subtitle">À 650m da BR-101 (Km 142), próximo à Fábrica da Cacau Show</p>
+  </header>
+
+  <div class="imovel-card__media">
+    <img src="assets/area-2000-planalto-01.jpeg" alt="Área 20.000m² no Bairro Planalto, Linhares/ES" loading="lazy">
+  </div>
+
+  <div class="imovel-card__body">
+    <ul class="imovel-card__bullets">
+      <li>20.000m² (100m de frente x 200m de comprimento)</li>
+      <li>650m da BR-101 (Km 142) – estrada da Lasa</li>
+      <li>6km da Fábrica da Cacau Show • 2km do Aeroporto</li>
+      <li>1,5km do Shopping PátioMix</li>
+      <li>250m da UGBP • 150m da Norte Recicla</li>
+      <li>Acesso asfaltado • Terraplanado • Pronto para construir</li>
+      <li>Documentação em dia</li>
+    </ul>
+  </div>
+
+  <footer class="imovel-card__foot">
+    <div class="imovel-card__price">
+      <strong>R$ 4.000.000,00</strong>
+      <small>(R$ 190,00/m²)</small>
+    </div>
+    <button class="btn btn-black" data-open-gallery="area-2000-planalto">Ver fotos</button>
+  </footer>
+</article>
+
+<!-- === GALERIA MODAL (tela cheia) === -->
+<div class="gallery-modal" id="gal-area-2000-planalto" hidden>
+  <div class="gallery-modal__backdrop" data-close-gallery></div>
+  <div class="gallery-modal__dialog" role="dialog" aria-label="Galeria de fotos – Área 20.000m²" aria-modal="true">
+    <button class="gallery-modal__close" title="Fechar" aria-label="Fechar" data-close-gallery>&times;</button>
+    <div class="gallery-modal__viewport">
+      <!-- Ajuste a quantidade conforme suas imagens (01 a 07) -->
+      <img data-g-item src="assets/area-2000-planalto-01.jpeg" alt="Foto 1 – Área 20.000m²" loading="lazy">
+      <img data-g-item src="assets/area-2000-planalto-02.jpeg" alt="Foto 2 – Área 20.000m²" loading="lazy" hidden>
+      <img data-g-item src="assets/area-2000-planalto-03.jpeg" alt="Foto 3 – Área 20.000m²" loading="lazy" hidden>
+      <img data-g-item src="assets/area-2000-planalto-04.jpeg" alt="Foto 4 – Área 20.000m²" loading="lazy" hidden>
+      <img data-g-item src="assets/area-2000-planalto-05.jpeg" alt="Foto 5 – Área 20.000m²" loading="lazy" hidden>
+      <img data-g-item src="assets/area-2000-planalto-06.jpeg" alt="Foto 6 – Área 20.000m²" loading="lazy" hidden>
+      <img data-g-item src="assets/area-2000-planalto-07.jpeg" alt="Foto 7 – Área 20.000m²" loading="lazy" hidden>
+    </div>
+    <div class="gallery-modal__controls">
+      <button class="g-prev" aria-label="Foto anterior" data-g-prev>&larr;</button>
+      <span class="g-count"><b data-g-index>1</b>/<span data-g-total>7</span></span>
+      <button class="g-next" aria-label="Próxima foto" data-g-next>&rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- === CSS mínimo opcional (pode adaptar aos seus utilitários) === -->
+<style>
+  .imovel-card{border:1px solid #e7e7e7;border-radius:16px;padding:16px;background:#fff;display:grid;gap:12px}
+  .imovel-card__head{display:grid;gap:4px}
+  .imovel-card__title{margin:0;font-size:1.05rem;line-height:1.35}
+  .imovel-card__subtitle{margin:0;color:#666;font-size:.9rem}
+  .imovel-card__media img{width:100%;height:auto;border-radius:12px;display:block;object-fit:cover}
+  .imovel-card__bullets{margin:0;padding-left:18px;color:#333;line-height:1.45}
+  .imovel-card__foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .imovel-card__price strong{font-size:1.05rem}
+  .imovel-card__price small{display:block;color:#666}
+  .btn{border:0;cursor:pointer;border-radius:999px;padding:10px 16px;font-weight:600}
+  .btn-black{background:#000;color:#fff}
+  /* Modal */
+  .gallery-modal[hidden]{display:none}
+  .gallery-modal{position:fixed;inset:0;z-index:9999}
+  .gallery-modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72)}
+  .gallery-modal__dialog{position:relative;inset:0;display:grid;place-items:center;height:100%;padding:24px}
+  .gallery-modal__viewport{position:relative;max-width:min(1200px,95vw);max-height:80vh;display:grid}
+  .gallery-modal__viewport img{width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px}
+  .gallery-modal__close{position:absolute;top:22px;right:28px;font-size:32px;line-height:1;background:transparent;border:0;color:#fff;cursor:pointer}
+  .gallery-modal__controls{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px}
+  .g-prev,.g-next{border:0;padding:10px 14px;border-radius:10px;background:#fff;cursor:pointer;font-weight:700}
+  .g-count{color:#fff;font-weight:600}
+</style>
+
+<!-- === JS da galeria (isolado; não conflita) === -->
+<script>
+  (function () {
+    // Abrir modal
+    document.querySelectorAll('[data-open-gallery="area-2000-planalto"]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const modal = document.getElementById('gal-area-2000-planalto');
+        if(!modal) return;
+        modal.hidden = false;
+        const imgs = [...modal.querySelectorAll('[data-g-item]')];
+        const total = imgs.length;
+        let idx = 0;
+        const idxEl = modal.querySelector('[data-g-index]');
+        const totalEl = modal.querySelector('[data-g-total]');
+        totalEl.textContent = total.toString();
+
+        function show(i){
+          idx = (i + total) % total;
+          imgs.forEach((im,k)=> im.hidden = (k!==idx));
+          idxEl.textContent = (idx+1).toString();
+        }
+        show(0);
+
+        // Controles
+        const prev = modal.querySelector('[data-g-prev]');
+        const next = modal.querySelector('[data-g-next]');
+        const backdrop = modal.querySelector('[data-close-gallery]');
+        const closeBtn = modal.querySelector('.gallery-modal__close');
+
+        const onPrev = ()=> show(idx - 1);
+        const onNext = ()=> show(idx + 1);
+        const onClose = ()=> modal.hidden = true;
+        const onKeys = (ev)=>{
+          if(modal.hidden) return;
+          if(ev.key==='Escape') onClose();
+          if(ev.key==='ArrowLeft') onPrev();
+          if(ev.key==='ArrowRight') onNext();
+        };
+
+        prev.addEventListener('click', onPrev, { once:false });
+        next.addEventListener('click', onNext, { once:false });
+        backdrop.addEventListener('click', onClose, { once:false });
+        closeBtn.addEventListener('click', onClose, { once:false });
+        window.addEventListener('keydown', onKeys);
+
+        // remove listener ao fechar por botão/overlay
+        const cleanup = ()=>{
+          window.removeEventListener('keydown', onKeys);
+        };
+        // Observa fechamento para limpar
+        const obs = new MutationObserver(()=>{
+          if(modal.hidden) { cleanup(); obs.disconnect(); }
+        });
+        obs.observe(modal, { attributes:true, attributeFilter:['hidden'] });
+      });
+    });
+  })();
+</script>
+
+
       </div>
     </div>
   </section>
