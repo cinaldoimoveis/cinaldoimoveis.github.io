@@ -1269,11 +1269,65 @@
   });
 
   // === Modal & Leaflet ===
-  const modal  = document.getElementById('map-modal');
-  const btnX   = modal.querySelector('.map-close');
-  let map, circle;
+const modal  = document.getElementById('map-modal');
+const btnX   = modal.querySelector('.map-close');
+let map, circle;
 
-  function openMap(key){
+function ensureMap(){
+  if (map) return map;
+  map = L.map('map', { zoomControl: true, attributionControl: true });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+  return map;
+}
+
+function openMap(key){
+  const coords = GEO[key];
+  if(!coords){ alert('Localização indisponível.'); return; }
+
+  modal.hidden = false;
+  modal.setAttribute('aria-hidden','false');
+  document.documentElement.style.overflow='hidden';
+
+  // Mobile fica um pouco mais aberto
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  const MAX_ZOOM = isMobile ? 14 : 15;
+
+  setTimeout(()=>{
+    ensureMap();
+    map.invalidateSize(); // garante layout correto do container visível
+
+    if(circle){ circle.remove(); }
+    circle = L.circle(coords, {
+      radius: 500,          // 500 m (estilo Airbnb)
+      color: '#2b7',
+      fillColor: '#2b7',
+      fillOpacity: 0.12,
+      weight: 2
+    }).addTo(map);
+
+    // Enquadra o círculo sem colar demais no mobile
+    const bounds = circle.getBounds();
+    map.fitBounds(bounds, {
+      padding: [24, 24],
+      maxZoom: MAX_ZOOM,
+      animate: false
+    });
+  }, 50);
+}
+
+function closeMap(){
+  modal.hidden = true;
+  modal.setAttribute('aria-hidden','true');
+  document.documentElement.style.overflow='';
+}
+
+btnX.addEventListener('click', closeMap);
+modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); });
+window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap(); });
+
     const coords = GEO[key];
     if(!coords){ alert('Localização indisponível.'); return; }
 
