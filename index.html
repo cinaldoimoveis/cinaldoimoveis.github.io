@@ -143,46 +143,52 @@
 
  <!-- Destaques + logo -->
 <style>
+.mini-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:12px;
+  margin-top:8px;
+}
+.mini-item{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:12px;
+  padding:8px;
+}
+.mini-item img{
+  width:100%;
+  height:auto;
+  aspect-ratio:4/3;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+/* No retrato (vertical): 2 por linha */
+@media (orientation: portrait){
   .mini-list{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+}
+
+/* No paisagem (horizontal): 3 por linha */
+@media (orientation: landscape){
+  .mini-list{
+    grid-template-columns:repeat(3,1fr);
     gap:10px;
-    margin-top:8px;
   }
-  .mini-item{
-    display:flex; align-items:center; justify-content:center;
-    border:1px solid var(--line); background:#fff; border-radius:12px; padding:6px;
-  }
-  .mini-item img{
-    width:100%;
-    height:auto;
-    aspect-ratio: 4 / 3;   /* mantém proporção agradável como antes */
-    object-fit: cover;
-    border-radius:8px;
-  }
+  .mini-item img{aspect-ratio:16/9;}
+}
 
-  /* Mobile em pé (vertical): 2 por linha -> fica 2 em cima e 1 embaixo */
-  @media (orientation: portrait) and (max-width: 900px){
-    .mini-list{
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-  }
-
-  /* Mobile deitado (horizontal): 3 por linha, como antes */
-  @media (orientation: landscape) and (max-width: 900px){
-    .mini-list{
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
-    }
-    .mini-item img{ aspect-ratio: 16 / 9; } /* se preferir 16:9 deitado */
-  }
-
-  /* Telas muito estreitas: garante 2 colunas também */
-  @media (max-width: 360px){
-    .mini-list{ grid-template-columns: 1fr 1fr; }
-  }
+/* Telas muito pequenas (ex: iPhone SE antigo) */
+@media (max-width:360px){
+  .mini-list{grid-template-columns:1fr 1fr;}
+}
 </style>
+
 
  <style id="mini-highlights-portrait-same-size">
 /* Mobile em retrato: 1 por linha, mas com o MESMO tamanho do paisagem */
