@@ -196,6 +196,27 @@
 }
 </style>
 
+  <style id="mini-highlights-portrait-fix">
+/* Mobile em retrato: 1 por linha, mantendo o mesmo “wide” do paisagem */
+@media (max-width: 900px) and (orientation: portrait){
+  .mini-list{
+    grid-template-columns: 1fr;   /* uma por linha */
+    justify-items: center;         /* centraliza a célula */
+    gap: 12px;
+  }
+  .mini-item{
+    /* largura aproximada de 1/3 da tela, como no paisagem, com limites */
+    width: clamp(140px, 33.33vw, 220px);
+    padding: 8px;
+  }
+  .mini-item img{
+    aspect-ratio: 16 / 9;         /* mesmo formato wide do paisagem */
+    object-fit: cover;
+  }
+}
+</style>
+
+
   <!-- Só os cards dos imóveis brancos -->
   <style>
     #imoveis{background:transparent}
