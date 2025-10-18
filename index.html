@@ -1184,12 +1184,25 @@
   }
   #map{ width:100%; height:100%; }
   /* Botão dentro do card do imóvel */
-  .btn-map{
-    display:inline-block; padding:.60rem .9rem; margin-left:6px;
-    border:1px solid var(--line); border-radius:.5rem; background:#fff; cursor:pointer;
-    font-weight:600;
-  }
-  .btn-map:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.08); }
+  .btn-map {
+  display: inline-block;
+  padding: 0.45rem 0.75rem;   /* antes era .60rem .9rem — reduzido */
+  margin-left: 6px;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;         /* ligeiramente menor */
+  line-height: 1.1;
+  transition: all 0.25s ease;
+}
+.btn-map:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  background: #fafafa;
+}
+
 </style>
 
 <!-- Modal do mapa -->
