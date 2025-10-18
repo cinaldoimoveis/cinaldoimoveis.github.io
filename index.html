@@ -189,6 +189,36 @@
 }
 </style>
 
+  <style id="mini-desktop-fix">
+  /* Desktop: igual ao mobile na horizontal, mas com moldura mais discreta */
+  @media (min-width: 1024px){
+    .mini-list{
+      /* 3 colunas e o mesmo espaçamento do modo horizontal do mobile */
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .mini-item{
+      /* borda bem mais leve (meio pixel em telas HiDPI) */
+      border: 0.5px solid rgba(0,0,0,.10);
+      box-shadow: 0 1px 0 rgba(0,0,0,.03);
+      padding: 6px;             /* um pouquinho menos pra borda “sumir” */
+      border-radius: 10px;
+      background: #fff;         /* mantém o fundo limpo */
+    }
+    .mini-item img{
+      aspect-ratio: 16 / 9;     /* mesmo “wide” do mobile horizontal */
+      border-radius: 8px;
+    }
+  }
+
+  /* Fallback caso o browser não suporte 0.5px */
+  @supports not (border: .5px solid #000){
+    @media (min-width: 1024px){
+      .mini-item{ border: 1px solid rgba(0,0,0,.08); }
+    }
+  }
+</style>
+
 
  <style id="mini-highlights-portrait-same-size">
 /* Mobile em retrato: 1 por linha, mas com o MESMO tamanho do paisagem */
