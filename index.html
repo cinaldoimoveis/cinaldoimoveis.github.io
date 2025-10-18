@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-  <!-- Open Graph / Twitter -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Cinaldo Imóveis – Linhares/ES" />
   <meta property="og:description" content="Imóveis selecionados em Linhares – ES. Negócios com transparência e segurança." />
   <meta property="og:type" content="website" />
@@ -28,13 +28,13 @@
   <style>
     :root{
       --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
-      --side: 20px;
-      --glow: 0 0 0 3px rgba(199,162,75,.45);
+      --side: 20px; /* margem lateral padrão global */
     }
     .container{
-      max-width:1150px; margin:0 auto;
-      padding-left:max(var(--side), env(safe-area-inset-left));
-      padding-right:max(var(--side), env(safe-area-inset-right));
+      max-width:1150px;
+      margin:0 auto;
+      padding-left:  max(var(--side), env(safe-area-inset-left));
+      padding-right: max(var(--side), env(safe-area-inset-right));
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--fg)}
@@ -45,10 +45,11 @@
     .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px}
     .brand{display:flex;align-items:center;gap:-2px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
     .brand-logo-img{width:44px;height:44px;object-fit:contain;border-radius:10px}
-    .brand small{display:block;font-weight:600;font-size:12px;color:var(--muted);letter-spacing:.4px;margin-left:2px}
+    .brand small{display:block;font-weight:600;font-size:12px;color:var(--muted);letter-spacing:.4px;margin-left: 2px}
+
     .menu{display:flex;gap:18px;align-items:center}
 
-    .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--fg);transition:.2s;font-weight:600}
+    .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--fg);transition:.2s ease-in-out;font-weight:600}
     .btn:hover{transform:translateY(-1px)}
     .btn-whats{background:#25D366;border-color:#25D366;color:#0b3c1b}
 
@@ -80,31 +81,56 @@
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
     @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
     @media (max-width:640px){.grid{grid-template-columns:1fr}}
-    .card{background:#ffffff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.04),0 6px 24px rgba(0,0,0,.04);transition:transform .25s, box-shadow .25s;}
-    .card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
-    .card.glow{box-shadow:var(--glow),0 6px 24px rgba(0,0,0,.08)}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 1px 0 rgba(0,0,0,.04);
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.08);
+    }
     .thumb{aspect-ratio:16/9;background:#f1f1f1;display:grid;place-items:center;color:#333}
     .thumb-img{width:100%;height:100%;object-fit:cover}
     .content{padding:16px}
     .price{font-weight:800;font-size:18px;margin:10px 0}
     .ul{margin:8px 0 0;padding:0 0 0 18px;color:#333}
-    .pill{display:inline-block;background:#f6f1ea;border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:#444}
+    .pill{display:inline-block;background:var(--card);border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:#444}
   </style>
 
-  <!-- ===== Filtros ===== -->
   <style>
-    .filters{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
-    .filters .fbtn{padding:8px 12px;border:1px solid var(--line);background:#fff;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;transition:.18s;box-shadow:0 1px 0 rgba(0,0,0,.04)}
-    .filters .fbtn:hover{transform:translateY(-1px)}
-    .filters .fbtn.is-active{background:#111;color:#fff;border-color:#111}
-    .grid.filtering .card{transition:opacity .18s, transform .18s}
-    .card[hidden]{display:none!important}
+  /* ===== Filtros (barra de categorias) ===== */
+  .filters{
+    display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 18px;
+  }
+  .filters .fbtn{
+    padding:8px 12px; border:1px solid var(--line); background:#fff;
+    border-radius:999px; font-weight:600; font-size:14px; cursor:pointer;
+    transition:.18s ease; box-shadow:0 1px 0 rgba(0,0,0,.04);
+  }
+  .filters .fbtn:hover{ transform:translateY(-1px); }
+  .filters .fbtn.is-active{
+    background:#111; color:#fff; border-color:#111;
+  }
+  .grid.filtering .card{ transition:opacity .18s ease, transform .18s ease; }
+  .card[hidden]{ display:none !important; }
   </style>
 
   <!-- Botão "Ver fotos" + Modal -->
   <style>
-    .btn-fotos{display:inline-block;padding:.75rem 1rem;border:0;border-radius:.5rem;background:#111;color:#fff;cursor:pointer;font-weight:600;transition:all .25s}
-    .btn-fotos:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.25);background:#000}
+    .btn-fotos{
+      display:inline-block;padding:.75rem 1rem;border:0;border-radius:.5rem;
+      background:#111;color:#fff;cursor:pointer;font-weight:600;
+      transition:all .25s ease;
+    }
+    .btn-fotos:hover{
+      transform:translateY(-2px);
+      box-shadow:0 4px 10px rgba(0,0,0,0.25);
+      background:#000;
+    }
     .gallery-modal{position:fixed;inset:0;display:none;z-index:1000}
     .gallery-modal.open{display:block}
     .gallery-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6)}
@@ -117,20 +143,132 @@
 
   <!-- Destaques + logo -->
   <style>
-    .mini-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:8px}
-    .mini-item{display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px}
-    .mini-item img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:8px}
-    @media (orientation: portrait){.mini-list{grid-template-columns:1fr 1fr;gap:12px}}
-    @media (orientation: landscape){.mini-list{grid-template-columns:repeat(3,1fr);gap:10px}.mini-item img{aspect-ratio:16/9}}
-    @media (max-width:360px){.mini-list{grid-template-columns:1fr 1fr}}
-    @media (min-width: 1024px){
-      .mini-list{grid-template-columns:repeat(3,1fr);gap:10px}
-      .mini-item{border:.5px solid rgba(0,0,0,.10);box-shadow:0 1px 0 rgba(0,0,0,.03);padding:6px;border-radius:10px;background:#fff}
-      .mini-item img{aspect-ratio:16/9;border-radius:8px}
+    .mini-list{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+      gap:12px;
+      margin-top:8px;
+    }
+    .mini-item{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:8px;
+    }
+    .mini-item img{
+      width:100%;
+      height:auto;
+      aspect-ratio:4/3;
+      object-fit:cover;
+      border-radius:8px;
+    }
+
+    @media (orientation: portrait){
+      .mini-list{ grid-template-columns:1fr 1fr; gap:12px; }
+    }
+    @media (orientation: landscape){
+      .mini-list{ grid-template-columns:repeat(3,1fr); gap:10px; }
+      .mini-item img{aspect-ratio:16/9;}
+    }
+    @media (max-width:360px){
+      .mini-list{grid-template-columns:1fr 1fr;}
     }
   </style>
 
-  <!-- Viewer (zoom) -->
+  <style id="mini-desktop-fix">
+    @media (min-width: 1024px){
+      .mini-list{ grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .mini-item{
+        border: 0.5px solid rgba(0,0,0,.10);
+        box-shadow: 0 1px 0 rgba(0,0,0,.03);
+        padding: 6px; border-radius: 10px; background: #fff;
+      }
+      .mini-item img{ aspect-ratio: 16 / 9; border-radius: 8px; }
+    }
+    @supports not (border: .5px solid #000){
+      @media (min-width: 1024px){
+        .mini-item{ border: 1px solid rgba(0,0,0,.08); }
+      }
+    }
+  </style>
+
+  <style id="mini-highlights-portrait-same-size">
+    @media (max-width: 900px) and (orientation: portrait){
+      .mini-list{ grid-template-columns: 1fr; justify-items:center; gap:12px; }
+      .mini-item{ width: 33.333vw; padding:8px; }
+      .mini-item img{ aspect-ratio: 16 / 9; object-fit: cover; }
+    }
+  </style>
+
+  <!-- Só os cards dos imóveis brancos -->
+  <style>
+    #imoveis{background:transparent}
+    #imoveis .card{
+      background:#ffffff;
+      box-shadow:0 1px 0 rgba(0,0,0,.04), 0 6px 24px rgba(0,0,0,.04);
+      border-color:var(--line);
+    }
+    #imoveis .pill{background:#f6f1ea}
+  </style>
+
+  <!-- Mobile/desktop: ajustes extras para a galeria -->
+  <style>
+    .gallery-content, .gallery-grid, .gallery-grid * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .gallery-grid .gcell {
+      height: 200px;
+      border: 1px solid #eee;
+      border-radius: .5rem;
+      overflow: hidden;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      cursor: zoom-in;
+    }
+  </style>
+
+  <!-- Ajustes finos independentes (páginas e header) -->
+  <style id="fix-sides">
+    :root{
+      --side-left: 16px;   /* ajuste fino ESQUERDA global */
+      --side-right: 16px;  /* ajuste fino DIREITA  global */
+    }
+    header .container,
+    main .container,
+    section .container,
+    footer .container {
+      padding-left:  calc(var(--side-left)  + env(safe-area-inset-left));
+      padding-right: calc(var(--side-right) + env(safe-area-inset-right));
+    }
+    @media (max-width: 640px){
+      .menu{ padding:0 !important; }
+    }
+    @media (orientation: landscape) and (max-width: 900px){
+      .menu{ padding:0 !important; }
+    }
+  </style>
+
+  <!-- Ajuste fino apenas do header -->
+  <style id="header-fine-tune">
+    header .container {
+      padding-left:  var(--head-left, 2px);
+      padding-right: var(--head-right, 12px);
+    }
+    @media (max-width: 900px) {
+      header .container {
+        padding-left:  var(--head-left-mobile, 2px);
+        padding-right: var(--head-right-mobile, 12px);
+      }
+    }
+  </style>
+
+  <!-- VISOR (zoom) — usado em mobile e desktop -->
   <style>
     .viewer[hidden]{display:none}
     .viewer{position:fixed;inset:0;z-index:2000;background:#000}
@@ -144,37 +282,31 @@
     .viewer .left{left:12px}
     .viewer .right{right:12px}
     .viewer .count{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);opacity:.8;font-weight:700}
-    @media (hover:hover){ .viewer .stage{cursor:grab} .viewer .stage:active{cursor:grabbing} }
+    @media (hover:hover){
+      .viewer .stage{cursor:grab}
+      .viewer .stage:active{cursor:grabbing}
+    }
   </style>
 
-  <!-- Leaflet CSS (mapas) -->
+  <!-- Leaflet (mapas) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
-  <!-- Mapa (modal) -->
   <style>
-    .map-modal[hidden]{display:none}
-    .map-modal{position:fixed;inset:0;z-index:2500;display:grid;place-items:center;background:rgba(0,0,0,.55)}
-    .map-card{width:min(900px, 92vw);height:min(640px, 85vh);background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.25);display:grid;grid-template-rows:48px 1fr}
-    .map-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f7f7f7;border-bottom:1px solid #e8e8e8}
-    .map-title{font-weight:700}
-    .map-close{background:transparent;border:0;font-size:24px;cursor:pointer;line-height:1}
-    #map{width:100%;height:100%;min-height:320px}
-    .btn-map{display:block;width:100%;text-align:center;margin:0 0 6px 0;padding:.3rem .6rem;border:1px solid #ddd;border-radius:6px;background:#fafafa;cursor:pointer;font-weight:500;font-size:.8rem;color:#555;transition:.25s}
-    .btn-map:hover{background:#f2f2f2;color:#222;transform:translateY(-1px);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+    /* Caixa do mapa embutido nos cards (se quiser usar no futuro) */
+    .mapbox{
+      width:100%;
+      height:260px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      margin-top:10px;
+      display:none;
+      background:#f6f6f6;
+    }
+    @media (max-width:640px){ .mapbox{ height: 220px; } }
   </style>
 </head>
 <body>
-  <!-- ===== Modal do MAPA (AGORA ANTES dos scripts) ===== -->
-  <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
-    <div class="map-card">
-      <div class="map-head">
-        <div class="map-title">Localização aproximada</div>
-        <button class="map-close" title="Fechar" aria-label="Fechar">&times;</button>
-      </div>
-      <div id="map"></div>
-    </div>
-  </div>
-
   <header>
     <div class="container nav">
       <a href="#inicio" class="brand">
@@ -228,10 +360,13 @@
       </div>
 
       <div class="grid">
-        <!-- (seus cards exatamente como estavam) -->
-        <!-- Casa em Alphaville -->
+
+        <!-- Casa em Alphaville (FIXA nos destaques) -->
         <article class="card" id="casa-alphaville"
-          data-code="CI-CA-ALPH-217" data-type="casa" data-tags="casa" data-geo="alphaville-casa-217">
+          data-code="CI-CA-ALPH-217"
+          data-type="casa"
+          data-tags="casa"
+          data-geo="alphaville-casa-217">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
             <h3>Casa 3Q (2 Suítes) – Alphaville</h3>
@@ -248,22 +383,403 @@
           </div>
         </article>
 
-        <!-- (demais cards inalterados; mantive todos os seus dados) -->
-        <!-- ... TODA a sua lista de artigos daqui em diante permanece igual ao que enviou ... -->
-        <!-- Para economizar espaço na mensagem, mantive os mesmos elementos que você colou (Laguna, Lotes, Fazenda, Apto, Unique, Área Planalto, 717m², Complexo SM, Casa em construção, Lote 253m², Lote 390m²). -->
-        <!-- >>> Copie os seus <article> exatamente como estavam que funcionará com os scripts abaixo. <<< -->
-        <!-- (FIM da grade) -->
+        <!-- Casa Jardim Laguna -->
+        <article class="card" id="laguna" data-code="CI-CA-LAG-100" data-type="casa" data-tags="casa" data-geo="laguna">
+          <div class="thumb"><img src="assets/casa-rua-italia-01.jpeg" alt="Casa Linear - Jardim Laguna 2" loading="lazy"></div>
+          <div class="content">
+            <h3>Casa Linear 2Q (1 Suíte) – Jardim Laguna 2</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">100m² const.</span><span class="pill">Lote 380m²</span><span class="pill">2Q • 1 suíte</span><span class="pill">1 vaga coberta</span>
+              <span class="pill">Ref: CI-CA-LAG-100</span>
+            </div>
+            <p class="price">R$ 700.000,00</p>
+            <ul class="ul"><li>Laje + telha colonial</li><li>Varanda frontal e área de serviço</li><li>Gradeada + toldos nas janelas</li></ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="casa-rua-italia-" data-gallery-count="7">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Comercial (FIXO nos destaques) -->
+        <article class="card" id="lote-alphaville"
+          data-code="CI-LO-ALPH-437C"
+          data-type="comercial"
+          data-tags="lote,comercial"
+          data-geo="alphaville-lote-437c">
+          <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
+          <div class="content">
+            <h3>Lote Comercial 437m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">437m²</span><span class="pill">13,53m × 32,30m</span><span class="pill">Sol da manhã</span>
+              <span class="pill">Ref: CI-LO-ALPH-437C</span>
+            </div>
+            <p class="price">R$ 200.000,00</p>
+            <ul class="ul"><li>13,53m frente/fundo • 32,30m profundidade</li><li><strong>Uso exclusivamente comercial</strong></li></ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="lote-alphaville-" data-gallery-count="5">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Fazenda -->
+        <article class="card" id="fazenda-linhares" data-code="CI-FZ-LIN-290" data-type="fazenda" data-tags="fazenda" data-geo="fazenda-linhares">
+          <div class="thumb"><img src="assets/fazenda-linhares-01.jpeg" alt="Fazenda em Linhares ES" loading="lazy"></div>
+          <div class="content">
+            <h3>Fazenda – 290ha (60 alq) – Linhares ES</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">290ha</span><span class="pill">Poço 100m</span><span class="pill">Caixa 30mil/L</span><span class="pill">Curral p/ 500 bois</span>
+              <span class="pill">Ref: CI-FZ-LIN-290</span>
+            </div>
+            <p class="price">R$ 18.000.000,00</p>
+            <ul class="ul">
+              <li>3km do asfalto • Próx. à agrovila</li>
+              <li>70% terra argilosa • 8 casas • 2 trafos</li>
+              <li>2 poços perfurados pela Petrobras (lacrados)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="fazenda-linhares-" data-gallery-count="18">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
+        <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras">
+          <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
+          <div class="content">
+            <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">90,76m²</span><span class="pill">Varanda c/ gourmet</span><span class="pill">2 vagas</span>
+              <span class="pill">Ref: CI-AP-TB-90</span>
+            </div>
+            <p class="price">R$ 759.000,00</p>
+            <ul class="ul">
+              <li>Luminárias • Armários na cozinha/banhos • Box blindex</li>
+              <li>Condomínio com academia, piscinas, sauna, festa, brinquedoteca</li>
+              <li>Condomínio aprox. R$ 420/mês</li>
+            </ul>
+            <p>
+              <button class="btn-fotos"
+                data-gallery-prefix="apto-tres-barras-"
+                data-gallery-count="15"
+                data-gallery-ext=".jpg"
+                data-gallery-ext-first=".PNG">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Residencial 360 m² -->
+        <article class="card" id="lote-residencial-360"
+          data-code="CI-LO-ALPH-360"
+          data-type="lote"
+          data-tags="lote"
+          data-geo="alphaville-lote-360">
+          <div class="thumb"><img src="assets/lote-alphaville-360-01.jpeg" alt="Lote residencial 360 m²" loading="lazy"></div>
+          <div class="content">
+            <h3>Lote Residencial 360m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">360m²</span><span class="pill">12m × 30m</span><span class="pill">Quitado e escriturado</span>
+              <span class="pill">Ref: CI-LO-ALPH-360</span>
+            </div>
+            <p class="price">R$ 470.000,00</p>
+            <ul class="ul">
+              <li>Aprox. 50m do clube • Murado pelos vizinhos</li>
+              <li>Condomínio alto padrão: portaria 24h, lazer completo</li>
+              <li>2,5km do Bairro Aviso (sent. Pontal do Ipiranga)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="lote-alphaville-360-" data-gallery-count="3">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Residencial 420 m² -->
+        <article class="card" id="lote-residencial-420"
+          data-code="CI-LO-ALPH-420"
+          data-type="lote"
+          data-tags="lote"
+          data-geo="alphaville-lote-420">
+          <div class="thumb"><img src="assets/lote-alphaville-420-01.jpeg" alt="Lote residencial 420 m²" loading="lazy"></div>
+          <div class="content">
+            <h3>Lote Residencial 420m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">420m²</span><span class="pill">14m × 30m</span><span class="pill">Sol da manhã</span><span class="pill">Vista parcial lagoa</span>
+              <span class="pill">Ref: CI-LO-ALPH-420</span>
+            </div>
+            <p class="price">R$ 440.000,00</p>
+            <ul class="ul">
+              <li>Quitado e livre de pendências</li>
+              <li>Lazer completo: clube, academia, festas, piscinas, quadras</li>
+              <li>2,5km do Bairro Aviso (sent. Pontal do Ipiranga)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="lote-alphaville-420-" data-gallery-count="3">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Residencial 630 m² – Condomínio Unique -->
+        <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique">
+          <div class="thumb">
+            <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Lote Residencial 630m² – Condomínio Unique</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">630m²</span>
+              <span class="pill">18m × 35m</span>
+              <span class="pill">Acesso à Lagoa Juparanã</span>
+              <span class="pill">Segurança 24h</span>
+              <span class="pill">Lazer completo</span>
+              <span class="pill">Ref: CI-LO-UNIQ-630</span>
+            </div>
+            <p class="price">R$ 650.000,00</p>
+            <ul class="ul">
+              <li>Quadra poliesportiva e tênis, brinquedoteca, sala de jogos, academia, sauna</li>
+              <li>Piscinas adulto e infantil • Parque infantil</li>
+              <li>Aprox. 10km do Centro de Linhares</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="unique-lote-" data-gallery-count="5">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Área Comercial 20.000 m² – Bairro Planalto (NOVO) -->
+        <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000" data-type="comercial" data-tags="area, comercial" data-geo="area-planalto-20000">
+          <div class="thumb">
+            <img src="assets/area-2000-planalto-01.jpeg" alt="Área 20.000m² no Bairro Planalto, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Área Comercial 20.000m² – Bairro Planalto</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">20.000m²</span>
+              <span class="pill">100m × 200m</span>
+              <span class="pill">650m da BR-101 (Km 142)</span>
+              <span class="pill">Terraplanado</span>
+              <span class="pill">Acesso asfaltado</span>
+              <span class="pill">Ref: CI-AR-PLAN-20000</span>
+            </div>
+            <p class="price">R$ 4.000.000,00</p>
+            <ul class="ul">
+              <li>À 650m da BR-101 (Km 142), estrada da Lasa</li>
+              <li>À 6km da Fábrica da Cacau Show</li>
+              <li>À 2km do Aeroporto de Linhares/ES</li>
+              <li>À 1,5km do Shopping PátioMix</li>
+              <li>À 250m da UGBP Produção e Exportação • À 150m da Norte Recicla</li>
+              <li>Terreno todo terraplanado, pronto para construção</li>
+              <li>Documentação toda ok</li>
+            </ul>
+            <p>
+              <button class="btn-fotos" data-gallery-prefix="area-2000-planalto-" data-gallery-count="7">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Residencial 717m² – Terras Alphaville (NOVO) -->
+        <article class="card" id="lote-alphaville-717"
+          data-code="CI-LO-ALPH-717"
+          data-type="lote"
+          data-tags="lote"
+          data-geo="alphaville-lote-717">
+          <div class="thumb">
+            <img src="assets/lote-alphaville-717-01.jpeg" alt="Lote 717m² no Terras Alphaville, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Lote Residencial 717m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">717m²</span>
+              <span class="pill">Sol da manhã</span>
+              <span class="pill">Condomínio fechado</span>
+              <span class="pill">Quitado</span>
+              <span class="pill">Ref: CI-LO-ALPH-717</span>
+            </div>
+            <p class="price">R$ 717.000,00</p>
+            <ul class="ul">
+              <li>Portaria 24h com segurança</li>
+              <li>Clube completo: brinquedoteca, academia, festas, churras, forno de pizza</li>
+              <li>Piscina • Playground • Quadras: tênis, basquete/futebol, vôlei de areia</li>
+              <li>2,5km do Bairro Aviso (sent. Pontal do Ipiranga)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos"
+                data-gallery-prefix="lote-alphaville-717-"
+                data-gallery-count="7"
+                data-gallery-ext=".jpeg">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Complexo Residencial Familiar – São Mateus ES (NOVO) -->
+        <article class="card" id="complexo-sao-mateus" data-code="CI-CO-SM-2000" data-type="comercial" data-tags="casa" data-geo="complexo-sao-mateus">
+          <div class="thumb">
+            <img src="assets/Complexo-Residencial-SM-01.jpeg" alt="Complexo Residencial Familiar em São Mateus ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Complexo Residencial Familiar – São Mateus ES</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">2.000m² de terreno</span>
+              <span class="pill">4 moradias</span>
+              <span class="pill">Piscina • Lazer completo</span>
+              <span class="pill">Mobília inclusa</span>
+              <span class="pill">Ref: CI-CO-SM-2000</span>
+            </div>
+            <p class="price">R$ 3.500.000,00</p>
+            <ul class="ul">
+              <li>Área total do condomínio: 20.000m² (em formação de condomínio fechado)</li>
+              <li>Localização: 6km da praia de Guriri</li>
+              <li>4 moradias: 2 chalés lineares, 1 chalé duplex, 1 casa dormitório linear</li>
+              <li>Área de lazer: piscina 40mil L, churrasqueira, cozinha, sauna, redário, academia</li>
+              <li>Adega, 2 áreas de serviço, garagem coberta p/ 2 e descoberta p/ 6 carros</li>
+            </ul>
+            <p>
+              <button class="btn-fotos"
+                data-gallery-prefix="Complexo-Residencial-SM-"
+                data-gallery-count="14"
+                data-gallery-ext=".jpeg">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Casa Linear Alto Padrão – Alphaville Linhares (NOVO) -->
+        <article class="card" id="casa-em-construcao-alphaville"
+          data-code="CI-CA-ALPH-186"
+          data-type="casa"
+          data-tags="casa"
+          data-geo="alphaville-casa-186">
+          <div class="thumb">
+            <img src="assets/casa-em-construcao-alphaville-01.jpeg" alt="Casa linear alto padrão em construção no Alphaville Linhares" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Casa Linear 3Q (1 Suíte c/ Closet) – Alphaville Linhares</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">186,90m² const.</span>
+              <span class="pill">Lote 360m²</span>
+              <span class="pill">3Q • 1 suíte c/ closet</span>
+              <span class="pill">Área gourmet</span>
+              <span class="pill">Entrega ago/2026</span>
+              <span class="pill">Ref: CI-CA-ALPH-186</span>
+            </div>
+            <p class="price">R$ 1.800.000,00</p>
+            <ul class="ul">
+              <li>Projeto moderno e funcional, com ótimo aproveitamento do terreno</li>
+              <li>Acabamentos de alto padrão e ampla iluminação natural</li>
+              <li>Porta pivotante em ACM (2,30m x 1,20m)</li>
+              <li>Sala, copa e cozinha em conceito aberto + lavabo</li>
+              <li>2 vagas de garagem soltas</li>
+              <li>Previsão de entrega: agosto de 2026</li>
+            </ul>
+            <p>
+              <button class="btn-fotos"
+                data-gallery-prefix="casa-em-construcao-alphaville-"
+                data-gallery-count="4"
+                data-gallery-ext=".jpeg">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote 253m² c/ Casa Simples – Jardim Laguna (NOVO) -->
+        <article class="card" id="casa-simples-laguna" data-code="CI-LO-LAG-253" data-type="lote" data-tags="lote, casa" data-geo="casa-simples-laguna">
+          <div class="thumb">
+            <img src="assets/casa-simples-jardimlaguna-01.jpeg" alt="Lote 253m² com casa simples no Jardim Laguna, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Lote 253m² c/ Casa Simples – Jardim Laguna</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">253m²</span>
+              <span class="pill">11m x 23m</span>
+              <span class="pill">Sol da manhã</span>
+              <span class="pill">Casa simples 80m²</span>
+              <span class="pill">Ref: CI-CA-LAG-253</span>
+            </div>
+            <p class="price">R$ 420.000,00</p>
+            <ul class="ul">
+              <li>Localizado no Jardim Laguna, bairro valorizado de Linhares</li>
+              <li>Casa simples com 80m² construídos</li>
+              <li>Ideal para quem deseja investir, construir ou reformar</li>
+              <li>Terreno plano com frente e fundos de 11m e laterais de 23m</li>
+            </ul>
+            <p>
+              <button class="btn-fotos"
+                data-gallery-prefix="casa-simples-jardimlaguna-"
+                data-gallery-count="4"
+                data-gallery-ext=".jpeg">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
+        <!-- Lote Residencial 390 m² – Terras Alphaville (NOVO) -->
+        <article class="card" id="lote-alphaville-390" data-code="CI-LO-ALPH-390" data-type="lote" data-tags="lote" data-geo="alphaville-lote-390">
+          <div class="thumb">
+            <img src="assets/lote-alphaville-390-01.jpeg" alt="Lote 390m² no Terras Alphaville, Linhares/ES" loading="lazy">
+          </div>
+          <div class="content">
+            <h3>Lote Residencial 390m² – Terras Alphaville</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pill">390m²</span>
+              <span class="pill">13m x 30m</span>
+              <span class="pill">Sol da manhã</span>
+              <span class="pill">Quitado</span>
+              <span class="pill">Ref: CI-LO-ALPH-390</span>
+            </div>
+            <p class="price">R$ 400.000,00</p>
+            <ul class="ul">
+              <li>Condomínio fechado horizontal de alta qualidade</li>
+              <li>Portaria 24h com seguranças bem equipados</li>
+              <li>Clube completo: brinquedoteca, academia, festas, churras, piscina, playground</li>
+              <li>Quadras de tênis, basquete, futebol e vôlei de areia</li>
+              <li>Apenas 2,5km do Bairro Aviso (sentido Pontal do Ipiranga)</li>
+            </ul>
+            <p>
+              <button class="btn-fotos"
+                data-gallery-prefix="lote-alphaville-390-"
+                data-gallery-count="4"
+                data-gallery-ext=".jpeg">Ver fotos</button>
+              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+            </p>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
 
-  <section id="sobre"><div class="container"><h2 class="title">Sobre</h2><p>Sou o <strong>Cinaldo O Ferreira</strong>, corretor de imóveis em Linhares – ES. Trabalho com foco total em segurança, clareza e atendimento direto.</p></div></section>
-  <section id="contato"><div class="container"><h2 class="title">Contato</h2><p>📲 <strong>WhatsApp:</strong> <a href="https://wa.me/5527999567000" target="_blank" rel="noopener">(27) 99956-7000</a></p><p>✉️ <strong>E-mail:</strong> <a href="mailto:cinaldo@cinaldoimoveis.com.br">cinaldo@cinaldoimoveis.com.br</a></p></div></section>
+  <section id="sobre">
+    <div class="container">
+      <h2 class="title">Sobre</h2>
+      <p>Sou o <strong>Cinaldo O Ferreira</strong>, corretor de imóveis em Linhares – ES. Trabalho com foco total em segurança, clareza e atendimento direto.</p>
+    </div>
+  </section>
 
-  <footer><div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap"><div>© <span id="y"></span> Cinaldo Imóveis • Linhares – ES</div><div style="color:#777">CRECI 8356-F</div></div></footer>
+  <section id="contato">
+    <div class="container">
+      <h2 class="title">Contato</h2>
+      <p>📲 <strong>WhatsApp:</strong> <a href="https://wa.me/5527999567000" target="_blank" rel="noopener">(27) 99956-7000</a></p>
+      <p>✉️ <strong>E-mail:</strong> <a href="mailto:cinaldo@cinaldoimoveis.com.br">cinaldo@cinaldoimoveis.com.br</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap">
+      <div>© <span id="y"></span> Cinaldo Imóveis • Linhares – ES</div>
+      <div style="color:#777">CRECI 8356-F</div>
+    </div>
+  </footer>
+
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 
-  <!-- Modal da galeria -->
+  <!-- Modal da galeria (grade empilhada) -->
   <div id="gallery-modal" class="gallery-modal" aria-hidden="true">
     <div class="gallery-backdrop" data-close></div>
     <div class="gallery-content" role="dialog" aria-modal="true" aria-label="Galeria de fotos">
@@ -272,14 +788,18 @@
     </div>
   </div>
 
-  <!-- VISOR -->
+  <!-- VISOR (zoom/pinch/rodinha + setas/swipe) -->
   <div class="viewer" id="viewer" hidden>
     <div class="toolbar">
       <button class="btn-open" id="openNew" title="Abrir esta imagem em nova aba">↗ abrir em nova aba</button>
       <span class="count"><b id="vi">1</b>/<span id="vt">1</span></span>
       <button class="btn-close" title="Fechar" aria-label="Fechar">&times;</button>
     </div>
-    <div class="viewport" id="vp"><div class="stage" id="stg"><img id="ph" class="pic" alt=""></div></div>
+    <div class="viewport" id="vp">
+      <div class="stage" id="stg">
+        <img id="ph" class="pic" alt="">
+      </div>
+    </div>
     <button class="arrow left" aria-label="Anterior">&#8592;</button>
     <button class="arrow right" aria-label="Próxima">&#8594;</button>
   </div>
@@ -311,39 +831,18 @@
       const img = card.querySelector('.thumb img');
       const h3  = card.querySelector('h3');
       if (!img) return null;
-      return { href: id ? `#${id}` : '#', id, src: img.getAttribute('src') || img.src || '', alt: h3 ? h3.textContent.trim() : 'Imóvel' };
+      return { href: id ? `#${id}` : '#', src: img.getAttribute('src') || img.src || '', alt: h3 ? h3.textContent.trim() : 'Imóvel' };
     }).filter(Boolean);
     if (!items.length) return;
     const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
     const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
     const rotated = rotate(items, dayNumber % items.length);
     const picks = rotated.slice(0, Math.min(3, rotated.length));
-    box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}" data-target="${it.id}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
-
-    // >>> Novo: clicar no destaque remove filtro e revela o card mesmo com filtro ativo
-    function clearFilterAndReveal(targetId){
-      const bar = document.getElementById('filters');
-      const btnAll = bar?.querySelector('.fbtn[data-filter="all"]');
-      if (btnAll) {
-        bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-        btnAll.classList.add('is-active');
-      }
-      // revelar todos
-      document.querySelectorAll('#imoveis .grid .card').forEach(card=>card.hidden=false);
-
-      const el = document.getElementById(targetId);
-      if (!el) return;
-      el.classList.add('glow');
-      el.scrollIntoView({behavior:'smooth', block:'center'});
-      setTimeout(()=> el.classList.remove('glow'), 1200);
-    }
-
-    box.addEventListener('click', (e)=>{
-      const a = e.target.closest('a.mini-item');
-      if(!a) return;
-      e.preventDefault();
-      const target = a.getAttribute('data-target');
-      if (target) clearFilterAndReveal(target);
+    box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
+    box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
+    requestAnimationFrame(() => {
+      box.style.transition = 'opacity .25s ease, transform .25s ease';
+      box.style.opacity = '1'; box.style.transform = 'translateY(0)';
     });
   })();
   </script>
@@ -354,11 +853,14 @@
     const bar   = document.getElementById('filters');
     const grid  = document.querySelector('#imoveis .grid');
     const cards = Array.from(grid.querySelectorAll('.card'));
+
     if(!bar || !grid) return;
 
     function getTags(card){
       const raw = card.getAttribute('data-tags');
-      if(raw && raw.trim()) return raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+      if(raw && raw.trim()){
+        return raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+      }
       const t = (card.getAttribute('data-type')||'').toLowerCase().trim();
       return t ? [t] : [];
     }
@@ -375,7 +877,8 @@
     }
 
     bar.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.fbtn'); if(!btn) return;
+      const btn = e.target.closest('.fbtn');
+      if(!btn) return;
       bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
       btn.classList.add('is-active');
       applyFilter(btn.dataset.filter);
@@ -391,7 +894,7 @@
   })();
   </script>
 
-  <!-- Galeria + visor (agora com pinch e double-tap no mobile) -->
+  <!-- Galeria: grade empilhada + visor -->
   <script>
   (function(){
     const modal = document.getElementById('gallery-modal');
@@ -426,28 +929,41 @@
     document.querySelector('.viewer .btn-close').addEventListener('click', closeViewer);
     window.addEventListener('keydown', e=>{ if(viewer.hidden) return; if(e.key==='ArrowLeft')show(idx-1); if(e.key==='ArrowRight')show(idx+1); if(e.key==='Escape')closeViewer(); });
 
-    // Swipe simples (sem zoom)
+    // Swipe simples (fechar p/ baixo, navegar p/ lados) quando sem zoom
     let swipeSX=0, swipeSY=0, swipeTime=0;
-    vp.addEventListener('touchstart', e=>{ if(e.touches.length===1){ swipeSX=e.touches[0].clientX; swipeSY=e.touches[0].clientY; swipeTime=Date.now(); } }, {passive:true});
+    vp.addEventListener('touchstart', e=>{
+      if(e.touches.length===1){
+        swipeSX=e.touches[0].clientX;
+        swipeSY=e.touches[0].clientY;
+        swipeTime=Date.now();
+      }
+    }, {passive:true});
     vp.addEventListener('touchend', e=>{
       if(!e.changedTouches.length) return;
       const dx=e.changedTouches[0].clientX - swipeSX;
       const dy=e.changedTouches[0].clientY - swipeSY;
       const dt=Date.now()-swipeTime;
-      if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy) && scale<=1.05){ if(dx<0) show(idx+1); else show(idx-1); return; }
-      if(scale<=1.02 && dy>120 && dt<500){ closeViewer(); }
+
+      if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy) && scale<=1.05){
+        if(dx<0) show(idx+1); else show(idx-1);
+        return;
+      }
+      if(scale<=1.02 && dy>120 && dt<500){
+        closeViewer();
+      }
     }, {passive:true});
 
-    // Zoom com roda (desktop)
+    // Zoom (wheel) + pan (mouse)
     vp.addEventListener('wheel', e=>{
       e.preventDefault();
       const delta = -e.deltaY;
       const zoom = delta>0 ? 1.1 : 0.9;
       const newScale = Math.min(maxScale, Math.max(minScale, scale * zoom));
-      if(newScale !== scale){ scale = newScale; setT(); }
+      if(newScale !== scale){
+        scale = newScale;
+        setT();
+      }
     }, {passive:false});
-
-    // Pan com mouse
     stg.addEventListener('mousedown', e=>{
       if(e.button!==0) return;
       isDraggingMouse = true;
@@ -457,208 +973,224 @@
     });
     window.addEventListener('mousemove', e=>{
       if(!isDraggingMouse || scale<=1) return;
-      tx = e.clientX - dragSX; ty = e.clientY - dragSY; setT();
+      tx = e.clientX - dragSX;
+      ty = e.clientY - dragSY;
+      setT();
     });
-    window.addEventListener('mouseup', ()=>{ isDraggingMouse = false; stg.style.cursor = 'grab'; });
+    window.addEventListener('mouseup', ()=>{
+      isDraggingMouse = false;
+      stg.style.cursor = 'grab';
+    });
+    vp.addEventListener('dblclick', ()=>{
+      if(scale===1){ scale=2; } else { scale=1; tx=0; ty=0; }
+      setT();
+    });
 
-    // Double-click (desktop)
-    vp.addEventListener('dblclick', ()=>{ if(scale===1){ scale=2; } else { scale=1; tx=0; ty=0; } setT(); });
-
-    // === NOVO: double-tap (mobile) ===
-    let lastTapTime=0;
-    vp.addEventListener('touchstart', (e)=>{
-      if(e.touches.length===1){
-        const now=Date.now();
-        if(now-lastTapTime<300){
-          // double-tap
-          if(scale===1){ scale=2; } else { scale=1; tx=0; ty=0; }
-          setT();
-        }
-        lastTapTime=now;
-      }
-    }, {passive:true});
-
-    // === NOVO: pinch-to-zoom (mobile) ===
-    let pinchStartDist=0, pinchStartScale=1;
-    let pinchStartMidX=0, pinchStartMidY=0;
-    vp.addEventListener('touchstart', (e)=>{
-      if(e.touches.length===2){
-        const dx=e.touches[0].clientX - e.touches[1].clientX;
-        const dy=e.touches[0].clientY - e.touches[1].clientY;
-        pinchStartDist=Math.hypot(dx,dy);
-        pinchStartScale=scale;
-        pinchStartMidX=(e.touches[0].clientX + e.touches[1].clientX)/2;
-        pinchStartMidY=(e.touches[0].clientY + e.touches[1].clientY)/2;
-      }
-    }, {passive:true});
-    vp.addEventListener('touchmove', (e)=>{
-      if(e.touches.length===2){
-        e.preventDefault();
-        const dx=e.touches[0].clientX - e.touches[1].clientX;
-        const dy=e.touches[0].clientY - e.touches[1].clientY;
-        const dist=Math.hypot(dx,dy);
-        const factor=dist/pinchStartDist;
-        scale=Math.min(maxScale, Math.max(minScale, pinchStartScale*factor));
-        setT();
-      }
-    }, {passive:false});
-
+    // MODAL abrir/fechar
     function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
     function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; grid.innerHTML=''; }
-
     modal.addEventListener('click',(e)=>{ if(e.target.hasAttribute('data-close')) closeModal(); });
     document.addEventListener('keydown',(e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
     // CLICK em "Ver fotos"
     document.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.btn-fotos'); if(!btn) return;
+      const btn = e.target.closest('.btn-fotos');
+      if(!btn) return;
+
       const prefix     = btn.dataset.galleryPrefix;
       const count      = parseInt(btn.dataset.galleryCount || '0', 10);
       const extDefault = btn.dataset.galleryExt || '.jpeg';
       const extFirst   = btn.dataset.galleryExtFirst || extDefault;
-      imgs = []; grid.innerHTML = '';
+
+      imgs = [];
+      grid.innerHTML = '';
+
       for (let i = 1; i <= count; i++) {
-        const nn=String(i).padStart(2,'0');
-        const extUse=(i===1?extFirst:extDefault);
-        const src=`assets/${prefix}${nn}${extUse}`;
-        const k=i-1;
+        const nn     = String(i).padStart(2,'0');
+        const extUse = (i === 1 ? extFirst : extDefault);
+        const src    = `assets/${prefix}${nn}${extUse}`;
+        const k      = i - 1;
+
         imgs.push(src);
-        const a=document.createElement('a'); a.href=src; a.target='_blank'; a.rel='noopener';
-        const img=document.createElement('img'); img.loading='lazy'; img.alt=`Foto ${i}`; img.src=src;
-        a.addEventListener('click',(ev)=>{ ev.preventDefault(); openViewer(k); });
-        a.appendChild(img); grid.appendChild(a);
+
+        const a = document.createElement('a');
+        a.href = src; a.target = '_blank'; a.rel = 'noopener';
+
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = `Foto ${i}`;
+        img.src = src;
+
+        a.addEventListener('click', (ev)=>{ ev.preventDefault(); openViewer(k); });
+        a.appendChild(img);
+        grid.appendChild(a);
       }
+
       openModal();
     });
   })();
   </script>
 
-  <!-- Esconde o botão "Abrir em nova aba" onde não faz sentido -->
-  <style id="hide-open-desktop">@media (any-pointer: fine){#openNew{display:none!important;visibility:hidden!important;opacity:0!important}}</style>
-  <style id="hide-open-mobile">@media (any-pointer: coarse){#openNew{display:none!important;visibility:hidden!important;opacity:0!important}}</style>
+  <!-- Oculta o botão "Abrir em nova aba" onde não faz sentido -->
+  <style id="hide-open-desktop">
+    @media (any-pointer: fine) {
+      #openNew { display: none !important; visibility: hidden !important; opacity: 0 !important; }
+    }
+  </style>
+  <style id="hide-open-mobile">
+    @media (any-pointer: coarse) {
+      #openNew { display: none !important; visibility: hidden !important; opacity: 0 !important; }
+    }
+  </style>
+
+  <!-- ====== MAPA: Modal + Estilos + Script ====== -->
+  <style>
+    .map-modal[hidden]{display:none}
+    .map-modal{
+      position:fixed; inset:0; z-index:2500;
+      display:grid; place-items:center; background:rgba(0,0,0,.55);
+    }
+    .map-card{
+      width:min(900px, 92vw);
+      height:min(640px, 85vh);
+      background:#fff; border-radius:14px; overflow:hidden;
+      box-shadow:0 18px 60px rgba(0,0,0,.25);
+      display:grid; grid-template-rows:48px 1fr;
+    }
+    .map-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:8px 12px; background:#f7f7f7; border-bottom:1px solid #e8e8e8;
+    }
+    .map-title{ font-weight:700; }
+    .map-close{
+      background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
+    }
+    #map{ width:100%; height:100%; }
+    .btn-map {
+      display:block; width:100%; text-align:center; margin:0 0 6px 0;
+      padding:.3rem .6rem; border:1px solid #ddd; border-radius:6px; background:#fafafa;
+      cursor:pointer; font-weight:500; font-size:.8rem; color:#555; transition:.25s ease;
+    }
+    .btn-map:hover { background:#f2f2f2; color:#222; transform:translateY(-1px); box-shadow:0 1px 4px rgba(0,0,0,.05); }
+  </style>
+
+  <!-- Modal do mapa -->
+  <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
+    <div class="map-card">
+      <div class="map-head">
+        <div class="map-title">Localização aproximada</div>
+        <button class="map-close" title="Fechar" aria-label="Fechar">&times;</button>
+      </div>
+      <div id="map"></div>
+    </div>
+  </div>
 
   <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
 
-  <!-- Script do mapa (com linha de segurança) -->
+  <!-- Script do mapa (único e limpo) -->
   <script>
-(function(){
-  // --- COORDENADAS ---
-  const GEO = {
-    alphaville: [-19.392604, -40.025909],
-    'alphaville-casa-217': [-19.397728, -40.022248],
-    'alphaville-lote-360': [-19.392500, -40.024900],
-    'alphaville-lote-420': [-19.397728, -40.022248],
-    'alphaville-lote-717': [-19.391800, -40.025300],
-    'alphaville-lote-390': [-19.397728, -40.022248],
-    'alphaville-casa-186': [-19.397728, -40.022248],
-    'alphaville-lote-437c': [-19.391600, -40.026000],
-    unique: [-19.327982, -40.075060],
-    'complexo-sao-mateus': [-18.731801, -39.790920],
-    'casa-simples-laguna': [-19.376735, -40.053552],
-    laguna: [-19.374194, -40.055102],
-    'apto-tres-barras': [-19.378666, -40.069564],
-    'fazenda-linhares': [-19.257191, -39.801592],
-    'area-planalto-20000': [-19.341756, -40.057675],
-  };
+  (function(){
+    // === COORDENADAS por chave (usar o data-geo do card) ===
+    const GEO = {
+      alphaville: [-19.392604, -40.025909],
+      'alphaville-casa-217': [-19.397728, -40.022248],
+      'alphaville-lote-360': [-19.392500, -40.024900],
+      'alphaville-lote-420': [-19.397728, -40.022248],
+      'alphaville-lote-717': [-19.391800, -40.025300],
+      'alphaville-lote-390': [-19.397728, -40.022248],
+      'alphaville-casa-186': [-19.397728, -40.022248],
+      'alphaville-lote-437c': [-19.391600, -40.026000],
+      unique: [-19.327982, -40.075060],
+      'complexo-sao-mateus': [-18.731801, -39.790920],
+      'casa-simples-laguna': [-19.376735, -40.053552],
+      laguna: [-19.374194, -40.055102],
+      'apto-tres-barras': [-19.378666, -40.069564],
+      'fazenda-linhares': [-19.257191, -39.801592],
+      'area-planalto-20000': [-19.341756, -40.057675],
+    };
 
-  // --- elementos do modal ---
-  const modal  = document.getElementById('map-modal');
-  const btnX   = modal ? modal.querySelector('.map-close') : null;
-  const mapDiv = document.getElementById('map');
+    // Injeta o botão "📍 Ver localização aproximada" em cada card com data-geo
+    document.querySelectorAll('article.card[data-geo]').forEach(card=>{
+      if(card.querySelector('.btn-map')) return;
+      const wrapP = card.querySelector('p');
+      if(!wrapP) return;
 
-  let map, circle;
+      const b = document.createElement('button');
+      b.className = 'btn-map';
+      b.type = 'button';
+      b.textContent = '📍 Ver localização aproximada';
+      b.addEventListener('click', ()=>{
+        const key = card.getAttribute('data-geo');
+        openMap(key);
+      });
+      wrapP.prepend(b);
+    });
 
-  // injeta o botão em cada card (uma vez)
-  document.querySelectorAll('article.card[data-geo]').forEach(card=>{
-    if(card.querySelector('.btn-map')) return;
-    const p = card.querySelector('p');
-    if(!p) return;
-    const b = document.createElement('button');
-    b.className = 'btn-map';
-    b.type = 'button';
-    b.textContent = '📍 Ver localização aproximada';
-    b.dataset.geo = card.getAttribute('data-geo') || '';
-    p.prepend(b);
-  });
+    // === Modal & Leaflet ===
+    const modal  = document.getElementById('map-modal');
+    const btnX   = modal.querySelector('.map-close');
+    let map, circle;
 
-  // delegação: um único listener para todos os botões
-  document.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.btn-map');
-    if(!btn) return;
-    e.preventDefault();
-    const key = btn.dataset.geo;
-    openMap(key);
-  });
-
-  function ensureMap(){
-    if(map) return map;
-    if(typeof L === 'undefined'){
-      console.error('Leaflet (L) não carregado.');
-      return null;
+    function ensureMap(){
+      if (map) return map;
+      map = L.map('map', { zoomControl: true, attributionControl: true });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+      return map;
     }
-    map = L.map(mapDiv, { zoomControl:true, attributionControl:true });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-    return map;
-  }
 
-  function renderCircleAndZoom(coords){
-    if(!map) return;
-    const isMobile = window.matchMedia('(max-width: 640px)').matches;
-    const MAX_ZOOM = isMobile ? 14 : 15;
-
-    if(circle){ circle.remove(); }
-    circle = L.circle(coords, {
-      radius: 500, color:'#2b7', fillColor:'#2b7', fillOpacity:0.12, weight:2
-    }).addTo(map);
-
-    map.fitBounds(circle.getBounds(), { padding:[24,24], maxZoom:MAX_ZOOM, animate:false });
-    map.invalidateSize();
-    setTimeout(()=> map.invalidateSize(), 60);
-  }
-
-  function openMap(key){
-    try{
+    function openMap(key){
       const coords = GEO[key];
-      if(!coords){
-        alert('Localização indisponível.');
-        return;
-      }
-      if (!modal) return; // segurança extra
-      // 1) abre o modal agora
+      if(!coords){ alert('Localização indisponível.'); return; }
+
       modal.hidden = false;
       modal.setAttribute('aria-hidden','false');
-      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.overflow='hidden';
 
-      // 2) prepara/atualiza o mapa
+      const isMobile = window.matchMedia('(max-width: 640px)').matches;
+      const MAX_ZOOM = isMobile ? 14 : 15;
+
+      // garante que o container já está visível antes de inicializar/medir
       requestAnimationFrame(()=>{
-        const ok = ensureMap();
-        if(!ok) return;
-        setTimeout(()=>{ renderCircleAndZoom(coords); }, 0);
+        requestAnimationFrame(()=>{
+          ensureMap();
+          map.invalidateSize();
+
+          if(circle){ circle.remove(); }
+          circle = L.circle(coords, {
+            radius: 500,
+            color: '#2b7',
+            fillColor: '#2b7',
+            fillOpacity: 0.12,
+            weight: 2
+          }).addTo(map);
+
+          const bounds = circle.getBounds();
+          map.fitBounds(bounds, {
+            padding: [24, 24],
+            maxZoom: MAX_ZOOM,
+            animate: false
+          });
+        });
       });
-    }catch(err){
-      console.error('Erro ao abrir mapa:', err);
     }
-  }
 
-  function closeMap(){
-    if (!modal) return;
-    modal.hidden = true;
-    modal.setAttribute('aria-hidden','true');
-    document.documentElement.style.overflow = '';
-  }
+    function closeMap(){
+      modal.hidden = true;
+      modal.setAttribute('aria-hidden','true');
+      document.documentElement.style.overflow='';
+    }
 
-  if(btnX) btnX.addEventListener('click', closeMap);
-  if (modal) modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); }); // << linha de segurança
-  window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal && modal.getAttribute('aria-hidden') === 'false') closeMap(); });
-
-  // expõe se quiser usar em outros pontos
-  window.openMap = openMap;
-  window.closeMap = closeMap;
-})();
+    btnX.addEventListener('click', closeMap);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap(); });
+  })();
   </script>
+  <!-- ====== /MAPA ====== -->
 </body>
 </html>
