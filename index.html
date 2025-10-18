@@ -141,44 +141,46 @@
     .gallery-grid img{width:100%;height:200px;object-fit:cover;display:block}
   </style>
 
- <!-- Destaques + logo (mantém desktop / horizontal; força mesmo tamanho no retrato) -->
+ <!-- Destaques + logo -->
 <style>
   .mini-list{
     display:grid;
-    gap:12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap:10px;
     margin-top:8px;
-    grid-template-columns: repeat(3, minmax(120px, 1fr));
   }
   .mini-item{
     display:flex; align-items:center; justify-content:center;
-    border:1px solid var(--line); background:#fff; border-radius:12px; padding:8px;
+    border:1px solid var(--line); background:#fff; border-radius:12px; padding:6px;
   }
   .mini-item img{
-    width:100%; height:auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius:8px;
+    width:100%;
+    height:auto;
+    aspect-ratio: 4 / 3;   /* mantém proporção agradável como antes */
+    object-fit: cover;
+    border-radius:8px;
   }
 
-  /* Horizontal (celular deitado) já estava OK */
-  @media (orientation: landscape) and (max-width: 900px){
-    .mini-list{ grid-template-columns: repeat(3, minmax(120px, 1fr)); gap:10px; }
-    .mini-item img{ aspect-ratio: 16 / 9; }
-  }
-
-  /* Retrato (celular em pé): 1 por linha, mas com a MESMA largura/altura do horizontal */
-  @media (max-width: 900px) and (orientation: portrait){
+  /* Mobile em pé (vertical): 2 por linha -> fica 2 em cima e 1 embaixo */
+  @media (orientation: portrait) and (max-width: 900px){
     .mini-list{
-      grid-template-columns: 1fr;       /* empilha */
-      justify-items: center;            /* centraliza a célula */
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
     }
-    .mini-item{
-      width: var(--miniW, 140px);       /* definido via JS para ficar idêntico ao horizontal */
+  }
+
+  /* Mobile deitado (horizontal): 3 por linha, como antes */
+  @media (orientation: landscape) and (max-width: 900px){
+    .mini-list{
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
     }
-    .mini-item img{
-      width: 100%;
-      height: var(--miniH, 78px);       /* 16:9 do --miniW */
-      object-fit: cover;
-      aspect-ratio: auto;               /* usa altura fixa calculada */
-    }
+    .mini-item img{ aspect-ratio: 16 / 9; } /* se preferir 16:9 deitado */
+  }
+
+  /* Telas muito estreitas: garante 2 colunas também */
+  @media (max-width: 360px){
+    .mini-list{ grid-template-columns: 1fr 1fr; }
   }
 </style>
 
