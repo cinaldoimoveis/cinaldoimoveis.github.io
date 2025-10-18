@@ -99,6 +99,10 @@
     .price{font-weight:800;font-size:18px;margin:10px 0}
     .ul{margin:8px 0 0;padding:0 0 0 18px;color:#333}
     .pill{display:inline-block;background:var(--card);border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:#444}
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   </style>
 
   <style>
@@ -326,6 +330,27 @@
       .viewer .stage:active{cursor:grabbing}
     }
   </style>
+
+  <!-- Leaflet (mapas) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+<style>
+  /* Caixa do mapa embutido nos cards */
+  .mapbox{
+    width:100%;
+    height:260px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    margin-top:10px;
+    display:none;         /* abre/fecha no clique */
+    background:#f6f6f6;   /* fallback antes do tile carregar */
+  }
+  @media (max-width:640px){
+    .mapbox{ height: 220px; }
+  }
+</style>
+
 </head>
 <body>
   <header>
@@ -382,7 +407,11 @@
       <div class="grid">
 
         <!-- Casa em Alphaville (FIXA nos destaques) -->
-        <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217" data-type="casa" data-tags="casa">
+        <article class="card" id="casa-alphaville"
+  data-code="CI-CA-ALPH-217"
+  data-type="casa"
+  data-tags="casa"
+  data-geo="alphaville">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
             <h3>Casa 3Q (2 Suítes) – Alphaville</h3>
@@ -400,7 +429,7 @@
         </article>
 
         <!-- Casa Jardim Laguna -->
-        <article class="card" id="laguna" data-code="CI-CA-LAG-100" data-type="casa" data-tags="casa">
+        <article class="card" id="laguna" data-code="CI-CA-LAG-100" data-type="casa" data-tags="casa" data-geo="laguna">
           <div class="thumb"><img src="assets/casa-rua-italia-01.jpeg" alt="Casa Linear - Jardim Laguna 2" loading="lazy"></div>
           <div class="content">
             <h3>Casa Linear 2Q (1 Suíte) – Jardim Laguna 2</h3>
@@ -418,7 +447,11 @@
         </article>
 
         <!-- Lote Comercial (FIXO nos destaques) -->
-        <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C" data-type="comercial" data-tags="lote, comercial">
+        <article class="card" id="lote-alphaville"
+  data-code="CI-LO-ALPH-437C"
+  data-type="comercial"
+  data-tags="lote,comercial"
+  data-geo="alphaville">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
           <div class="content">
             <h3>Lote Comercial 437m² – Terras Alphaville</h3>
@@ -436,7 +469,7 @@
         </article>
 
         <!-- Fazenda -->
-        <article class="card" id="fazenda-linhares" data-code="CI-FZ-LIN-290" data-type="fazenda" data-tags="fazenda">
+        <article class="card" id="fazenda-linhares" data-code="CI-FZ-LIN-290" data-type="fazenda" data-tags="fazenda" data-geo="fazenda-linhares">
           <div class="thumb"><img src="assets/fazenda-linhares-01.jpeg" alt="Fazenda em Linhares ES" loading="lazy"></div>
           <div class="content">
             <h3>Fazenda – 290ha (60 alq) – Linhares ES</h3>
@@ -458,7 +491,7 @@
         </article>
 
         <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
-        <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento">
+        <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras">
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
@@ -484,7 +517,11 @@
         </article>
 
         <!-- Lote Residencial 360 m² -->
-        <article class="card" id="lote-residencial-360" data-code="CI-LO-ALPH-360" data-type="lote" data-tags="lote">
+        <article class="card" id="lote-residencial-360"
+  data-code="CI-LO-ALPH-360"
+  data-type="lote"
+  data-tags="lote"
+  data-geo="alphaville">
           <div class="thumb"><img src="assets/lote-alphaville-360-01.jpeg" alt="Lote residencial 360 m²" loading="lazy"></div>
           <div class="content">
             <h3>Lote Residencial 360m² – Terras Alphaville</h3>
@@ -506,7 +543,11 @@
         </article>
 
         <!-- Lote Residencial 420 m² -->
-        <article class="card" id="lote-residencial-420" data-code="CI-LO-ALPH-420" data-type="lote" data-tags="lote">
+        <article class="card" id="lote-residencial-420"
+  data-code="CI-LO-ALPH-420"
+  data-type="lote"
+  data-tags="lote"
+  data-geo="alphaville">
           <div class="thumb"><img src="assets/lote-alphaville-420-01.jpeg" alt="Lote residencial 420 m²" loading="lazy"></div>
           <div class="content">
             <h3>Lote Residencial 420m² – Terras Alphaville</h3>
@@ -528,7 +569,7 @@
         </article>
 
         <!-- Lote Residencial 630 m² – Condomínio Unique -->
-        <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote">
+        <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique">
           <div class="thumb">
             <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
           </div>
@@ -556,7 +597,7 @@
         </article>
 
         <!-- Área Comercial 20.000 m² – Bairro Planalto (NOVO) -->
-        <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000" data-type="comercial" data-tags="area, comercial">
+        <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000" data-type="comercial" data-tags="area, comercial" data-geo="area-planalto-20000">
           <div class="thumb">
             <img src="assets/area-2000-planalto-01.jpeg" alt="Área 20.000m² no Bairro Planalto, Linhares/ES" loading="lazy">
           </div>
@@ -588,7 +629,11 @@
         </article>
 
         <!-- Lote Residencial 717m² – Terras Alphaville (NOVO) -->
-        <article class="card" id="lote-alphaville-717" data-code="CI-LO-ALPH-717" data-type="lote" data-tags="lote">
+        <article class="card" id="lote-alphaville-717"
+  data-code="CI-LO-ALPH-717"
+  data-type="lote"
+  data-tags="lote"
+  data-geo="alphaville">
           <div class="thumb">
             <img src="assets/lote-alphaville-717-01.jpeg" alt="Lote 717m² no Terras Alphaville, Linhares/ES" loading="lazy">
           </div>
@@ -619,7 +664,7 @@
         </article>
 
         <!-- Complexo Residencial Familiar – São Mateus ES (NOVO) -->
-        <article class="card" id="complexo-sao-mateus" data-code="CI-CO-SM-2000" data-type="comercial" data-tags="casa">
+        <article class="card" id="complexo-sao-mateus" data-code="CI-CO-SM-2000" data-type="comercial" data-tags="casa" data-geo="complexo-sao-mateus">
           <div class="thumb">
             <img src="assets/Complexo-Residencial-SM-01.jpeg" alt="Complexo Residencial Familiar em São Mateus ES" loading="lazy">
           </div>
@@ -651,7 +696,11 @@
         </article>
 
         <!-- Casa Linear Alto Padrão – Alphaville Linhares (NOVO) -->
-<article class="card" id="casa-em-construcao-alphaville" data-code="CI-CA-ALPH-186" data-type="casa" data-tags="casa">
+<article class="card" id="casa-em-construcao-alphaville"
+  data-code="CI-CA-ALPH-186"
+  data-type="casa"
+  data-tags="casa"
+  data-geo="alphaville">
   <div class="thumb">
     <img src="assets/casa-em-construcao-alphaville-01.jpeg" alt="Casa linear alto padrão em construção no Alphaville Linhares" loading="lazy">
   </div>
@@ -685,7 +734,7 @@
 </article>
 
         <!-- Lote 253m² c/ Casa Simples – Jardim Laguna (NOVO) -->
-<article class="card" id="casa-simples-laguna" data-code="CI-LO-LAG-253" data-type="lote" data-tags="lote, casa">
+<article class="card" id="casa-simples-laguna" data-code="CI-LO-LAG-253" data-type="lote" data-tags="lote, casa" data-geo="casa-simples-laguna">
   <div class="thumb">
     <img src="assets/casa-simples-jardimlaguna-01.jpeg" alt="Lote 253m² com casa simples no Jardim Laguna, Linhares/ES" loading="lazy">
   </div>
@@ -1113,6 +1162,144 @@
     }
   }
 </style>
+
+<!-- ====== MAPA: Modal + Estilos + Script ====== -->
+<style>
+  .map-modal[hidden]{display:none}
+  .map-modal{
+    position:fixed; inset:0; z-index:2500;
+    display:grid; place-items:center; background:rgba(0,0,0,.55);
+  }
+  .map-card{
+    width:min(900px, 92vw);
+    height:min(640px, 85vh);
+    background:#fff; border-radius:14px; overflow:hidden;
+    box-shadow:0 18px 60px rgba(0,0,0,.25);
+    display:grid; grid-template-rows:48px 1fr;
+  }
+  .map-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:8px 12px; background:#f7f7f7; border-bottom:1px solid #e8e8e8;
+  }
+  .map-title{ font-weight:700; }
+  .map-close{
+    background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
+  }
+  #map{ width:100%; height:100%; }
+  /* Botão dentro do card do imóvel */
+  .btn-map{
+    display:inline-block; padding:.60rem .9rem; margin-left:6px;
+    border:1px solid var(--line); border-radius:.5rem; background:#fff; cursor:pointer;
+    font-weight:600;
+  }
+  .btn-map:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.08); }
+</style>
+
+<!-- Modal do mapa -->
+<div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
+  <div class="map-card">
+    <div class="map-head">
+      <div class="map-title">Localização aproximada</div>
+      <button class="map-close" title="Fechar" aria-label="Fechar">&times;</button>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // === COORDENADAS por chave ===
+  // Use 'data-geo' do card como chave aqui.
+  const GEO = {
+    // agrupamento Alphaville (vários anúncios usam data-geo="alphaville")
+    alphaville: [-19.392604, -40.025909],
+
+    // demais locais individuais
+    unique: [-19.327982, -40.075060],
+    'complexo-sao-mateus': [-18.731801, -39.790920],
+    'casa-simples-laguna': [-19.376735, -40.053552],
+    laguna: [-19.374194, -40.055102],
+    'apto-tres-barras': [-19.378666, -40.069564],
+    'fazenda-linhares': [-19.257191, -39.801592],
+    'area-planalto-20000': [-19.341756, -40.057675],
+  };
+
+  // cria botão "📍 Ver localização aproximada" automaticamente
+  document.querySelectorAll('article.card[data-geo]').forEach(card=>{
+    // evita duplicar se já existir
+    if(card.querySelector('.btn-map')) return;
+
+    const wrapP = card.querySelector('p'); // mesmo lugar dos botões
+    if(!wrapP) return;
+
+    const b = document.createElement('button');
+    b.className = 'btn-map';
+    b.type = 'button';
+    b.textContent = '📍 Ver localização aproximada';
+    b.addEventListener('click', ()=>{
+      const key = card.getAttribute('data-geo');
+      openMap(key);
+    });
+    wrapP.appendChild(b);
+  });
+
+  // === Modal & Leaflet ===
+  const modal  = document.getElementById('map-modal');
+  const btnX   = modal.querySelector('.map-close');
+  let map, circle;
+
+  function openMap(key){
+    const coords = GEO[key];
+    if(!coords){ alert('Localização indisponível.'); return; }
+
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow='hidden';
+
+    setTimeout(()=>{ // garante que o container já está visível
+      if(!map){
+        map = L.map('map', { zoomControl: true, attributionControl: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+      }
+      map.setView(coords, 15); // zoom aproximado de bairro
+
+      if(circle){ circle.remove(); }
+      circle = L.circle(coords, {
+        radius: 500,          // 500 metros = estilo Airbnb
+        color: '#2b7',
+        fillColor: '#2b7',
+        fillOpacity: 0.12,
+        weight: 2
+      }).addTo(map);
+
+      // Ajusta o mapa para caber o círculo com folga
+      map.fitBounds(circle.getBounds(), { padding: [24,24] });
+      map.invalidateSize(); // corrige dimensionamento em modal
+    }, 50);
+  }
+
+  function closeMap(){
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow='';
+  }
+
+  btnX.addEventListener('click', closeMap);
+  modal.addEventListener('click', (e)=>{
+    if(e.target === modal) closeMap(); // clique fora fecha
+  });
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap();
+  });
+})();
+</script>
+<!-- ====== /MAPA ====== -->
+
+          
+          
 
 
 </body>
