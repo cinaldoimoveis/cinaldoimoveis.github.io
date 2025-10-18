@@ -369,18 +369,20 @@
   <section id="imoveis">
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
-      <div class="filters" id="filters">
+     <div class="filters" id="filters">
   <button class="fbtn is-active" data-filter="all">Todos</button>
   <button class="fbtn" data-filter="casa">Casas</button>
   <button class="fbtn" data-filter="apartamento">Apartamentos</button>
   <button class="fbtn" data-filter="lote">Lotes</button>
+  <button class="fbtn" data-filter="area">Áreas</button>
   <button class="fbtn" data-filter="fazenda">Fazendas</button>
   <button class="fbtn" data-filter="comercial">Comercial</button>
 </div>
+
       <div class="grid">
 
         <!-- Casa em Alphaville (FIXA nos destaques) -->
-        <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217" data-type="casa">
+        <article class="card" id="casa-alphaville" data-code="CI-CA-ALPH-217" data-type="casa" data-tags="casa">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
             <h3>Casa 3Q (2 Suítes) – Alphaville</h3>
@@ -398,7 +400,7 @@
         </article>
 
         <!-- Casa Jardim Laguna -->
-        <article class="card" id="laguna" data-code="CI-CA-LAG-100" data-type="casa">
+        <article class="card" id="laguna" data-code="CI-CA-LAG-100" data-type="casa" data-tags="casa">
           <div class="thumb"><img src="assets/casa-rua-italia-01.jpeg" alt="Casa Linear - Jardim Laguna 2" loading="lazy"></div>
           <div class="content">
             <h3>Casa Linear 2Q (1 Suíte) – Jardim Laguna 2</h3>
@@ -416,7 +418,7 @@
         </article>
 
         <!-- Lote Comercial (FIXO nos destaques) -->
-        <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C" data-type="comercial">
+        <article class="card" id="lote-alphaville" data-code="CI-LO-ALPH-437C" data-type="comercial" data-tags="lote, comercial">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
           <div class="content">
             <h3>Lote Comercial 437m² – Terras Alphaville</h3>
@@ -434,7 +436,7 @@
         </article>
 
         <!-- Fazenda -->
-        <article class="card" id="fazenda-linhares" data-code="CI-FZ-LIN-290" data-type="fazenda">
+        <article class="card" id="fazenda-linhares" data-code="CI-FZ-LIN-290" data-type="fazenda" data-tags="fazenda">
           <div class="thumb"><img src="assets/fazenda-linhares-01.jpeg" alt="Fazenda em Linhares ES" loading="lazy"></div>
           <div class="content">
             <h3>Fazenda – 290ha (60 alq) – Linhares ES</h3>
@@ -456,7 +458,7 @@
         </article>
 
         <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
-        <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento">
+        <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento">
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
@@ -482,7 +484,7 @@
         </article>
 
         <!-- Lote Residencial 360 m² -->
-        <article class="card" id="lote-residencial-360" data-code="CI-LO-ALPH-360" data-type="lote">
+        <article class="card" id="lote-residencial-360" data-code="CI-LO-ALPH-360" data-type="lote" data-tags="lote">
           <div class="thumb"><img src="assets/lote-alphaville-360-01.jpeg" alt="Lote residencial 360 m²" loading="lazy"></div>
           <div class="content">
             <h3>Lote Residencial 360m² – Terras Alphaville</h3>
@@ -504,7 +506,7 @@
         </article>
 
         <!-- Lote Residencial 420 m² -->
-        <article class="card" id="lote-residencial-420" data-code="CI-LO-ALPH-420" data-type="lote">
+        <article class="card" id="lote-residencial-420" data-code="CI-LO-ALPH-420" data-type="lote" data-tags="lote">
           <div class="thumb"><img src="assets/lote-alphaville-420-01.jpeg" alt="Lote residencial 420 m²" loading="lazy"></div>
           <div class="content">
             <h3>Lote Residencial 420m² – Terras Alphaville</h3>
@@ -526,7 +528,7 @@
         </article>
 
         <!-- Lote Residencial 630 m² – Condomínio Unique -->
-        <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote">
+        <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote">
           <div class="thumb">
             <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
           </div>
@@ -554,7 +556,7 @@
         </article>
 
         <!-- Área Comercial 20.000 m² – Bairro Planalto (NOVO) -->
-        <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000" data-type="comercial">
+        <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000" data-type="comercial" data-tags="area, comercial">
           <div class="thumb">
             <img src="assets/area-2000-planalto-01.jpeg" alt="Área 20.000m² no Bairro Planalto, Linhares/ES" loading="lazy">
           </div>
@@ -586,7 +588,7 @@
         </article>
 
         <!-- Lote Residencial 717m² – Terras Alphaville (NOVO) -->
-        <article class="card" id="lote-alphaville-717" data-code="CI-LO-ALPH-717" data-type="lote">
+        <article class="card" id="lote-alphaville-717" data-code="CI-LO-ALPH-717" data-type="lote" data-tags="lote">
           <div class="thumb">
             <img src="assets/lote-alphaville-717-01.jpeg" alt="Lote 717m² no Terras Alphaville, Linhares/ES" loading="lazy">
           </div>
@@ -617,7 +619,7 @@
         </article>
 
         <!-- Complexo Residencial Familiar – São Mateus ES (NOVO) -->
-        <article class="card" id="complexo-sao-mateus" data-code="CI-CO-SM-2000" data-type="comercial">
+        <article class="card" id="complexo-sao-mateus" data-code="CI-CO-SM-2000" data-type="comercial" data-tags="casa">
           <div class="thumb">
             <img src="assets/Complexo-Residencial-SM-01.jpeg" alt="Complexo Residencial Familiar em São Mateus ES" loading="lazy">
           </div>
@@ -649,7 +651,7 @@
         </article>
 
         <!-- Casa Linear Alto Padrão – Alphaville Linhares (NOVO) -->
-<article class="card" id="casa-em-construcao-alphaville" data-code="CI-CA-ALPH-186" data-type="casa">
+<article class="card" id="casa-em-construcao-alphaville" data-code="CI-CA-ALPH-186" data-type="casa" data-tags="casa">
   <div class="thumb">
     <img src="assets/casa-em-construcao-alphaville-01.jpeg" alt="Casa linear alto padrão em construção no Alphaville Linhares" loading="lazy">
   </div>
@@ -683,7 +685,7 @@
 </article>
 
         <!-- Lote 253m² c/ Casa Simples – Jardim Laguna (NOVO) -->
-<article class="card" id="casa-simples-laguna" data-code="CI-LO-LAG-253" data-type="lote">
+<article class="card" id="casa-simples-laguna" data-code="CI-LO-LAG-253" data-type="lote" data-tags="lote">
   <div class="thumb">
     <img src="assets/casa-simples-jardimlaguna-01.jpeg" alt="Lote 253m² com casa simples no Jardim Laguna, Linhares/ES" loading="lazy">
   </div>
@@ -714,7 +716,7 @@
 </article>
 
         <!-- Lote Residencial 390 m² – Terras Alphaville (NOVO) -->
-<article class="card" id="lote-alphaville-390" data-code="CI-LO-ALPH-390" data-type="lote">
+<article class="card" id="lote-alphaville-390" data-code="CI-LO-ALPH-390" data-type="lote" data-tags="lote">
   <div class="thumb">
     <img src="assets/lote-alphaville-390-01.jpeg" alt="Lote 390m² no Terras Alphaville, Linhares/ES" loading="lazy">
   </div>
@@ -829,7 +831,7 @@
   })();
   </script>
 
-  <script>
+ <script>
 (function(){
   const bar   = document.getElementById('filters');
   const grid  = document.querySelector('#imoveis .grid');
@@ -837,12 +839,22 @@
 
   if(!bar || !grid) return;
 
+  function getTags(card){
+    // 1) se tiver data-tags, usa; 2) senão, cai pro data-type; 3) senão, []
+    const raw = card.getAttribute('data-tags');
+    if(raw && raw.trim()){
+      return raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+    }
+    const t = (card.getAttribute('data-type')||'').toLowerCase().trim();
+    return t ? [t] : [];
+  }
+
   function applyFilter(type){
     grid.classList.add('filtering');
-    const t = (type||'all').toLowerCase();
+    const f = (type||'all').toLowerCase();
     cards.forEach(card=>{
-      const k = (card.getAttribute('data-type')||'').toLowerCase();
-      const show = (t==='all') || (k===t);
+      const tags = getTags(card);
+      const show = (f==='all') || tags.includes(f);
       card.hidden = !show;
     });
     grid.classList.remove('filtering');
