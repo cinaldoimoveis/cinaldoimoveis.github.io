@@ -1185,22 +1185,24 @@
   #map{ width:100%; height:100%; }
   /* Botão dentro do card do imóvel */
   .btn-map {
-  display: inline-block;
-  padding: 0.45rem 0.75rem;   /* antes era .60rem .9rem — reduzido */
-  margin-left: 6px;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0 0 8px 0;             /* espaço abaixo para separar dos outros */
+  padding: 0.55rem 0.9rem;
   border: 1px solid var(--line);
-  border-radius: 0.4rem;
-  background: #fff;
+  border-radius: 0.5rem;
+  background: #f8f8f8;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.88rem;         /* ligeiramente menor */
-  line-height: 1.1;
+  font-size: 0.9rem;
+  color: #333;
   transition: all 0.25s ease;
 }
 .btn-map:hover {
+  background: #f0f0f0;
   transform: translateY(-1px);
   box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-  background: #fafafa;
 }
 
 </style>
@@ -1262,7 +1264,7 @@
       const key = card.getAttribute('data-geo');
       openMap(key);
     });
-    wrapP.appendChild(b);
+    wrapP.prepend(b);
   });
 
   // === Modal & Leaflet ===
