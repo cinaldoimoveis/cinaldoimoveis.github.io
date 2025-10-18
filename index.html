@@ -142,59 +142,59 @@
   </style>
 
   <!-- Destaques + logo -->
-  <style>
-   /* === Destaques + logo (RESPONSIVO POR ORIENTAÇÃO) === */
-.mini-list{
-  display:grid;
-  gap:12px;
-  margin-top:8px;
-  /* auto-fit = encaixa o máximo que couber; minmax evita ficar minúsculo */
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-}
-
-.mini-item{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:12px;
-  padding:8px;
-}
-
-/* A imagem passa a preencher a célula mantendo proporção */
-.mini-item img{
-  width:100%;
-  height:auto;
-  aspect-ratio: 4 / 3;   /* altura automática conforme largura da célula */
-  object-fit: cover;
-  border-radius:8px;
-}
-
-/* ===== Ajustes por orientação ===== */
-@media (orientation: portrait){
-  /* No retrato, miniaturas maiores e menos colunas */
+<style>
+  /* === Destaques + logo (3 itens alinhados em retrato, estilo wide) === */
   .mini-list{
-    grid-template-columns: repeat(2, minmax(140px, 1fr));
-    gap:14px;
-  }
-  .mini-item img{ aspect-ratio: 4 / 3; }
-}
-
-@media (orientation: landscape) and (max-width: 900px){
-  /* No paisagem (celular deitado), cabem mais itens e ficam mais “wide” */
-  .mini-list{
-    grid-template-columns: repeat(3, minmax(120px, 1fr));
+    display:grid;
     gap:10px;
+    grid-template-columns: repeat(3, 1fr); /* sempre 3 colunas para manter alinhado */
+    margin-top:8px;
   }
-  .mini-item img{ aspect-ratio: 16 / 9; }
-}
 
-/* Em telas muito estreitas, garanta tamanho mínimo confortável */
-@media (max-width: 360px){
-  .mini-list{ grid-template-columns: 1fr 1fr; }
-}
-  </style>
+  .mini-item{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:12px;
+    padding:0;                /* sem padding para aproveitar largura total da célula */
+    overflow:hidden;          /* garante corte correto no 16:9 */
+  }
+
+  /* A imagem “estica” como wide (16:9) e preenche a célula */
+  .mini-item img{
+    width:100%;
+    height:auto;
+    aspect-ratio:16 / 9;      /* widescreen */
+    object-fit:cover;
+    display:block;
+  }
+
+  /* ===== Ajustes por orientação ===== */
+  @media (orientation: portrait){
+    /* Mantém 3 colunas no retrato para não quebrar em 2+1 */
+    .mini-list{
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    .mini-item img{ aspect-ratio:16 / 9; }
+  }
+
+  @media (orientation: landscape) and (max-width: 900px){
+    /* No paisagem em celulares/tablets, também 3 colunas (já fica confortável) */
+    .mini-list{
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    .mini-item img{ aspect-ratio:16 / 9; }
+  }
+
+  /* Em telas bem estreitas, mantém 3 alinhadas para não virar 2+1 */
+  @media (max-width: 360px){
+    .mini-list{ grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
 
   <!-- Só os cards dos imóveis brancos -->
   <style>
