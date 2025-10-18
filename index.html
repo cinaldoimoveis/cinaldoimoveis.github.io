@@ -304,6 +304,29 @@
       background:#f6f6f6;
     }
     @media (max-width:640px){ .mapbox{ height: 220px; } }
+
+    /* ====== MAPA: Modal + Estilos ====== */
+    .map-modal[hidden]{display:none}
+    .map-modal{
+      position:fixed; inset:0; z-index:2500;
+      display:grid; place-items:center; background:rgba(0,0,0,.55);
+    }
+    .map-card{
+      width:min(900px, 92vw);
+      height:min(640px, 85vh);
+      background:#fff; border-radius:14px; overflow:hidden;
+      box-shadow:0 18px 60px rgba(0,0,0,.25);
+      display:grid; grid-template-rows:48px 1fr;
+    }
+    .map-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:8px 12px; background:#f7f7f7; border-bottom:1px solid #e8e8e8;
+    }
+    .map-title{ font-weight:700; }
+    .map-close{
+      background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
+    }
+    #map{ width:100%; height:100%; min-height:320px; }
   </style>
 </head>
 <body>
@@ -360,7 +383,6 @@
       </div>
 
       <div class="grid">
-
         <!-- Casa em Alphaville (FIXA nos destaques) -->
         <article class="card" id="casa-alphaville"
           data-code="CI-CA-ALPH-217"
@@ -894,7 +916,7 @@
   })();
   </script>
 
-  <!-- Galeria: grade empilhada + visor -->
+  <!-- Galeria: grade empilhada + visor (com pinch e double-tap no mobile) -->
   <script>
   (function(){
     const modal = document.getElementById('gallery-modal');
@@ -936,8 +958,22 @@
         swipeSX=e.touches[0].clientX;
         swipeSY=e.touches[0].clientY;
         swipeTime=Date.now();
+        // início do pan por toque (se já estiver com zoom)
+        if(scale>1){
+          dragSX = e.touches[0].clientX - tx;
+          dragSY = e.touches[0].clientY - ty;
+        }
       }
     }, {passive:true});
+    vp.addEventListener('touchmove', e=>{
+      // pan com um dedo quando ampliado
+      if(e.touches.length===1 && scale>1){
+        e.preventDefault();
+        tx = e.touches[0].clientX - dragSX;
+        ty = e.touches[0].clientY - dragSY;
+        setT();
+      }
+    }, {passive:false});
     vp.addEventListener('touchend', e=>{
       if(!e.changedTouches.length) return;
       const dx=e.changedTouches[0].clientX - swipeSX;
@@ -985,6 +1021,44 @@
       if(scale===1){ scale=2; } else { scale=1; tx=0; ty=0; }
       setT();
     });
+
+    // === Double-tap (mobile) ===
+    let lastTapTime=0, lastTapX=0, lastTapY=0;
+    vp.addEventListener('touchstart', (e)=>{
+      if(e.touches.length===1){
+        const now=Date.now();
+        const x=e.touches[0].clientX, y=e.touches[0].clientY;
+        const isNear = Math.hypot(x-lastTapX, y-lastTapY) < 40;
+        if(now-lastTapTime<300 && isNear){
+          // alterna zoom
+          if(scale===1){ scale=2; } else { scale=1; tx=0; ty=0; }
+          setT();
+        }
+        lastTapTime=now; lastTapX=x; lastTapY=y;
+      }
+    }, {passive:true});
+
+    // === Pinch-to-zoom (mobile) ===
+    let pinchStartDist=0, pinchStartScale=1;
+    vp.addEventListener('touchstart', (e)=>{
+      if(e.touches.length===2){
+        const dx=e.touches[0].clientX - e.touches[1].clientX;
+        const dy=e.touches[0].clientY - e.touches[1].clientY;
+        pinchStartDist=Math.hypot(dx,dy);
+        pinchStartScale=scale;
+      }
+    }, {passive:true});
+    vp.addEventListener('touchmove', (e)=>{
+      if(e.touches.length===2){
+        e.preventDefault();
+        const dx=e.touches[0].clientX - e.touches[1].clientX;
+        const dy=e.touches[0].clientY - e.touches[1].clientY;
+        const dist=Math.hypot(dx,dy);
+        const factor=dist/pinchStartDist;
+        scale=Math.min(maxScale, Math.max(minScale, pinchStartScale*factor));
+        setT();
+      }
+    }, {passive:false});
 
     // MODAL abrir/fechar
     function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
@@ -1043,38 +1117,7 @@
     }
   </style>
 
-  <!-- ====== MAPA: Modal + Estilos + Script ====== -->
-  <style>
-    .map-modal[hidden]{display:none}
-    .map-modal{
-      position:fixed; inset:0; z-index:2500;
-      display:grid; place-items:center; background:rgba(0,0,0,.55);
-    }
-    .map-card{
-      width:min(900px, 92vw);
-      height:min(640px, 85vh);
-      background:#fff; border-radius:14px; overflow:hidden;
-      box-shadow:0 18px 60px rgba(0,0,0,.25);
-      display:grid; grid-template-rows:48px 1fr;
-    }
-    .map-head{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:8px 12px; background:#f7f7f7; border-bottom:1px solid #e8e8e8;
-    }
-    .map-title{ font-weight:700; }
-    .map-close{
-      background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
-    }
-    #map{ width:100%; height:100%; }
-    .btn-map {
-      display:block; width:100%; text-align:center; margin:0 0 6px 0;
-      padding:.3rem .6rem; border:1px solid #ddd; border-radius:6px; background:#fafafa;
-      cursor:pointer; font-weight:500; font-size:.8rem; color:#555; transition:.25s ease;
-    }
-    .btn-map:hover { background:#f2f2f2; color:#222; transform:translateY(-1px); box-shadow:0 1px 4px rgba(0,0,0,.05); }
-  </style>
-
-  <!-- Modal do mapa -->
+  <!-- ====== MAPA: Modal ====== -->
   <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
     <div class="map-card">
       <div class="map-head">
@@ -1090,7 +1133,7 @@
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
           crossorigin=""></script>
 
-  <!-- Script do mapa (único e limpo) -->
+  <!-- Script do mapa (com invalidação robusta) -->
   <script>
   (function(){
     // === COORDENADAS por chave (usar o data-geo do card) ===
@@ -1132,16 +1175,40 @@
     // === Modal & Leaflet ===
     const modal  = document.getElementById('map-modal');
     const btnX   = modal.querySelector('.map-close');
-    let map, circle;
+    const mapDiv = document.getElementById('map');
+
+    let map = null, circle = null;
 
     function ensureMap(){
       if (map) return map;
-      map = L.map('map', { zoomControl: true, attributionControl: true });
+      if (typeof L === 'undefined' || !mapDiv) return null;
+      map = L.map(mapDiv, { zoomControl: true, attributionControl: true });
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap'
       }).addTo(map);
       return map;
+    }
+
+    function renderCircleAndZoom(coords){
+      if(!map) return;
+      const isMobile = window.matchMedia('(max-width: 640px)').matches;
+      const MAX_ZOOM = isMobile ? 14 : 15;
+
+      if(circle){ circle.remove(); }
+      circle = L.circle(coords, {
+        radius: 500,
+        color: '#2b7',
+        fillColor: '#2b7',
+        fillOpacity: 0.12,
+        weight: 2
+      }).addTo(map);
+
+      map.fitBounds(circle.getBounds(), {
+        padding: [24, 24],
+        maxZoom: MAX_ZOOM,
+        animate: false
+      });
     }
 
     function openMap(key){
@@ -1152,31 +1219,17 @@
       modal.setAttribute('aria-hidden','false');
       document.documentElement.style.overflow='hidden';
 
-      const isMobile = window.matchMedia('(max-width: 640px)').matches;
-      const MAX_ZOOM = isMobile ? 14 : 15;
-
-      // garante que o container já está visível antes de inicializar/medir
+      // Espera o modal aplicar layout, então inicializa/atualiza o map
       requestAnimationFrame(()=>{
-        requestAnimationFrame(()=>{
-          ensureMap();
+        const ok = ensureMap();
+        if(!ok){ console.error('Leaflet não disponível'); return; }
+
+        // invalidamos o tamanho em 2 passos pra garantir cálculo correto
+        map.invalidateSize();
+        setTimeout(()=>{
           map.invalidateSize();
-
-          if(circle){ circle.remove(); }
-          circle = L.circle(coords, {
-            radius: 500,
-            color: '#2b7',
-            fillColor: '#2b7',
-            fillOpacity: 0.12,
-            weight: 2
-          }).addTo(map);
-
-          const bounds = circle.getBounds();
-          map.fitBounds(bounds, {
-            padding: [24, 24],
-            maxZoom: MAX_ZOOM,
-            animate: false
-          });
-        });
+          renderCircleAndZoom(coords);
+        }, 80);
       });
     }
 
@@ -1187,10 +1240,13 @@
     }
 
     btnX.addEventListener('click', closeMap);
-    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); });
+    if (modal) modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); });
     window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap(); });
+
+    // expõe se precisar chamar manualmente
+    window.openMap = openMap;
+    window.closeMap = closeMap;
   })();
   </script>
-  <!-- ====== /MAPA ====== -->
 </body>
 </html>
