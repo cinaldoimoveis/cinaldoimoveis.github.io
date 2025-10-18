@@ -162,6 +162,30 @@
   padding:8px;
 }
 
+    <style>
+/* Mini-highlights: versão WIDE no mobile em modo retrato */
+@media (max-width: 640px) and (orientation: portrait){
+  .mini-list{
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .mini-item{
+    padding: 0 !important;
+    border-radius: 12px;
+    overflow: hidden;
+    justify-content: stretch;
+  }
+  /* imagem cobre toda a largura com “corte” tipo 16:9 */
+  .mini-item img{
+    width: 100% !important;
+    height: clamp(90px, 26vw, 160px) !important; /* ajusta conforme a tela */
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    display: block;
+  }
+}
+</style>
+
 /* A imagem passa a preencher a célula mantendo proporção */
 .mini-item img{
   width:100%;
