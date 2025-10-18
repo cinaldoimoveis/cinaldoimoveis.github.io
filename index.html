@@ -1291,24 +1291,24 @@ function openMap(key){
   modal.setAttribute('aria-hidden','false');
   document.documentElement.style.overflow='hidden';
 
-  // Mobile fica um pouco mais aberto
+  // Mobile: enquadramento um pouco mais "aberto"
   const isMobile = window.matchMedia('(max-width: 640px)').matches;
-  const MAX_ZOOM = isMobile ? 14 : 15;
+  const MAX_ZOOM = isMobile ? 14 : 15;   // ajuste: 13 se quiser mais distante no celular
 
   setTimeout(()=>{
     ensureMap();
-    map.invalidateSize(); // garante layout correto do container visível
+    map.invalidateSize(); // container em modal
 
     if(circle){ circle.remove(); }
     circle = L.circle(coords, {
-      radius: 500,          // 500 m (estilo Airbnb)
+      radius: 500,          // 500 m
       color: '#2b7',
       fillColor: '#2b7',
       fillOpacity: 0.12,
       weight: 2
     }).addTo(map);
 
-    // Enquadra o círculo sem colar demais no mobile
+    // Enquadra o círculo e limita o zoom no mobile
     const bounds = circle.getBounds();
     map.fitBounds(bounds, {
       padding: [24, 24],
