@@ -1226,20 +1226,16 @@
 
 <script>
 (function(){
-  // === COORDENADAS por chave ===
-  // Use 'data-geo' do card como chave aqui.
+  // === COORDENADAS por chave (usar o data-geo do card) ===
   const GEO = {
-    // agrupamento Alphaville (vários anúncios usam data-geo="alphaville")
     alphaville: [-19.392604, -40.025909],
     'alphaville-casa-217': [-19.397728, -40.022248],
-  'alphaville-lote-360': [-19.392500, -40.024900],
-  'alphaville-lote-420': [-19.397728, -40.022248],
-  'alphaville-lote-717': [-19.391800, -40.025300],
-  'alphaville-lote-390': [-19.397728, -40.022248],
-  'alphaville-casa-186': [-19.397728, -40.022248],
-  'alphaville-lote-437c': [-19.391600, -40.026000],
-
-    // demais locais individuais
+    'alphaville-lote-360': [-19.392500, -40.024900],
+    'alphaville-lote-420': [-19.397728, -40.022248],
+    'alphaville-lote-717': [-19.391800, -40.025300],
+    'alphaville-lote-390': [-19.397728, -40.022248],
+    'alphaville-casa-186': [-19.397728, -40.022248],
+    'alphaville-lote-437c': [-19.391600, -40.026000],
     unique: [-19.327982, -40.075060],
     'complexo-sao-mateus': [-18.731801, -39.790920],
     'casa-simples-laguna': [-19.376735, -40.053552],
@@ -1249,12 +1245,10 @@
     'area-planalto-20000': [-19.341756, -40.057675],
   };
 
-  // cria botão "📍 Ver localização aproximada" automaticamente
+  // === Injeta o botão "📍 Ver localização aproximada" em cada card com data-geo ===
   document.querySelectorAll('article.card[data-geo]').forEach(card=>{
-    // evita duplicar se já existir
-    if(card.querySelector('.btn-map')) return;
-
-    const wrapP = card.querySelector('p'); // mesmo lugar dos botões
+    if(card.querySelector('.btn-map')) return; // evita duplicar
+    const wrapP = card.querySelector('p');     // mesmo container dos botões
     if(!wrapP) return;
 
     const b = document.createElement('button');
@@ -1269,64 +1263,64 @@
   });
 
   // === Modal & Leaflet ===
-const modal  = document.getElementById('map-modal');
-const btnX   = modal.querySelector('.map-close');
-let map, circle;
+  const modal  = document.getElementById('map-modal');
+  const btnX   = modal.querySelector('.map-close');
+  let map, circle;
 
-function ensureMap(){
-  if (map) return map;
-  map = L.map('map', { zoomControl: true, attributionControl: true });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(map);
-  return map;
-}
-
-function openMap(key){
-  const coords = GEO[key];
-  if(!coords){ alert('Localização indisponível.'); return; }
-
-  modal.hidden = false;
-  modal.setAttribute('aria-hidden','false');
-  document.documentElement.style.overflow='hidden';
-
-  // Mobile: enquadramento um pouco mais "aberto"
-  const isMobile = window.matchMedia('(max-width: 640px)').matches;
-  const MAX_ZOOM = isMobile ? 14 : 15;   // ajuste: 13 se quiser mais distante no celular
-
-  setTimeout(()=>{
-    ensureMap();
-    map.invalidateSize(); // container em modal
-
-    if(circle){ circle.remove(); }
-    circle = L.circle(coords, {
-      radius: 500,          // 500 m
-      color: '#2b7',
-      fillColor: '#2b7',
-      fillOpacity: 0.12,
-      weight: 2
+  function ensureMap(){
+    if (map) return map;
+    map = L.map('map', { zoomControl: true, attributionControl: true });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
     }).addTo(map);
+    return map;
+  }
 
-    // Enquadra o círculo e limita o zoom no mobile
-    const bounds = circle.getBounds();
-    map.fitBounds(bounds, {
-      padding: [24, 24],
-      maxZoom: MAX_ZOOM,
-      animate: false
-    });
-  }, 50);
-}
+  function openMap(key){
+    const coords = GEO[key];
+    if(!coords){ alert('Localização indisponível.'); return; }
 
-function closeMap(){
-  modal.hidden = true;
-  modal.setAttribute('aria-hidden','true');
-  document.documentElement.style.overflow='';
-}
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow='hidden';
 
-btnX.addEventListener('click', closeMap);
-modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); });
-window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap(); });
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const MAX_ZOOM = isMobile ? 14 : 15; // deixe 13 se quiser ainda mais “aberto” no celular
+
+    setTimeout(()=>{
+      ensureMap();
+      map.invalidateSize();
+
+      if(circle){ circle.remove(); }
+      circle = L.circle(coords, {
+        radius: 500,          // 500 m (estilo Airbnb)
+        color: '#2b7',
+        fillColor: '#2b7',
+        fillOpacity: 0.12,
+        weight: 2
+      }).addTo(map);
+
+      const bounds = circle.getBounds();
+      map.fitBounds(bounds, {
+        padding: [24, 24],
+        maxZoom: MAX_ZOOM,
+        animate: false
+      });
+    }, 50);
+  }
+
+  function closeMap(){
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow='';
+  }
+
+  btnX.addEventListener('click', closeMap);
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); });
+  window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap(); });
+})();
+</script>
 
     const coords = GEO[key];
     if(!coords){ alert('Localização indisponível.'); return; }
