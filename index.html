@@ -1260,6 +1260,9 @@
   let map, circle;
 
   function openMap(key){
+    // 1) Adicione isso no início da openMap:
+    const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
+    const desiredZoom = isMobile ? 13 : 15; // mobile 13 (mais aberto), desktop mantém 15
     const coords = GEO[key];
     if(!coords){ alert('Localização indisponível.'); return; }
 
@@ -1275,7 +1278,7 @@
           attribution: '&copy; OpenStreetMap'
         }).addTo(map);
       }
-      map.setView(coords, 15); // zoom aproximado de bairro
+      map.setView(coords, desiredZoom); // zoom aproximado de bairro
 
       if(circle){ circle.remove(); }
       circle = L.circle(coords, {
@@ -1287,7 +1290,10 @@
       }).addTo(map);
 
       // Ajusta o mapa para caber o círculo com folga
-      map.fitBounds(circle.getBounds(), { padding: [24,24] });
+      map.fitBounds(circle.getBounds(), {
+  padding: [24, 24],
+  ...(isMobile ? { maxZoom: desiredZoom } : {})
+});
       map.invalidateSize(); // corrige dimensionamento em modal
     }, 50);
   }
