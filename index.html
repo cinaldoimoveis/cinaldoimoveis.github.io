@@ -1275,10 +1275,14 @@
   function ensureMap(){
     if(map) return;
     map = L.map('map', { zoomControl: true, attributionControl: true });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  detectRetina: true,
+  attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+
+// loga se algum tile falhar (diagnóstico)
+tiles.on('tileerror', (e)=>{ console.warn('Falha tile OSM:', e?.error || e); });
   }
 
   function openMap(key){
@@ -1304,6 +1308,10 @@ mapEl.style.width = '100%';
     // Se por algum motivo a altura vier 0px, força um mínimo
     if(mapEl.clientHeight < 120){ mapEl.style.minHeight = '260px'; }
 
+    // 🔁 Reinicia instância (evita estados antigos no mobile)
+if (map) { try { map.remove(); } catch(e){} map = null; }
+mapEl.innerHTML = '';
+
     // Duplo requestAnimationFrame para esperar o modal renderizar
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       ensureMap();
@@ -1317,6 +1325,9 @@ mapEl.style.width = '100%';
         fillOpacity: 0.12,
         weight: 2
       }).addTo(map);
+
+      // 📍 marcador de teste para confirmar render
+L.marker(coords).addTo(map);
 
       if(isMobile){
         // Enquadra o círculo SEM passar do zoom limite (uniforme em todos)
@@ -1332,7 +1343,7 @@ mapEl.style.width = '100%';
 
       // Garante recalcular o tamanho (alguns mobiles precisam de dois ticks)
       map.invalidateSize(true);
-      setTimeout(()=>map.invalidateSize(true), 150);
+setTimeout(()=>map.invalidateSize(true), 150);
     }));
   }
 
