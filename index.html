@@ -1174,6 +1174,10 @@
     box-shadow:0 18px 60px rgba(0,0,0,.25);
     display:grid; grid-template-rows:48px 1fr;
   }
+  /* iOS/Safari modernos lidam melhor com dvh — fallback acima continua valendo */
+  @supports (height: 1dvh){
+    .map-card{ height:min(640px, 85dvh); }
+  }
   .map-head{
     display:flex; align-items:center; justify-content:space-between;
     padding:8px 12px; background:#f7f7f7; border-bottom:1px solid #e8e8e8;
@@ -1182,8 +1186,8 @@
   .map-close{
     background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
   }
-  #map{ width:100%; height:100%; }
-  #map{ min-height: 240px; } /* garante altura mínima em telas pequenas */
+  /* Força altura mínima para evitar container “0px” em alguns mobiles */
+  #map{ width:100%; height:100%; min-height:260px; }
 
   /* Botão dentro do card do imóvel */
   .btn-map{
@@ -1205,29 +1209,23 @@
   </div>
 </div>
 
-  <!-- Leaflet JS (precisa vir antes do script do mapa) -->
+<!-- Leaflet JS (precisa vir antes do script do mapa) -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
-  
+
 <script>
 (function(){
-  // === COORDENADAS por chave ===
-  // Use 'data-geo' do card como chave aqui.
+  // === COORDENADAS por chave (usa data-geo) ===
   const GEO = {
-    // agrupamento Alphaville (vários anúncios usam data-geo="alphaville")
     alphaville: [-19.392604, -40.025909],
-   'alphaville-casa-217': [-19.397728, -40.022248], 
-   'alphaville-lote-360': [-19.392500, -40.024900], 
-   'alphaville-lote-420': [-19.397728, -40.022248], 
-   'alphaville-lote-717': [-19.391800, -40.025300], 
-   'alphaville-lote-390': [-19.397728, -40.022248], 
-   'alphaville-casa-186': [-19.397728, -40.022248], 
-   'alphaville-lote-437c': [-19.391600, -40.026000],
-
-    
-
-    // demais locais individuais
+    'alphaville-casa-217': [-19.397728, -40.022248],
+    'alphaville-lote-360': [-19.392500, -40.024900],
+    'alphaville-lote-420': [-19.397728, -40.022248],
+    'alphaville-lote-717': [-19.391800, -40.025300],
+    'alphaville-lote-390': [-19.397728, -40.022248],
+    'alphaville-casa-186': [-19.397728, -40.022248],
+    'alphaville-lote-437c': [-19.391600, -40.026000],
     unique: [-19.327982, -40.075060],
     'complexo-sao-mateus': [-18.731801, -39.790920],
     'casa-simples-laguna': [-19.376735, -40.053552],
@@ -1237,17 +1235,13 @@
     'area-planalto-20000': [-19.341756, -40.057675],
   };
 
-  // cria botão "📍 Ver localização aproximada" automaticamente
+  // Cria botão "📍 Ver localização aproximada" em cada card com data-geo
   document.querySelectorAll('article.card[data-geo]').forEach(card=>{
-    // evita duplicar se já existir
-    if(card.querySelector('.btn-map')) return;
-
-    const wrapP = card.querySelector('p'); // mesmo lugar dos botões
+    if(card.querySelector('.btn-map')) return; // evita duplicar
+    const wrapP = card.querySelector('p');
     if(!wrapP) return;
-
     const b = document.createElement('button');
-    b.className = 'btn-map';
-    b.type = 'button';
+    b.className = 'btn-map'; b.type = 'button';
     b.textContent = '📍 Ver localização aproximada';
     b.addEventListener('click', ()=>{
       const key = card.getAttribute('data-geo');
@@ -1259,63 +1253,67 @@
   // === Modal & Leaflet ===
   const modal  = document.getElementById('map-modal');
   const btnX   = modal.querySelector('.map-close');
+  const mapEl  = document.getElementById('map');
   let map, circle;
 
-  function openMap(key){
-  const coords = GEO[key];
-  if(!coords){ alert('Localização indisponível.'); return; }
+  // Ajustes finos globais para MOBILE
+  const MOBILE_ZOOM_CAP = 14.0;   // ↑ aproxima | ↓ afasta | 13.8 ~ 14.2 costuma ficar perfeito
+  const MOBILE_PADDING  = [22,22]; // folga nas bordas do círculo
 
-  const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
-
-  // Ajustes finos (apenas mobile)
-  const MOBILE_ZOOM_CAP = 14.0;   // ↑ aproxima | ↓ afasta
-  const MOBILE_PADDING  = [22,22]; // folga nas bordas
-
-  // Abre o modal ANTES de instanciar/usar o mapa
-  modal.hidden = false;
-  modal.setAttribute('aria-hidden','false');
-  document.documentElement.style.overflow='hidden';
-
-  // Duplo RAF garante que o modal já foi pintado (evita mapa “branco”)
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    // Cria o mapa uma única vez
-    if(!map){
-      map = L.map('map', { zoomControl: true, attributionControl: true });
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap'
-      }).addTo(map);
-    }
-
-    // (Re)desenha o círculo
-    if(circle){ circle.remove(); }
-    circle = L.circle(coords, {
-      radius: 500,
-      color: '#2b7',
-      fillColor: '#2b7',
-      fillOpacity: 0.12,
-      weight: 2
+  function ensureMap(){
+    if(map) return;
+    map = L.map('map', { zoomControl: true, attributionControl: true });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
     }).addTo(map);
+  }
 
-    if(isMobile){
-      // Enquadra SEM ultrapassar o zoom desejado
-      map.fitBounds(circle.getBounds(), {
-        padding: MOBILE_PADDING,
-        maxZoom: MOBILE_ZOOM_CAP
-      });
-    }else{
-      // Desktop: mantém seu comportamento
-      map.setView(coords, 15);
-      map.fitBounds(circle.getBounds(), { padding: [24,24] });
-    }
+  function openMap(key){
+    const coords = GEO[key];
+    if(!coords){ alert('Localização indisponível.'); return; }
 
-    // Força o Leaflet a recalcular tamanho (mais uma garantia)
-    map.invalidateSize(true);
+    const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
 
-    // Se quiser, faça um “seguro extra” alguns ms depois:
-    setTimeout(()=>map.invalidateSize(true), 120);
-  }));
-}
+    // Abre o modal e garante altura visível do container
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow='hidden';
+
+    // Se por algum motivo a altura vier 0px, força um mínimo
+    if(mapEl.clientHeight < 120){ mapEl.style.minHeight = '260px'; }
+
+    // Duplo requestAnimationFrame para esperar o modal renderizar
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      ensureMap();
+
+      // (Re)desenha o círculo
+      if(circle){ circle.remove(); }
+      circle = L.circle(coords, {
+        radius: 500,
+        color: '#2b7',
+        fillColor: '#2b7',
+        fillOpacity: 0.12,
+        weight: 2
+      }).addTo(map);
+
+      if(isMobile){
+        // Enquadra o círculo SEM passar do zoom limite (uniforme em todos)
+        map.fitBounds(circle.getBounds(), {
+          padding: MOBILE_PADDING,
+          maxZoom: MOBILE_ZOOM_CAP
+        });
+      }else{
+        // Desktop: preserva o comportamento anterior
+        map.setView(coords, 15);
+        map.fitBounds(circle.getBounds(), { padding: [24,24] });
+      }
+
+      // Garante recalcular o tamanho (alguns mobiles precisam de dois ticks)
+      map.invalidateSize(true);
+      setTimeout(()=>map.invalidateSize(true), 150);
+    }));
+  }
 
   function closeMap(){
     modal.hidden = true;
@@ -1324,9 +1322,7 @@
   }
 
   btnX.addEventListener('click', closeMap);
-  modal.addEventListener('click', (e)=>{
-    if(e.target === modal) closeMap(); // clique fora fecha
-  });
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeMap(); });
   window.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap();
   });
