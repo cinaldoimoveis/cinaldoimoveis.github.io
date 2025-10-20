@@ -1260,43 +1260,56 @@
   let map, circle;
 
   function openMap(key){
-    // 1) Adicione isso no início da openMap:
-    const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
-    const desiredZoom = isMobile ? 15 : 15; // mobile 13 (mais aberto), desktop mantém 15
-    const coords = GEO[key];
-    if(!coords){ alert('Localização indisponível.'); return; }
+  const coords = GEO[key];
+  if(!coords){ alert('Localização indisponível.'); return; }
 
-    modal.hidden = false;
-    modal.setAttribute('aria-hidden','false');
-    document.documentElement.style.overflow='hidden';
+  // Detecta mobile/touch (ajuste vale só no celular)
+  const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
 
-    setTimeout(()=>{ // garante que o container já está visível
-      if(!map){
-        map = L.map('map', { zoomControl: true, attributionControl: true });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; OpenStreetMap'
-        }).addTo(map);
-      }
-      map.setView(coords, desiredZoom); // zoom aproximado de bairro
+  // 🔧 PONTOS DE AJUSTE FINO (só no mobile)
+  // - Aumente MOBILE_ZOOM_CAP para aproximar um pouco mais
+  // - Aumente MOBILE_PADDING se quiser mais “folga” nas bordas
+  const MOBILE_ZOOM_CAP = 14.0;      // 13.6 ~ 14.4 são bons pontos de teste
+  const MOBILE_PADDING  = [22, 22];   // 16–28 conforme seu gosto
 
-      if(circle){ circle.remove(); }
-      circle = L.circle(coords, {
-        radius: 500,          // 500 metros = estilo Airbnb
-        color: '#2b7',
-        fillColor: '#2b7',
-        fillOpacity: 0.12,
-        weight: 2
+  modal.hidden = false;
+  modal.setAttribute('aria-hidden','false');
+  document.documentElement.style.overflow='hidden';
+
+  setTimeout(()=>{
+    if(!map){
+      map = L.map('map', { zoomControl: true, attributionControl: true });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
       }).addTo(map);
+    }
 
-      // Ajusta o mapa para caber o círculo com folga
+    // (Re)desenha o círculo de 500 m
+    if(circle){ circle.remove(); }
+    circle = L.circle(coords, {
+      radius: 500,
+      color: '#2b7',
+      fillColor: '#2b7',
+      fillOpacity: 0.12,
+      weight: 2
+    }).addTo(map);
+
+    if(isMobile){
+      // 📱 Sempre mostrar o círculo inteiro com um zoom uniforme
       map.fitBounds(circle.getBounds(), {
-  padding: [24, 24],
-  ...(isMobile ? { maxZoom: desiredZoom } : {})
-});
-      map.invalidateSize(); // corrige dimensionamento em modal
-    }, 50);
-  }
+        padding: MOBILE_PADDING,
+        maxZoom: MOBILE_ZOOM_CAP
+      });
+    }else{
+      // 💻 Desktop: mantém seu comportamento atual (zoom 15 + fitBounds)
+      map.setView(coords, 15);
+      map.fitBounds(circle.getBounds(), { padding: [24, 24] });
+    }
+
+    map.invalidateSize();
+  }, 50);
+}
 
   function closeMap(){
     modal.hidden = true;
