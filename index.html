@@ -1175,17 +1175,18 @@
     position:fixed; inset:0; z-index:2500;
     display:grid; place-items:center; background:rgba(0,0,0,.55);
   }
-  .map-card{
+    .map-card{
     width:min(900px, 92vw);
-    height:min(640px, 85vh);
+    height:85vh;                /* altura visível para o card inteiro */
     background:#fff; border-radius:14px; overflow:hidden;
     box-shadow:0 18px 60px rgba(0,0,0,.25);
     display:grid; grid-template-rows:48px 1fr;
   }
-  /* iOS/Safari modernos lidam melhor com dvh — fallback acima continua valendo */
+  /* iOS/Safari modernos: dvh corrige barras de endereço animadas */
   @supports (height: 1dvh){
-    .map-card{ height:min(640px, 85dvh); }
+    .map-card{ height:85dvh; }
   }
+
   .map-head{
     display:flex; align-items:center; justify-content:space-between;
     padding:8px 12px; background:#f7f7f7; border-bottom:1px solid #e8e8e8;
@@ -1194,12 +1195,17 @@
   .map-close{
     background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
   }
-  /* Força altura mínima para evitar container “0px” em alguns mobiles */
+
+  /* 🔒 Altura do mapa = (altura do card - cabeçalho) */
   #map{
-  width:100%;
-  height:100%;
-  min-height:260px; /* evita altura 0 em alguns mobiles */
-}
+    width:100%;
+    height:calc(85vh - 48px);
+    min-height:260px;
+  }
+  @supports (height: 1dvh){
+    #map{ height:calc(85dvh - 48px); }
+  }
+
 
   /* Botão dentro do card do imóvel */
   .btn-map{
@@ -1286,66 +1292,53 @@ tiles.on('tileerror', (e)=>{ console.warn('Falha tile OSM:', e?.error || e); });
   }
 
   function openMap(key){
-    const coords = GEO[key];
-    if(!coords){ alert('Localização indisponível.'); return; }
+  const coords = GEO[key];
+  if(!coords){ alert('Localização indisponível.'); return; }
 
-    const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
+  const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
+  const MOBILE_ZOOM_CAP = 14.0;   // ↑ aproxima | ↓ afasta | 13.8~14.2 = bom
+  const MOBILE_PADDING  = [22,22];
 
-    // Abre o modal e garante altura visível do container
-    modal.hidden = false;
-    modal.setAttribute('aria-hidden','false');
-    document.documentElement.style.overflow='hidden';
+  // 1) abre o modal primeiro (assim o CSS de altura já está valendo)
+  modal.hidden = false;
+  modal.setAttribute('aria-hidden','false');
+  document.documentElement.style.overflow='hidden';
 
-    // 🔧 Força altura explícita do mapa com base no card (evita 0px no mobile)
-const cardEl = modal.querySelector('.map-card');
-const headEl = modal.querySelector('.map-head');
-const mapEl  = document.getElementById('map');
-const avail = Math.max(240, (cardEl?.clientHeight || 0) - (headEl?.clientHeight || 0));
-mapEl.style.height = avail + 'px';
-mapEl.style.minHeight = '240px';
-mapEl.style.width = '100%';
+  // 2) recria o mapa SEMPRE (estado limpo)
+  if (map) { try{ map.remove(); }catch(e){} map = null; }
+  mapEl.innerHTML = '';
 
-    // Se por algum motivo a altura vier 0px, força um mínimo
-    if(mapEl.clientHeight < 120){ mapEl.style.minHeight = '260px'; }
+  // 3) espera o modal renderizar (2 frames) e então instancia o Leaflet
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    map = L.map('map', { zoomControl: true, attributionControl: true });
 
-    // 🔁 Reinicia instância (evita estados antigos no mobile)
-if (map) { try { map.remove(); } catch(e){} map = null; }
-mapEl.innerHTML = '';
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      detectRetina: true,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    tiles.on('tileerror', (e)=>{ console.warn('Falha tile OSM:', e?.error || e); });
 
-    // Duplo requestAnimationFrame para esperar o modal renderizar
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      ensureMap();
+    // círculo + marcador (garante render visível mesmo se tile atrasar)
+    if (circle) { circle.remove(); }
+    circle = L.circle(coords, {
+      radius: 500, color: '#2b7', fillColor: '#2b7', fillOpacity: 0.12, weight: 2
+    }).addTo(map);
+    L.marker(coords).addTo(map);
 
-      // (Re)desenha o círculo
-      if(circle){ circle.remove(); }
-      circle = L.circle(coords, {
-        radius: 500,
-        color: '#2b7',
-        fillColor: '#2b7',
-        fillOpacity: 0.12,
-        weight: 2
-      }).addTo(map);
+    // posiciona
+    if(isMobile){
+      map.fitBounds(circle.getBounds(), { padding: MOBILE_PADDING, maxZoom: MOBILE_ZOOM_CAP });
+    }else{
+      map.setView(coords, 15);
+      map.fitBounds(circle.getBounds(), { padding: [24,24] });
+    }
 
-      // 📍 marcador de teste para confirmar render
-L.marker(coords).addTo(map);
-
-      if(isMobile){
-        // Enquadra o círculo SEM passar do zoom limite (uniforme em todos)
-        map.fitBounds(circle.getBounds(), {
-          padding: MOBILE_PADDING,
-          maxZoom: MOBILE_ZOOM_CAP
-        });
-      }else{
-        // Desktop: preserva o comportamento anterior
-        map.setView(coords, 15);
-        map.fitBounds(circle.getBounds(), { padding: [24,24] });
-      }
-
-      // Garante recalcular o tamanho (alguns mobiles precisam de dois ticks)
-      map.invalidateSize(true);
-setTimeout(()=>map.invalidateSize(true), 150);
-    }));
-  }
+    // força recálculo em dois tempos (iOS/Android webview)
+    map.invalidateSize(true);
+    setTimeout(()=>map.invalidateSize(true), 150);
+  }));
+}
 
   function closeMap(){
     modal.hidden = true;
