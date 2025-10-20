@@ -361,6 +361,9 @@
         <a href="#imoveis">Imóveis</a>
         <a href="#sobre">Sobre</a>
         <a href="#contato">Contato</a>
+        <a class="ig-link" href="https://www.instagram.com/cinaldo_imoveis" target="_blank" rel="noopener" aria-label="Instagram de Cinaldo Imóveis">
+  @cinaldo_imoveis
+</a>
         <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20quero%20falar%20sobre%20im%C3%B3veis%20em%20Linhares.%0AMeu%20nome%20%C3%A9%20_____%20e%20tenho%20interesse%20em%3A" target="_blank" rel="noopener">💬 WhatsApp</a>
       </nav>
     </div>
@@ -804,6 +807,18 @@
 
   <section id="contato"><div class="container"><h2 class="title">Contato</h2>
   <p>📲 <strong>WhatsApp:</strong> <a href="https://wa.me/5527999567000" target="_blank" rel="noopener">(27) 99956-7000</a></p>
+    <!-- Instagram + QR -->
+<p>📸 <strong>Instagram:</strong>
+  <a href="https://www.instagram.com/cinaldo_imoveis" target="_blank" rel="noopener">@cinaldo_imoveis</a>
+</p>
+
+<div class="ig-qr" aria-label="QR code do Instagram @cinaldo_imoveis">
+  <img src="assets/qr-instagram.jpeg" alt="QR do Instagram @cinaldo_imoveis" loading="lazy">
+  <div>
+    <div style="font-weight:700; margin-bottom:4px;">Siga no Instagram</div>
+    <small>Aponte a câmera do celular para o QR para abrir o perfil.</small>
+  </div>
+</div>
   <p>✉️ <strong>E-mail:</strong> <a href="mailto:cinaldo@cinaldoimoveis.com.br">cinaldo@cinaldoimoveis.com.br</a></p></div></section>
 
   <footer><div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap"><div>© <span id="y"></span> Cinaldo Imóveis • Linhares – ES</div><div style="color:#777">CRECI 8356-F</div></div></footer>
@@ -1152,13 +1167,28 @@
 
   <style id="hide-open-mobile">
   /* Esconde o botão em telas touch (celulares/tablets) */
-  @media (any-pointer: coarse) {
-    #openNew {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-    }
+  <style>
+  /* Instagram – bloco do QR */
+  .ig-qr{
+    display:flex; align-items:center; gap:12px;
+    background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:12px; max-width:460px; box-shadow:0 1px 0 rgba(0,0,0,.04);
   }
+  .ig-qr img{ width:150px; height:auto; border-radius:10px; }
+  .ig-qr small{ color:var(--muted); }
+
+  @media (max-width:640px){
+    .ig-qr{ gap:10px; padding:10px; }
+    .ig-qr img{ width:130px; }
+  }
+
+  /* Link “@cinaldo_imoveis” no header */
+  .menu .ig-link{
+    display:inline-flex; align-items:center; gap:6px; font-weight:600;
+    padding:8px 10px; border:1px solid var(--line); border-radius:999px;
+    background:#fff; box-shadow:0 1px 0 rgba(0,0,0,.04);
+  }
+  .menu .ig-link:hover{ transform:translateY(-1px); }
 </style>
 
 <!-- ====== MAPA: Modal + Estilos + Script ====== -->
