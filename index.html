@@ -1263,20 +1263,20 @@
   const coords = GEO[key];
   if(!coords){ alert('Localização indisponível.'); return; }
 
-  // Detecta mobile/touch (ajuste vale só no celular)
   const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
 
-  // 🔧 PONTOS DE AJUSTE FINO (só no mobile)
-  // - Aumente MOBILE_ZOOM_CAP para aproximar um pouco mais
-  // - Aumente MOBILE_PADDING se quiser mais “folga” nas bordas
-  const MOBILE_ZOOM_CAP = 14.0;      // 13.6 ~ 14.4 são bons pontos de teste
-  const MOBILE_PADDING  = [22, 22];   // 16–28 conforme seu gosto
+  // Ajustes finos (apenas mobile)
+  const MOBILE_ZOOM_CAP = 14.0;   // ↑ aproxima | ↓ afasta
+  const MOBILE_PADDING  = [22,22]; // folga nas bordas
 
+  // Abre o modal ANTES de instanciar/usar o mapa
   modal.hidden = false;
   modal.setAttribute('aria-hidden','false');
   document.documentElement.style.overflow='hidden';
 
-  setTimeout(()=>{
+  // Duplo RAF garante que o modal já foi pintado (evita mapa “branco”)
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    // Cria o mapa uma única vez
     if(!map){
       map = L.map('map', { zoomControl: true, attributionControl: true });
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1285,7 +1285,7 @@
       }).addTo(map);
     }
 
-    // (Re)desenha o círculo de 500 m
+    // (Re)desenha o círculo
     if(circle){ circle.remove(); }
     circle = L.circle(coords, {
       radius: 500,
@@ -1296,19 +1296,23 @@
     }).addTo(map);
 
     if(isMobile){
-      // 📱 Sempre mostrar o círculo inteiro com um zoom uniforme
+      // Enquadra SEM ultrapassar o zoom desejado
       map.fitBounds(circle.getBounds(), {
         padding: MOBILE_PADDING,
         maxZoom: MOBILE_ZOOM_CAP
       });
     }else{
-      // 💻 Desktop: mantém seu comportamento atual (zoom 15 + fitBounds)
+      // Desktop: mantém seu comportamento
       map.setView(coords, 15);
-      map.fitBounds(circle.getBounds(), { padding: [24, 24] });
+      map.fitBounds(circle.getBounds(), { padding: [24,24] });
     }
 
-    map.invalidateSize();
-  }, 50);
+    // Força o Leaflet a recalcular tamanho (mais uma garantia)
+    map.invalidateSize(true);
+
+    // Se quiser, faça um “seguro extra” alguns ms depois:
+    setTimeout(()=>map.invalidateSize(true), 120);
+  }));
 }
 
   function closeMap(){
