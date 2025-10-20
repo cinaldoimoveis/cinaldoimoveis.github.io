@@ -328,8 +328,15 @@
     }
   </style>
 
-  <!-- Leaflet (mapas) -->
+ <!-- Leaflet (mapas) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+<!-- 🩹 Correção: impede que o CSS global "img{max-width:100%}" esconda os tiles do mapa -->
+<style id="leaflet-img-fix">
+  .leaflet-container img,
+  .leaflet-container .leaflet-tile,
+  .leaflet-pane img { max-width: none !important; }
+</style>
 
 <style>
   /* Caixa do mapa embutido nos cards */
@@ -1187,7 +1194,11 @@
     background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
   }
   /* Força altura mínima para evitar container “0px” em alguns mobiles */
-  #map{ width:100%; height:100%; min-height:260px; }
+  #map{
+  width:100%;
+  height:100%;
+  min-height:260px; /* evita altura 0 em alguns mobiles */
+}
 
   /* Botão dentro do card do imóvel */
   .btn-map{
@@ -1331,8 +1342,6 @@
 <!-- ====== /MAPA ====== -->
 
           
-          
-
 
 </body>
 </html>
