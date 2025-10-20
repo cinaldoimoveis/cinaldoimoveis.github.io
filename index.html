@@ -1262,7 +1262,7 @@
   function openMap(key){
     // 1) Adicione isso no início da openMap:
     const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
-    const desiredZoom = isMobile ? 13 : 15; // mobile 13 (mais aberto), desktop mantém 15
+    const desiredZoom = isMobile ? 15 : 15; // mobile 13 (mais aberto), desktop mantém 15
     const coords = GEO[key];
     if(!coords){ alert('Localização indisponível.'); return; }
 
