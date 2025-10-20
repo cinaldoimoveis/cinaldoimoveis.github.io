@@ -1291,6 +1291,13 @@
     modal.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow='hidden';
 
+    // 🔁 Reinicia o Leaflet para evitar estados antigos no mobile
+if (map) {
+  try { map.remove(); } catch(e){}
+  map = null;
+}
+(mapEl || document.getElementById('map')).innerHTML = '';
+
     // Se por algum motivo a altura vier 0px, força um mínimo
     if(mapEl.clientHeight < 120){ mapEl.style.minHeight = '260px'; }
 
