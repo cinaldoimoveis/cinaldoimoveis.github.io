@@ -1176,16 +1176,17 @@
     display:grid; place-items:center; background:rgba(0,0,0,.55);
   }
     .map-card{
-    width:min(900px, 92vw);
-    height:85vh;                /* altura visível para o card inteiro */
-    background:#fff; border-radius:14px; overflow:hidden;
-    box-shadow:0 18px 60px rgba(0,0,0,.25);
-    display:grid; grid-template-rows:48px 1fr;
-  }
-  /* iOS/Safari modernos: dvh corrige barras de endereço animadas */
-  @supports (height: 1dvh){
-    .map-card{ height:85dvh; }
-  }
+  width:min(900px, 92vw);
+  height:85vh;                      /* desktop e Android */
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;                  /* 👈 garante o recorte */
+  box-shadow:0 18px 60px rgba(0,0,0,.25);
+  display:grid; grid-template-rows:48px 1fr;
+}
+@supports (height: 1dvh){           /* iOS Safari moderno */
+  .map-card{ height:85dvh; }
+}
 
   .map-head{
     display:flex; align-items:center; justify-content:space-between;
@@ -1198,22 +1199,35 @@
 
   /* 🔒 Altura do mapa = (altura do card - cabeçalho) */
   #map{
-    width:100%;
-    height:calc(85vh - 48px);
-    min-height:260px;
-  }
-  @supports (height: 1dvh){
-    #map{ height:calc(85dvh - 48px); }
-  }
+  display:block;
+  width:100%;
+  height:calc(85vh - 48px);   /* 48px = cabeçalho do modal */
+  min-height:260px;
+  background:#f6f6f6;         /* cinza de fundo (útil no debug) */
+}
+@supports (height: 1dvh){
+  #map{ height:calc(85dvh - 48px); }
+}
 
 
   /* Botão dentro do card do imóvel */
   .btn-map{
-    display:inline-block; padding:.60rem .9rem; margin-left:6px;
-    border:1px solid var(--line); border-radius:.5rem; background:#fff; cursor:pointer;
-    font-weight:600;
-  }
-  .btn-map:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.08); }
+  display:inline-block;             /* 👈 mantém na mesma linha */
+  vertical-align:middle;
+  padding:.60rem .9rem;
+  margin-left:6px;
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  background:#fff;
+  cursor:pointer;
+  font-weight:600;
+  line-height:1.1;
+  white-space:nowrap;               /* evita quebrar em 2 linhas */
+}
+.btn-map:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
 </style>
 
 <!-- Modal do mapa -->
@@ -1256,17 +1270,10 @@
   // Cria botão "📍 Ver localização aproximada" em cada card com data-geo
   document.querySelectorAll('article.card[data-geo]').forEach(card=>{
     if(card.querySelector('.btn-map')) return; // evita duplicar
-    const wrapP = card.querySelector('p');
-    if(!wrapP) return;
-    const b = document.createElement('button');
-    b.className = 'btn-map'; b.type = 'button';
-    b.textContent = '📍 Ver localização aproximada';
-    b.addEventListener('click', ()=>{
-      const key = card.getAttribute('data-geo');
-      openMap(key);
-    });
-    wrapP.appendChild(b);
-  });
+    // procura o <p> que contém a classe .btn-fotos (o dos botões)
+const wrapP = card.querySelector('p:has(.btn-fotos)') || card.querySelector('p');
+if(!wrapP) return;
+wrapP.appendChild(b);
 
   // === Modal & Leaflet ===
   const modal  = document.getElementById('map-modal');
@@ -1281,11 +1288,19 @@
   function ensureMap(){
     if(map) return;
     map = L.map('map', { zoomControl: true, attributionControl: true });
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-  detectRetina: true,
-  attribution: '&copy; OpenStreetMap'
-}).addTo(map);
+    const tiles = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    maxZoom: 19,
+    detectRetina: true,
+    crossOrigin: true,        // 👈 iOS/Safari: evita bloquear os tiles
+    attribution: '&copy; OpenStreetMap'
+  }
+).addTo(map);
+
+// logs úteis (remova depois)
+tiles.on('tileload', ()=>console.log('[MAP] tile loaded'));
+tiles.on('tileerror', (e)=>console.warn('[MAP] tile error', e));
 
 // loga se algum tile falhar (diagnóstico)
 tiles.on('tileerror', (e)=>{ console.warn('Falha tile OSM:', e?.error || e); });
@@ -1336,8 +1351,7 @@ tiles.on('tileerror', (e)=>{ console.warn('Falha tile OSM:', e?.error || e); });
 
     // força recálculo em dois tempos (iOS/Android webview)
     map.invalidateSize(true);
-    setTimeout(()=>map.invalidateSize(true), 150);
-  }));
+setTimeout(()=>map.invalidateSize(true), 150);
 }
 
   function closeMap(){
