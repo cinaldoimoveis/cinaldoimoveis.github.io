@@ -336,6 +336,7 @@
   .leaflet-container img,
   .leaflet-container .leaflet-tile,
   .leaflet-pane img { max-width: none !important; }
+  .leaflet-container { background:#eaeaea; } /* ajuda a ver se o mapa ganhou altura */
 </style>
 
 <style>
@@ -1291,12 +1292,14 @@
     modal.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow='hidden';
 
-    // 🔁 Reinicia o Leaflet para evitar estados antigos no mobile
-if (map) {
-  try { map.remove(); } catch(e){}
-  map = null;
-}
-(mapEl || document.getElementById('map')).innerHTML = '';
+    // 🔧 Força altura explícita do mapa com base no card (evita 0px no mobile)
+const cardEl = modal.querySelector('.map-card');
+const headEl = modal.querySelector('.map-head');
+const mapEl  = document.getElementById('map');
+const avail = Math.max(240, (cardEl?.clientHeight || 0) - (headEl?.clientHeight || 0));
+mapEl.style.height = avail + 'px';
+mapEl.style.minHeight = '240px';
+mapEl.style.width = '100%';
 
     // Se por algum motivo a altura vier 0px, força um mínimo
     if(mapEl.clientHeight < 120){ mapEl.style.minHeight = '260px'; }
