@@ -1455,10 +1455,81 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('load', onScroll, { passive: true });
     btn.addEventListener('click', scrollTop);
-  })();
+  })(); 
 </script>
 
+<script>
+(function(){
+  // Util: monta URL absoluta com hash
+  function makeUrl(hash){
+    const base = location.origin + location.pathname;
+    return base.replace(/#.*$/,'') + hash;
+  }
+  // Util: tenta compartilhar nativamente; fallback: copia
+  async function shareOrCopy({title, text, url, button}){
+    if(navigator.share){
+      try{ await navigator.share({title, text, url}); return true; }catch(e){ /* cancelado */ }
+    }
+    try{
+      await navigator.clipboard.writeText(url);
+      if(button){
+        const old = button.textContent;
+        button.textContent = 'Link copiado!';
+        button.disabled = true;
+        setTimeout(()=>{ button.textContent = old; button.disabled = false; }, 1400);
+      }
+      return true;
+    }catch(e){
+      alert('Não foi possível copiar o link. Pode tentar manualmente: ' + url);
+      return false;
+    }
+  }
 
+  /* === 2.1) Botão "Compartilhar" em cada CARD === */
+  document.querySelectorAll('article.card[id]').forEach(card=>{
+    const actionsRow = card.querySelector('.content p'); // mesma linha dos botões
+    if(!actionsRow) return;
+    if(actionsRow.querySelector('.share-btn')) return;
+
+    const shareBtn = document.createElement('button');
+    shareBtn.type = 'button';
+    shareBtn.className = 'share-btn';
+    shareBtn.textContent = 'Compartilhar';
+
+    shareBtn.addEventListener('click', ()=>{
+      const id    = '#' + card.id;
+      const url   = makeUrl(id);
+      const title = (card.querySelector('h3')?.textContent || 'Imóvel') + ' – Cinaldo Imóveis';
+      const price = (card.querySelector('.price')?.textContent || '').trim();
+      const text  = price ? `${price}` : 'Veja este imóvel';
+      shareOrCopy({ title, text, url, button: shareBtn });
+    });
+
+    actionsRow.appendChild(shareBtn);
+  });
+
+  /* === 2.2) Botão "Compartilhar categoria" na BARRA DE FILTROS === */
+  const bar = document.getElementById('filters');
+  if(bar && !bar.querySelector('.share-cat')){
+    const btnCat = document.createElement('button');
+    btnCat.type = 'button';
+    btnCat.className = 'fbtn share-cat';
+    btnCat.textContent = 'Compartilhar categoria';
+
+    btnCat.addEventListener('click', ()=>{
+      const active = bar.querySelector('.fbtn.is-active');
+      const f = (active?.dataset.filter || 'all').toLowerCase();
+      const hash = (f && f !== 'all') ? `#tipo=${f}` : '#imoveis';
+      const url = makeUrl(hash);
+      const title = f && f!=='all' ? `Imóveis – ${f}` : 'Imóveis em destaque';
+      const text = 'Veja esta seleção no site Cinaldo Imóveis';
+      shareOrCopy({ title, text, url, button: btnCat });
+    });
+
+    bar.appendChild(btnCat);
+  }
+})();
+</script>
 
 </body>
 </html>
