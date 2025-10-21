@@ -390,14 +390,22 @@
         </div>
       </div>
       <div>
-        <div class="card">
-          <div class="thumb"><img class="thumb-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis"></div>
-          <div class="content">
-            <strong>Destaques de hoje</strong>
-            <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje"></div>
-          </div>
-        </div>
-      </div>
+  <!-- Card 1: LOGO sozinha -->
+  <div class="card logo-card">
+    <div class="thumb thumb-logo">
+      <img class="logo-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
+    </div>
+  </div>
+
+  <!-- Card 2: Destaques de hoje (só as miniaturas) -->
+  <div class="card highlights-card">
+    <div class="content">
+      <strong style="display:block;margin-bottom:8px;">Destaques de hoje</strong>
+      <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje"></div>
+    </div>
+  </div>
+</div>
+
     </div>
   </main>
 
@@ -891,96 +899,38 @@
     if (!items.length) return;
     const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
     const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
-    const rotated = rotate(items, dayNumber % items.length);
+        const rotated = rotate(items, dayNumber % items.length);
     const picks = rotated.slice(0, Math.min(3, rotated.length));
     box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
+  })();
+  </script>
 
-<script>
-/* Passo 2 — clique nas miniaturas abre o imóvel em modo solo */
-(function(){
-  const box = document.getElementById('mini-highlights');
-  if(!box) return;
+  <script>
+  /* Passo 2 — clique nas miniaturas abre o imóvel em modo solo */
+  (function(){
+    const box = document.getElementById('mini-highlights');
+    if(!box) return;
 
-  box.addEventListener('click', ev=>{
-    const a = ev.target.closest('a.mini-item');
-    if(!a) return;
+    box.addEventListener('click', ev=>{
+      const a = ev.target.closest('a.mini-item');
+      if(!a) return;
 
-    ev.preventDefault();
-    const href = a.getAttribute('href');
-    if(!href || !href.startsWith('#')) return;
+      ev.preventDefault();
+      const href = a.getAttribute('href');
+      if(!href || !href.startsWith('#')) return;
 
-    // pega o ID do imóvel
-    const id = href.replace('#','').trim();
-    if(!id) return;
+      // pega o ID do imóvel
+      const id = href.replace('#','').trim();
+      if(!id) return;
 
-    // monta a URL para modo solo (?solo=1#id)
-    const url = location.pathname + '?solo=1#' + id;
+      // monta a URL para modo solo (?solo=1#id)
+      const url = location.pathname + '?solo=1#' + id;
 
-    // vai para a página do imóvel específico
-    location.href = url;
-  });
-})();
-</script>
-
-
- <script>
-(function(){
-  const bar   = document.getElementById('filters');
-  const grid  = document.querySelector('#imoveis .grid');
-  const cards = Array.from(grid.querySelectorAll('.card'));
-
-  if(!bar || !grid) return;
-
-  function getTags(card){
-    // 1) se tiver data-tags, usa; 2) senão, cai pro data-type; 3) senão, []
-    const raw = card.getAttribute('data-tags');
-    if(raw && raw.trim()){
-      return raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
-    }
-    const t = (card.getAttribute('data-type')||'').toLowerCase().trim();
-    return t ? [t] : [];
-  }
-
-  function applyFilter(type){
-    grid.classList.add('filtering');
-    const f = (type||'all').toLowerCase();
-    cards.forEach(card=>{
-      const tags = getTags(card);
-      const show = (f==='all') || tags.includes(f);
-      card.hidden = !show;
+      // vai para a página do imóvel específico
+      location.href = url;
     });
-    grid.classList.remove('filtering');
-  }
-
-  // clique nos botões
-  bar.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.fbtn');
-    if(!btn) return;
-    bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    applyFilter(btn.dataset.filter);
-    // guarda na URL (#tipo=lote) para poder compartilhar
-    const hash = btn.dataset.filter === 'all' ? '' : '#tipo=' + btn.dataset.filter;
-    history.replaceState(null, '', location.pathname + location.search + hash);
-  });
-
-    // restaura filtro da URL (ex.: #tipo=lote) e rola até a seção
-  const m = location.hash.match(/tipo=([\w-]+)/i);
-  const startType = m ? m[1].toLowerCase() : 'all';
-  const startBtn = bar.querySelector(`.fbtn[data-filter="${startType}"]`) || bar.querySelector('.fbtn[data-filter="all"]');
-  startBtn.classList.add('is-active');
-  applyFilter(startType);
-
-  // se veio com filtro, rola suave até a seção de imóveis
-  if (startType !== 'all') {
-    const section = document.getElementById('imoveis');
-    if (section) {
-      // espera o layout assentar e rola
-      requestAnimationFrame(()=> section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-    }
-  }
-})();
-</script>
+  })();
+  </script>
 
   <script>
 (function(){
