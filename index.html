@@ -1664,7 +1664,14 @@ window.showPicksToday = function(){
         document.body.classList.remove('solo');
         if(filtersBar) filtersBar.style.display = '';
         allCards.forEach(c=>c.hidden=false);
-        container.scrollIntoView({behavior:'smooth', block:'start'});
+        if (typeof smartScrollToWithRetries === 'function') {
+  smartScrollToWithRetries(container);
+} else {
+  const headerH = (document.querySelector('header')?.offsetHeight || 72) + 12;
+  const top = window.pageYOffset + container.getBoundingClientRect().top - headerH;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
         // remove o botão ao voltar
         const me = document.getElementById('exit-solo');
         if (me) me.remove();
