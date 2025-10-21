@@ -1248,6 +1248,42 @@
   .btn-map:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.08); }
 </style>
 
+  <style id="to-top-style">
+  .to-top{
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--accent);
+    color: #fff;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 8px 18px rgba(0,0,0,.18);
+    cursor: pointer;
+    z-index: 1500;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease, box-shadow .22s ease;
+  }
+  .to-top:hover{ box-shadow: 0 10px 24px rgba(0,0,0,.22); }
+  .to-top.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  @media (max-width:640px){
+    .to-top{ right: 14px; bottom: 14px; width: 52px; height: 52px; font-size: 20px; }
+  }
+</style>
+
+
 <!-- Modal do mapa -->
 <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
   <div class="map-card">
@@ -1371,8 +1407,37 @@
 </script>
 <!-- ====== /MAPA ====== -->
 
-          
-          
+  <!-- Botão flutuante: Voltar ao topo -->
+<button id="toTop" class="to-top" title="Voltar ao topo" aria-label="Voltar ao topo" type="button">↑</button>
+
+<script>
+  (function(){
+    const btn = document.getElementById('toTop');
+    if(!btn) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const showAt = 240; // px de rolagem para exibir o botão
+
+    function onScroll(){
+      const y = window.pageYOffset || document.documentElement.scrollTop;
+      if(y > showAt){ btn.classList.add('is-visible'); }
+      else { btn.classList.remove('is-visible'); }
+    }
+
+    function scrollTop(){
+      if(prefersReduced){
+        window.scrollTo(0,0);
+      }else{
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', onScroll, { passive: true });
+    btn.addEventListener('click', scrollTop);
+  })();
+</script>
+
 
 
 </body>
