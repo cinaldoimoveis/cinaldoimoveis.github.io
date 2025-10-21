@@ -385,8 +385,8 @@
         <h1 class="title">Seu novo imóvel em <span class="accent">Linhares ES e Região</span></h1>
         <p class="subtitle">Atendimento direto com o corretor. Segurança, clareza e as melhores oportunidades da região.</p>
         <div class="call">
-          <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20quero%20falar%20sobre%20im%C3%B3veis%20em%20Linhares.%0AMeu%20nome%20%C3%A9%20_____%20e%20tenho%20interesse%20em%3A" target="_blank" rel="noopener">Fale agora no WhatsApp</a>
-          <a class="btn" href="#imoveis">Ver imóveis em destaque</a>
+        <a class="btn btn-whats" href="https://wa.me/5527999567000?text=Ol%C3%A1%2C%20quero%20falar%20sobre%20im%C3%B3veis%20em%20Linhares.%0AMeu%20nome%20%C3%A9%20_____%20e%20tenho%20interesse%20em%3A" target="_blank" rel="noopener">Fale agora no WhatsApp</a>
+        <a id="btn-destaques" class="btn" href="#imoveis" title="Ver apenas os destaques de hoje">Destaques de hoje</a>
         </div>
       </div>
       <div>
@@ -894,7 +894,15 @@
     const rotated = rotate(items, dayNumber % items.length);
     const picks = rotated.slice(0, Math.min(3, rotated.length));
     box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
-    box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
+
+// guarda os IDs (sem #) dos 3 destaques para o filtro rápido
+box.dataset.picks = picks
+  .map(it => (it.href || '').replace('#',''))
+  .filter(Boolean)
+  .join(',');
+
+box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
+
     requestAnimationFrame(() => {
       box.style.transition = 'opacity .25s ease, transform .25s ease';
       box.style.opacity = '1'; box.style.transform = 'translateY(0)';
@@ -958,6 +966,81 @@
       requestAnimationFrame(()=> section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
   }
+})();
+</script>
+
+  <script>
+(function(){
+  const btn     = document.getElementById('btn-today');          // botão “Destaques de hoje” (do Passo 1)
+  const section = document.getElementById('imoveis');
+  const grid    = section?.querySelector('.grid');
+  const box     = document.getElementById('mini-highlights');    // onde salvamos data-picks no Passo 2
+  const bar     = document.getElementById('filters');
+
+  if(!btn || !grid || !box) return;
+
+  function resetToAll(){
+    const cards = Array.from(grid.querySelectorAll('.card[id]'));
+    cards.forEach(c => c.hidden = false);
+
+    // marca “Todos” nos filtros
+    if(bar){
+      const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
+      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+      if(allBtn) allBtn.classList.add('is-active');
+      // remove o chip “Destaques de hoje” se existir
+      const chip = document.getElementById('chip-hoje');
+      if(chip) chip.remove();
+    }
+  }
+
+  function showPicks(){
+    const picksAttr = box.dataset.picks || '';
+    const picks = picksAttr.split(',').map(s=>s.trim()).filter(Boolean);
+
+    // se por algum motivo não tiver picks, só rola até a seção e sai
+    if(!picks.length){
+      const anchor = section.querySelector('.container') || section;
+      if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+      else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+      return;
+    }
+
+    const cards = Array.from(grid.querySelectorAll('.card[id]'));
+    cards.forEach(c => { c.hidden = !picks.includes(c.id); });
+
+    // cria um “chip”/botão para voltar a ver tudo, se ainda não existir
+    if(bar && !document.getElementById('chip-hoje')){
+      const chip = document.createElement('button');
+      chip.id = 'chip-hoje';
+      chip.type = 'button';
+      chip.className = 'fbtn is-active';
+      chip.textContent = 'Destaques de hoje';
+      chip.title = 'Mostrar todos os imóveis';
+      chip.addEventListener('click', resetToAll);
+
+      // insere o chip no começo da barra e desativa os demais filtros
+      bar.insertAdjacentElement('afterbegin', chip);
+      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+      chip.classList.add('is-active');
+    }else if(bar){
+      // se o chip já existe, apenas deixamos ele ativo
+      const chip = document.getElementById('chip-hoje');
+      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+      if(chip) chip.classList.add('is-active');
+    }
+
+    // rola até a seção (compensando cabeçalho, se sua função estiver disponível)
+    const anchor = section.querySelector('.container') || section;
+    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }
+
+  // Clique no botão “Destaques de hoje”
+  btn.addEventListener('click', (ev)=>{
+    ev.preventDefault();     // evita pular direto só com o hash
+    showPicks();
+  });
 })();
 </script>
 
