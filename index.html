@@ -1304,6 +1304,16 @@
   }
 </style>
 
+  <style id="solo-cosmetics">
+  /* Em modo solo, esconda o divisor da seção anterior */
+  body.solo .hero{
+    border-bottom: 0 !important;
+  }
+
+  /* (Opcional) Se quiser esconder também a linha sob o cabeçalho, descomente abaixo */
+  /* body.solo header{ border-bottom-color: transparent !important; } */
+</style>
+
 
 <!-- Modal do mapa -->
 <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
@@ -1543,6 +1553,10 @@
     const targetId = location.hash.slice(1);
     const targetEl = document.getElementById(targetId);
     if(!targetEl) return;
+    
+        // marca o documento como "solo" para aplicar cosméticos (ex.: esconder divisor)
+    document.body.classList.add('solo');
+
 
     // 1) Esconde outros cards antes de qualquer rolagem
     const allCards = Array.from(document.querySelectorAll('#imoveis .grid .card'));
