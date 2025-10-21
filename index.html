@@ -895,20 +895,33 @@
     const picks = rotated.slice(0, Math.min(3, rotated.length));
     box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
 
-// guarda os IDs (sem #) dos 3 destaques para o filtro rápido
-box.dataset.picks = picks
-  .map(it => (it.href || '').replace('#',''))
-  .filter(Boolean)
-  .join(',');
+<script>
+/* Passo 2 — clique nas miniaturas abre o imóvel em modo solo */
+(function(){
+  const box = document.getElementById('mini-highlights');
+  if(!box) return;
 
-box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
+  box.addEventListener('click', ev=>{
+    const a = ev.target.closest('a.mini-item');
+    if(!a) return;
 
-    requestAnimationFrame(() => {
-      box.style.transition = 'opacity .25s ease, transform .25s ease';
-      box.style.opacity = '1'; box.style.transform = 'translateY(0)';
-    });
-  })();
-  </script>
+    ev.preventDefault();
+    const href = a.getAttribute('href');
+    if(!href || !href.startsWith('#')) return;
+
+    // pega o ID do imóvel
+    const id = href.replace('#','').trim();
+    if(!id) return;
+
+    // monta a URL para modo solo (?solo=1#id)
+    const url = location.pathname + '?solo=1#' + id;
+
+    // vai para a página do imóvel específico
+    location.href = url;
+  });
+})();
+</script>
+
 
  <script>
 (function(){
@@ -1045,85 +1058,53 @@ box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
 </script>
 
   <script>
-(function(){
-  // botão na hero
-  const btn     = document.getElementById('btn-destaques');
+/* Disponibiliza globalmente a ação "mostrar só os 3 de hoje" (sem chip) */
+window.showPicksToday = function(){
   const section = document.getElementById('imoveis');
   const grid    = section?.querySelector('.grid');
-  const box     = document.getElementById('mini-highlights'); // tem data-picks
-  const bar     = document.getElementById('filters');
+  const box     = document.getElementById('mini-highlights');
+  if(!section || !grid || !box) return;
 
-  if(!btn || !grid || !box) return;
+  const picksAttr = box.dataset.picks || '';
+  const picks = picksAttr.split(',').map(s=>s.trim()).filter(Boolean);
+  const cards = Array.from(grid.querySelectorAll('.card[id]'));
 
-  function resetToAll(){
-    const cards = Array.from(grid.querySelectorAll('.card[id]'));
-    cards.forEach(c => c.hidden = false);
-
-    if(bar){
-      // ativa “Todos”
-      const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
-      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-      if(allBtn) allBtn.classList.add('is-active');
-      // remove o chip
-      const chip = document.getElementById('chip-hoje');
-      if(chip) chip.remove();
-    }
-
-    // rola de volta para a seção
+  if(!picks.length){
+    // só rola até a seção
     const anchor = section.querySelector('.container') || section;
     if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
     else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+    return;
   }
 
-  function showPicks(){
-    const picksAttr = box.dataset.picks || '';
-    const picks = picksAttr.split(',').map(s=>s.trim()).filter(Boolean);
+  // mostra só os 3
+  cards.forEach(c => { c.hidden = !picks.includes(c.id); });
 
-    const anchor = section.querySelector('.container') || section;
-
-    if(!picks.length){
-      if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-      else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
-      return;
-    }
-
-    // mostra só os 3 destaques
-    const cards = Array.from(grid.querySelectorAll('.card[id]'));
-    cards.forEach(c => { c.hidden = !picks.includes(c.id); });
-
-    // adiciona o chip “⭐ Destaques de hoje” que volta a ver todos
-    if(bar && !document.getElementById('chip-hoje')){
-      const chip = document.createElement('button');
-      chip.id = 'chip-hoje';
-      chip.type = 'button';
-      chip.className = 'fbtn is-active';
-      chip.innerHTML = '⭐ Destaques de hoje';
-      chip.title = 'Voltar a ver todos os imóveis';
-      chip.setAttribute('aria-label', 'Voltar a ver todos os imóveis');
-      chip.addEventListener('click', resetToAll);
-
-      // deixa o chip ativo e desmarca os outros
-      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-      bar.insertAdjacentElement('afterbegin', chip);
-      chip.classList.add('is-active');
-    }else if(bar){
-      const chip = document.getElementById('chip-hoje');
-      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-      if(chip) chip.classList.add('is-active');
-    }
-
-    // rola até a seção
-    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+  // marca “Todos” nos filtros (sem chip)
+  const bar = document.getElementById('filters');
+  if(bar){
+    const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
+    bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+    if(allBtn) allBtn.classList.add('is-active');
   }
 
-  // clique no botão “Destaques de hoje”
+  // rola até a seção
+  const anchor = section.querySelector('.container') || section;
+  if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+  else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+};
+
+/* Botão da hero (“Destaques de hoje”): usa a função global acima */
+(function(){
+  const btn = document.getElementById('btn-destaques'); // seu botão na hero
+  if(!btn) return;
   btn.addEventListener('click', (ev)=>{
     ev.preventDefault();
-    showPicks();
+    window.showPicksToday();
   });
 })();
 </script>
+  
 
   <!-- Galeria: grade empilhada + visor com zoom (mobile e desktop) -->
   <script>
@@ -1716,29 +1697,42 @@ box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
     if(qs.get('solo') !== '1' || !location.hash) return;
 
     const targetId = location.hash.slice(1);
-    const targetEl = document.getElementById(targetId);
+        const targetEl = document.getElementById(targetId);
     if(!targetEl) return;
 
-// ativa o modo solo no <body> (habilita o CSS "body.solo …")
-document.body.classList.add('solo');
+    // ativa o modo solo no <body> (habilita o CSS "body.solo …")
+    document.body.classList.add('solo');
 
-// 1) Esconde outros cards antes de qualquer rolagem
+    // 1) Esconde todos os outros cards, mantendo apenas o alvo visível
     const allCards = Array.from(document.querySelectorAll('#imoveis .grid .card'));
     allCards.forEach(card => { card.hidden = (card !== targetEl); });
 
-    // 2) Esconde a barra de filtros (deixa a “página do imóvel” mais limpa)
+    // 2) Esconde a barra de filtros (para deixar “modo imóvel” mais limpo)
     const filtersBar = document.getElementById('filters');
     if(filtersBar) filtersBar.style.display = 'none';
 
-    // 3) Adiciona "← Ver todos os imóveis" logo abaixo do título, se ainda não existir
+    // 3) Adiciona o botão “← Ver todos os imóveis” se ainda não existir
     const container = document.querySelector('#imoveis .container');
     const title = container?.querySelector('h2');
-        if(container && title && !document.getElementById('exit-solo')){
+    if(container && title && !document.getElementById('exit-solo')){
       const exit = document.createElement('a');
       exit.id = 'exit-solo';
       exit.className = 'btn';
       exit.href = location.pathname + '#imoveis';
       exit.textContent = '← Ver todos os imóveis';
+      // 👉 clique volta ao modo normal e restaura todos os cards
+      exit.addEventListener('click', ev=>{
+        ev.preventDefault();
+        history.replaceState(null, '', location.pathname + '#imoveis');
+        document.body.classList.remove('solo');
+        if(filtersBar) filtersBar.style.display = '';
+        allCards.forEach(c=>c.hidden=false);
+        if(typeof smartScrollToWithRetries==='function'){
+          smartScrollToWithRetries(container);
+        }else{
+          container.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
       title.insertAdjacentElement('afterend', exit);
     }
 
@@ -1746,6 +1740,7 @@ document.body.classList.add('solo');
     setTimeout(()=>{
       history.replaceState(null, '', location.pathname + '?solo=1#imoveis');
     }, 20);
+
 
     // 4) Em modo solo: rola até a SEÇÃO de imóveis (mostra título + botão completamente)
     const anchorEl =
