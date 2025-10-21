@@ -943,12 +943,21 @@
     history.replaceState(null, '', location.pathname + location.search + hash);
   });
 
-  // restaura filtro da URL (ex.: #tipo=lote)
+    // restaura filtro da URL (ex.: #tipo=lote) e rola até a seção
   const m = location.hash.match(/tipo=([\w-]+)/i);
   const startType = m ? m[1].toLowerCase() : 'all';
   const startBtn = bar.querySelector(`.fbtn[data-filter="${startType}"]`) || bar.querySelector('.fbtn[data-filter="all"]');
   startBtn.classList.add('is-active');
   applyFilter(startType);
+
+  // se veio com filtro, rola suave até a seção de imóveis
+  if (startType !== 'all') {
+    const section = document.getElementById('imoveis');
+    if (section) {
+      // espera o layout assentar e rola
+      requestAnimationFrame(()=> section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
+  }
 })();
 </script>
 
