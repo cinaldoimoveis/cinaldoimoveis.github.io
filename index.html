@@ -888,29 +888,43 @@
   })();
   </script>
 
-  <!-- Destaques do dia (gera miniaturas e salva IDs dos 3 picks em data-picks) -->
-  <script>
-  (function(){
-    const box = document.getElementById('mini-highlights');
-    if (!box) return;
-    const cards = Array.from(document.querySelectorAll('#imoveis article.card[id]'));
-    const items = cards.map(card => {
-      const id  = card.id || '';
-      const img = card.querySelector('.thumb img');
-      const h3  = card.querySelector('h3');
-      if (!img || !id) return null;
-      return { href: `#${id}`, id, src: img.getAttribute('src') || img.src || '', alt: h3 ? h3.textContent.trim() : 'Imóvel' };
-    }).filter(Boolean);
-    if (!items.length) return;
-    const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
-    const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
-    const rotated = rotate(items, dayNumber % items.length);
-    const picks = rotated.slice(0, Math.min(3, rotated.length));
-    box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
-    /* <-- salva os IDs para o botão “Destaques de hoje” */
-    box.dataset.picks = picks.map(it => it.id).join(',');
-  })();
-  </script>
+  <!-- Destaques do dia -->
+<script>
+(function(){
+  const box = document.getElementById('mini-highlights');
+  if (!box) return;
+
+  const cards = Array.from(document.querySelectorAll('#imoveis article.card[id]'));
+  const items = cards.map(card => {
+    const id  = card.id || '';
+    const img = card.querySelector('.thumb img');
+    const h3  = card.querySelector('h3');
+    if (!img) return null;
+    return {
+      href: id ? `#${id}` : '#',
+      id,
+      src: img.getAttribute('src') || img.src || '',
+      alt: h3 ? h3.textContent.trim() : 'Imóvel'
+    };
+  }).filter(Boolean);
+
+  if (!items.length) return;
+
+  const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
+  const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
+  const rotated = rotate(items, dayNumber % items.length);
+  const picks = rotated.slice(0, Math.min(3, rotated.length));
+
+  // render
+  box.innerHTML = picks
+    .map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`)
+    .join('');
+
+  // 🔴 IMPORTANTE: salva os IDs dos 3 destaques para o botão filtrar
+  box.dataset.picks = picks.map(it => it.id).join(',');
+})();
+</script>
+
 
   <!-- Miniaturas: clique leva para o modo SOLO do imóvel clicado -->
   <script>
