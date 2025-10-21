@@ -1535,7 +1535,7 @@
     bar.appendChild(btnCat);
   }
 
-        /* === 3) Modo solo (robusto): ?solo=1#<id> mostra apenas o imóvel e rola compensando header === */
+          /* === 3) Modo solo (robusto): ?solo=1#<id> mostra apenas o imóvel e rola compensando header === */
   (function activateSoloMode(){
     const qs = new URLSearchParams(location.search);
     if(qs.get('solo') !== '1' || !location.hash) return;
@@ -1564,30 +1564,35 @@
       title.insertAdjacentElement('afterend', exit);
     }
 
-    // 4) Rola até o CARD do imóvel com compensação do header + re-tentativas
-    smartScrollToWithRetries(targetEl);
+    // 4) Em modo solo: rola até a SEÇÃO de imóveis (mostra título + botão completamente)
+    const anchorEl =
+      document.querySelector('#imoveis .container') ||
+      document.getElementById('imoveis') ||
+      targetEl;
+
+    smartScrollToWithRetries(anchorEl);
   })(); // fecha o activateSoloMode()
 
   /* === Funções de rolagem com compensação de cabeçalho e re-tentativas === */
-function getHeaderOffset(){
-  const h = document.querySelector('header');
-  let extra = 12; // respiro padrão abaixo do cabeçalho
+  function getHeaderOffset(){
+    const h = document.querySelector('header');
+    let extra = 12; // respiro padrão abaixo do cabeçalho
 
-  // Em modo solo, some também a altura do botão "← Ver todos os imóveis"
-  if (new URLSearchParams(location.search).get('solo') === '1') {
-    const exit = document.getElementById('exit-solo');
-    if (exit) {
-      const cs = getComputedStyle(exit);
-      const exitH =
-        exit.offsetHeight +
-        parseFloat(cs.marginTop || 0) +
-        parseFloat(cs.marginBottom || 0);
-      extra += exitH + 8; // folga extra para o botão não ficar coberto
+    // Em modo solo, some também a altura do botão "← Ver todos os imóveis"
+    if (new URLSearchParams(location.search).get('solo') === '1') {
+      const exit = document.getElementById('exit-solo');
+      if (exit) {
+        const cs = getComputedStyle(exit);
+        const exitH =
+          exit.offsetHeight +
+          parseFloat(cs.marginTop || 0) +
+          parseFloat(cs.marginBottom || 0);
+        extra += exitH + 8; // folga extra para o botão não ficar coberto
+      }
     }
-  }
 
-  return (h?.offsetHeight || 72) + extra;
-}
+    return (h?.offsetHeight || 72) + extra;
+  }
 
   function scrollToElOnce(el, behavior = 'auto'){
     const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
