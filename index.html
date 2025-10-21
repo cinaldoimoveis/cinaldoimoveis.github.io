@@ -1555,14 +1555,19 @@
     // 3) Adiciona "← Ver todos os imóveis" logo abaixo do título, se ainda não existir
     const container = document.querySelector('#imoveis .container');
     const title = container?.querySelector('h2');
-    if(container && title && !document.getElementById('exit-solo')){
+        if(container && title && !document.getElementById('exit-solo')){
       const exit = document.createElement('a');
       exit.id = 'exit-solo';
       exit.className = 'btn';
-      exit.href = location.pathname + '#imoveis'; // remove ?solo=1
+      exit.href = location.pathname + '#imoveis';
       exit.textContent = '← Ver todos os imóveis';
       title.insertAdjacentElement('afterend', exit);
     }
+
+    // Opcional: após preparar a seção, “congela” a URL em #imoveis para evitar re-rolagens pelo hash
+    setTimeout(()=>{
+      history.replaceState(null, '', location.pathname + '?solo=1#imoveis');
+    }, 20);
 
     // 4) Em modo solo: rola até a SEÇÃO de imóveis (mostra título + botão completamente)
     const anchorEl =
@@ -1616,8 +1621,13 @@
     });
   }
 
-  /* Reforço: hash normal (sem ?solo=1) também compensa o header e re-tenta */
+    /* Reforço: hash normal (sem ?solo=1) também compensa o header e re-tenta */
+  const isSolo = () => new URLSearchParams(location.search).get('solo') === '1';
+
   function scrollToHashSmart(){
+    // Em modo solo, NÃO faça a rolagem automática para o hash (evita conflito)
+    if (isSolo()) return;
+
     if(!location.hash) return;
     const el = document.querySelector(location.hash);
     if(!el) return;
@@ -1625,6 +1635,7 @@
   }
   window.addEventListener('hashchange', scrollToHashSmart, { passive: true });
   window.addEventListener('load', scrollToHashSmart, { passive: true });
+
 
 })();
 </script>
