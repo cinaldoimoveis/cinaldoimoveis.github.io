@@ -1596,9 +1596,7 @@ window.showPicksToday = function(){
     bar.appendChild(btnCat);
   }
 
-    <!-- === Helpers de rolagem com compensação de header e re-tentativas === -->
-  <script>
-  // calcula a altura a compensar (header + folgas + botão "← Ver todos os imóveis" no modo solo)
+      // === Helpers de rolagem com compensação de header e re-tentativas ===
   function getHeaderOffset(){
     const h = document.querySelector('header');
     let extra = 12; // respiro padrão
@@ -1620,28 +1618,20 @@ window.showPicksToday = function(){
     return (h?.offsetHeight || 72) + extra;
   }
 
-  // rola uma única vez até o elemento, compensando o header
   function scrollToElOnce(el, behavior = 'auto'){
     const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
     window.scrollTo({ top, behavior });
   }
 
-  // rolagem “inteligente”: tenta de novo após reflow de imagens/fontes
   function smartScrollToWithRetries(el){
-    // 1) salto imediato
     scrollToElOnce(el, 'auto');
-
-    // 2) re-tentativas (layout assentando)
     const delays = [60, 250, 700, 1400];
     delays.forEach(d=> setTimeout(()=> scrollToElOnce(el, 'auto'), d));
-
-    // 3) re-rolar quando imagens terminarem de carregar
     el.querySelectorAll('img').forEach(img=>{
       if(img.complete) return;
       img.addEventListener('load', ()=> scrollToElOnce(el, 'auto'), { once:true });
     });
   }
-  </script>
 
 
   (function activateSoloMode(){
