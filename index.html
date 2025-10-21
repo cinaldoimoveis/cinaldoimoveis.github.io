@@ -27,18 +27,22 @@
 
   <!-- ===== CSS BASE ===== -->
   <style>
-    :root{
-      --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
-      @media (min-width:900px){
   :root{
-  --bg:#f9f5e8;   /* fundo creme claro */
-  --fg:#1a1a1a;   /* texto principal levemente mais suave que preto puro */
-  --muted:#6b645a;/* texto secundário em tom neutro */
-  --accent:#c7a24b; /* dourado elegante */
-  --card:#fefcf8; /* fundo dos cards levemente off-white */
-  --line:#e4dccd; /* divisórias e bordas */
+  --bg:#f8f3ec; --fg:#111; --muted:#555; --accent:#c7a24b; --card:#f3eee8; --line:#eaeaea;
   --side: 20px; /* margem lateral padrão global */
 }
+/* ajuste de paleta só no desktop (fora do :root) */
+@media (min-width:900px){
+  :root{
+    --bg:#f9f5e8;   /* creme claro no desktop */
+    --fg:#1a1a1a;
+    --muted:#6b645a;
+    --accent:#c7a24b;
+    --card:#fefcf8;
+    --line:#e4dccd;
+  }
+}
+
     .container{
       max-width:1150px;
       margin:0 auto;
@@ -1172,34 +1176,38 @@
 
   <style id="hide-open-mobile">
   /* Esconde o botão em telas touch (celulares/tablets) */
-  <style>
-  
-  /* Instagram – bloco do QR */
-.ig-qr{
-  display:flex; align-items:center; gap:16px;
-  background:#fff; border:1px solid var(--line); border-radius:14px;
-  padding:14px; max-width:520px; box-shadow:0 1px 0 rgba(0,0,0,.05);
-}
-.ig-qr img{
-  width:250px; height:auto; border-radius:12px;
-}
-.ig-qr small{ color:var(--muted); }
-
-@media (max-width:640px){
-  .ig-qr{ gap:12px; padding:12px; }
-  .ig-qr img{ width:170px; }
-}
-
-    /* Esconde o QR e o texto de instrução apenas no mobile */
-@media (max-width:640px), (any-pointer: coarse) {
-  .ig-qr img,
-  .ig-qr small {
-    display: none !important;
-    visibility: hidden !important;
+  @media (any-pointer: coarse) {
+    #openNew {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
   }
-}
 
-  /* Link “@cinaldo_imoveis” no header */
+  /* Instagram – bloco do QR */
+  .ig-qr{
+    display:flex; align-items:center; gap:16px;
+    background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px; max-width:520px; box-shadow:0 1px 0 rgba(0,0,0,.05);
+  }
+  .ig-qr img{ width:250px; height:auto; border-radius:12px; }
+  .ig-qr small{ color:var(--muted); }
+
+  @media (max-width:640px){
+    .ig-qr{ gap:12px; padding:12px; }
+    .ig-qr img{ width:170px; }
+  }
+
+  /* Esconde o QR e o texto de instrução apenas no mobile */
+  @media (max-width:640px), (any-pointer: coarse) {
+    .ig-qr img,
+    .ig-qr small {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  }
+
+  /* (opcional) estilo do link do Instagram se usar no header algum dia */
   .menu .ig-link{
     display:inline-flex; align-items:center; gap:6px; font-weight:600;
     padding:8px 10px; border:1px solid var(--line); border-radius:999px;
