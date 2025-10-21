@@ -1569,11 +1569,25 @@
   })(); // fecha o activateSoloMode()
 
   /* === Funções de rolagem com compensação de cabeçalho e re-tentativas === */
-  function getHeaderOffset(){
-    const h = document.querySelector('header');
-    // margem extra de 12px para respirar abaixo do header
-    return (h?.offsetHeight || 72) + 12;
+function getHeaderOffset(){
+  const h = document.querySelector('header');
+  let extra = 12; // respiro padrão abaixo do cabeçalho
+
+  // Em modo solo, some também a altura do botão "← Ver todos os imóveis"
+  if (new URLSearchParams(location.search).get('solo') === '1') {
+    const exit = document.getElementById('exit-solo');
+    if (exit) {
+      const cs = getComputedStyle(exit);
+      const exitH =
+        exit.offsetHeight +
+        parseFloat(cs.marginTop || 0) +
+        parseFloat(cs.marginBottom || 0);
+      extra += exitH + 8; // folga extra para o botão não ficar coberto
+    }
   }
+
+  return (h?.offsetHeight || 72) + extra;
+}
 
   function scrollToElOnce(el, behavior = 'auto'){
     const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
