@@ -1305,19 +1305,15 @@
 </style>
 
   <style id="solo-cosmetics">
-  /* Em modo solo, esconda o divisor da seção anterior */
+  /* Em modo solo, esconda a seção hero inteira (inclui o card “Destaques de hoje”) */
   body.solo .hero{
-    border-bottom: 0 !important;
+    display: none !important;
   }
 
-  /* Também remove a “linha” do card de destaques (borda/sombra) */
-  body.solo .hero .card{
-    border-color: transparent !important;
-    box-shadow: none !important;
+  /* Opcional: tira a linha sob o cabeçalho no modo solo */
+  body.solo header{
+    border-bottom-color: transparent !important;
   }
-
-  /* (Opcional) Se quiser esconder também a linha sob o cabeçalho, descomente abaixo */
-  /* body.solo header{ border-bottom-color: transparent !important; } */
 </style>
 
 
@@ -1559,12 +1555,11 @@
     const targetId = location.hash.slice(1);
     const targetEl = document.getElementById(targetId);
     if(!targetEl) return;
-    
-        // marca o documento como "solo" para aplicar cosméticos (ex.: esconder divisor)
-    document.body.classList.add('solo');
 
+// ativa o modo solo no <body> (habilita o CSS "body.solo …")
+document.body.classList.add('solo');
 
-    // 1) Esconde outros cards antes de qualquer rolagem
+// 1) Esconde outros cards antes de qualquer rolagem
     const allCards = Array.from(document.querySelectorAll('#imoveis .grid .card'));
     allCards.forEach(card => { card.hidden = (card !== targetEl); });
 
