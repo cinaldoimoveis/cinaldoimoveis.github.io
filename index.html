@@ -1292,18 +1292,18 @@
   }
 </style>
 
-  <style id="share-style">
-  .share-btn{
-    display:inline-grid; place-items:center;
-    width:36px; height:36px; padding:0;
-    border:1px solid var(--line); border-radius:.5rem;
-    background:#fff; font-weight:700; font-size:18px; line-height:1;
-    cursor:pointer; transition:.18s ease; box-shadow:0 1px 0 rgba(0,0,0,.04);
+  <style id="anchor-offset">
+  /* Altura estimada do header (desktop x mobile) */
+  :root{ --header-h: 72px; }              /* desktop */
+  @media (max-width:900px){ :root{ --header-h: 64px; } } /* mobile/tablet */
+
+  /* Compensa o header fixo ao navegar para âncoras/IDs */
+  #imoveis, #sobre, #contato,
+  article.card[id]{
+    scroll-margin-top: calc(var(--header-h) + 12px);
   }
-  .share-btn:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.10); }
-  .share-btn:disabled{ opacity:.55; cursor:not-allowed; }
-  .filters .share-cat{ margin-left:auto; } /* botão de compartilhar categoria (texto pode ficar) */
 </style>
+
 
 <!-- Modal do mapa -->
 <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
@@ -1569,7 +1569,17 @@
     if(section){
       requestAnimationFrame(()=> section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
-  })();
+  })();  // fecha o activateSoloMode()
+
+  /* Reforço: ao trocar/abrir com hash, rola de novo respeitando o scroll-margin-top */
+  function scrollToHash(){
+    if(!location.hash) return;
+    const el = document.querySelector(location.hash);
+    if(!el) return;
+    requestAnimationFrame(()=> el.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+  window.addEventListener('hashchange', scrollToHash, { passive: true });
+  window.addEventListener('load', scrollToHash, { passive: true });
 
 })();
 </script>
