@@ -1003,20 +1003,21 @@
 
   <!-- Botão “Destaques de hoje” (filtra os 3 picks; sem chip; sai do modo solo se estiver) -->
   <script>
-/* Disponibiliza globalmente a ação "mostrar só os 3 de hoje" (sem chip) */
+/* Mostra só os 3 “de hoje” (sem chip) e assegura sair do modo solo, se estiver */
 window.showPicksToday = function(){
   const section = document.getElementById('imoveis');
   const grid    = section?.querySelector('.grid');
   const box     = document.getElementById('mini-highlights');
+  const bar     = document.getElementById('filters');
   if(!section || !grid || !box) return;
 
-  // Se estiver em modo solo, volta ao modo normal antes de filtrar
+  // Se veio de ?solo=1, restaura o layout completo
   if (document.body.classList.contains('solo')) {
     document.body.classList.remove('solo');
-    const filtersBar = document.getElementById('filters');
-    if (filtersBar) filtersBar.style.display = '';
     const exit = document.getElementById('exit-solo');
     if (exit) exit.remove();
+    if (bar) bar.style.display = '';
+    // “congela” a URL sem ?solo
     history.replaceState(null, '', location.pathname + '#imoveis');
   }
 
@@ -1026,7 +1027,8 @@ window.showPicksToday = function(){
 
   if(!picks.length){
     const anchor = section.querySelector('.container') || section;
-    anchor.scrollIntoView({behavior:'smooth', block:'start'});
+    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
     return;
   }
 
@@ -1034,7 +1036,6 @@ window.showPicksToday = function(){
   cards.forEach(c => { c.hidden = !picks.includes(c.id); });
 
   // marca “Todos” nos filtros (sem chip)
-  const bar = document.getElementById('filters');
   if(bar){
     const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
     bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
@@ -1043,10 +1044,11 @@ window.showPicksToday = function(){
 
   // rola até a seção
   const anchor = section.querySelector('.container') || section;
-  anchor.scrollIntoView({behavior:'smooth', block:'start'});
+  if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+  else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
 };
 
-/* Botão da hero (“Destaques de hoje”): usa a função global acima */
+/* Botão da hero (“Destaques de hoje”) usa a função acima */
 (function(){
   const btn = document.getElementById('btn-destaques');
   if(!btn) return;
@@ -1056,6 +1058,7 @@ window.showPicksToday = function(){
   });
 })();
 </script>
+
   
 
   <!-- Galeria: grade empilhada + visor com zoom (mobile e desktop) -->
