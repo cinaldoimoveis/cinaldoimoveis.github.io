@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -113,6 +112,14 @@
     .ul{margin:8px 0 0;padding:0 0 0 18px;color:#333}
     .pill{display:inline-block;background:var(--card);border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:#444}
 
+    /* ==== HERO: espaçamento entre os dois cards (logo + miniaturas) e logo centralizada ==== */
+    .hero-side{display:grid; gap:18px;}
+    .thumb-logo{background:#fff;}
+    .logo-card .thumb{display:grid; place-items:center; padding:12px;}
+    .logo-img{width:auto; height:64%; max-height:160px; object-fit:contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,.08));}
+    @media (max-width:900px){
+      .logo-img{max-height:120px; height:56%;}
+    }
   </style>
 
   <style>
@@ -389,22 +396,25 @@
         <a id="btn-destaques" class="btn" href="#imoveis" title="Ver apenas os destaques de hoje">Destaques de hoje</a>
         </div>
       </div>
-      <div>
-  <!-- Card 1: LOGO sozinha -->
-  <div class="card logo-card">
-    <div class="thumb thumb-logo">
-      <img class="logo-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
-    </div>
-  </div>
 
-  <!-- Card 2: Destaques de hoje (só as miniaturas) -->
-  <div class="card highlights-card">
-    <div class="content">
-      <strong style="display:block;margin-bottom:8px;">Destaques de hoje</strong>
-      <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje"></div>
-    </div>
-  </div>
-</div>
+      <!-- ===== LADO DIREITO DA HERO: 2 cards com espaçamento padrão ===== -->
+      <div class="hero-side">
+        <!-- Card 1: LOGO sozinha -->
+        <div class="card logo-card">
+          <div class="thumb thumb-logo">
+            <img class="logo-img" src="assets/logo-bimi.svg" alt="Cinaldo Imóveis">
+          </div>
+        </div>
+
+        <!-- Card 2: Destaques de hoje (só as miniaturas) -->
+        <div class="card highlights-card">
+          <div class="content">
+            <strong style="display:block;margin-bottom:8px;">Destaques de hoje</strong>
+            <div class="mini-list" id="mini-highlights" aria-label="Destaques de hoje"></div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== /lado direito ===== -->
 
     </div>
   </main>
@@ -883,30 +893,32 @@
   })();
   </script>
 
-  <!-- Destaques do dia -->
+  <!-- Destaques do dia (gera miniaturas e salva IDs dos 3 picks em data-picks) -->
   <script>
   (function(){
     const box = document.getElementById('mini-highlights');
     if (!box) return;
-    const cards = Array.from(document.querySelectorAll('#imoveis article.card'));
+    const cards = Array.from(document.querySelectorAll('#imoveis article.card[id]'));
     const items = cards.map(card => {
       const id  = card.id || '';
       const img = card.querySelector('.thumb img');
       const h3  = card.querySelector('h3');
-      if (!img) return null;
-      return { href: id ? `#${id}` : '#', src: img.getAttribute('src') || img.src || '', alt: h3 ? h3.textContent.trim() : 'Imóvel' };
+      if (!img || !id) return null;
+      return { href: `#${id}`, id, src: img.getAttribute('src') || img.src || '', alt: h3 ? h3.textContent.trim() : 'Imóvel' };
     }).filter(Boolean);
     if (!items.length) return;
     const dayNumber = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
     const rotate = (arr, n) => arr.map((_, i) => arr[(i + n) % arr.length]);
-        const rotated = rotate(items, dayNumber % items.length);
+    const rotated = rotate(items, dayNumber % items.length);
     const picks = rotated.slice(0, Math.min(3, rotated.length));
     box.innerHTML = picks.map(it => `<a class="mini-item" href="${it.href}"><img src="${it.src}" alt="${it.alt}" loading="lazy"></a>`).join('');
+    /* <-- salva os IDs para o botão “Destaques de hoje” */
+    box.dataset.picks = picks.map(it => it.id).join(',');
   })();
   </script>
 
+  <!-- Miniaturas: clique leva para o modo SOLO do imóvel clicado -->
   <script>
-  /* Passo 2 — clique nas miniaturas abre o imóvel em modo solo */
   (function(){
     const box = document.getElementById('mini-highlights');
     if(!box) return;
@@ -919,94 +931,68 @@
       const href = a.getAttribute('href');
       if(!href || !href.startsWith('#')) return;
 
-      // pega o ID do imóvel
       const id = href.replace('#','').trim();
       if(!id) return;
 
-      // monta a URL para modo solo (?solo=1#id)
       const url = location.pathname + '?solo=1#' + id;
-
-      // vai para a página do imóvel específico
       location.href = url;
     });
   })();
   </script>
 
+  <!-- Filtros por categoria -->
   <script>
-(function(){
-  const btn     = document.getElementById('btn-today');          // botão “Destaques de hoje” (do Passo 1)
-  const section = document.getElementById('imoveis');
-  const grid    = section?.querySelector('.grid');
-  const box     = document.getElementById('mini-highlights');    // onde salvamos data-picks no Passo 2
-  const bar     = document.getElementById('filters');
+ (function(){
+  const bar   = document.getElementById('filters');
+  const grid  = document.querySelector('#imoveis .grid');
+  const cards = Array.from(grid.querySelectorAll('.card'));
 
-  if(!btn || !grid || !box) return;
+  if(!bar || !grid) return;
 
-  function resetToAll(){
-    const cards = Array.from(grid.querySelectorAll('.card[id]'));
-    cards.forEach(c => c.hidden = false);
-
-    // marca “Todos” nos filtros
-    if(bar){
-      const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
-      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-      if(allBtn) allBtn.classList.add('is-active');
-      // remove o chip “Destaques de hoje” se existir
-      const chip = document.getElementById('chip-hoje');
-      if(chip) chip.remove();
+  function getTags(card){
+    const raw = card.getAttribute('data-tags');
+    if(raw && raw.trim()){
+      return raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
     }
+    const t = (card.getAttribute('data-type')||'').toLowerCase().trim();
+    return t ? [t] : [];
   }
 
-  function showPicks(){
-    const picksAttr = box.dataset.picks || '';
-    const picks = picksAttr.split(',').map(s=>s.trim()).filter(Boolean);
-
-    // se por algum motivo não tiver picks, só rola até a seção e sai
-    if(!picks.length){
-      const anchor = section.querySelector('.container') || section;
-      if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-      else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
-      return;
-    }
-
-    const cards = Array.from(grid.querySelectorAll('.card[id]'));
-    cards.forEach(c => { c.hidden = !picks.includes(c.id); });
-
-    // cria um “chip”/botão para voltar a ver tudo, se ainda não existir
-    if(bar && !document.getElementById('chip-hoje')){
-      const chip = document.createElement('button');
-      chip.id = 'chip-hoje';
-      chip.type = 'button';
-      chip.className = 'fbtn is-active';
-      chip.textContent = 'Destaques de hoje';
-      chip.title = 'Mostrar todos os imóveis';
-      chip.addEventListener('click', resetToAll);
-
-      // insere o chip no começo da barra e desativa os demais filtros
-      bar.insertAdjacentElement('afterbegin', chip);
-      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-      chip.classList.add('is-active');
-    }else if(bar){
-      // se o chip já existe, apenas deixamos ele ativo
-      const chip = document.getElementById('chip-hoje');
-      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-      if(chip) chip.classList.add('is-active');
-    }
-
-    // rola até a seção (compensando cabeçalho, se sua função estiver disponível)
-    const anchor = section.querySelector('.container') || section;
-    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+  function applyFilter(type){
+    grid.classList.add('filtering');
+    const f = (type||'all').toLowerCase();
+    cards.forEach(card=>{
+      const tags = getTags(card);
+      const show = (f==='all') || tags.includes(f);
+      card.hidden = !show;
+    });
+    grid.classList.remove('filtering');
   }
 
-  // Clique no botão “Destaques de hoje”
-  btn.addEventListener('click', (ev)=>{
-    ev.preventDefault();     // evita pular direto só com o hash
-    showPicks();
+  bar.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.fbtn');
+    if(!btn) return;
+    bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    applyFilter(btn.dataset.filter);
+    const hash = btn.dataset.filter === 'all' ? '' : '#tipo=' + btn.dataset.filter;
+    history.replaceState(null, '', location.pathname + location.search + hash);
   });
+
+  const m = location.hash.match(/tipo=([\w-]+)/i);
+  const startType = m ? m[1].toLowerCase() : 'all';
+  const startBtn = bar.querySelector(`.fbtn[data-filter="${startType}"]`) || bar.querySelector('.fbtn[data-filter="all"]');
+  startBtn.classList.add('is-active');
+  applyFilter(startType);
+
+  if (startType !== 'all') {
+    const section = document.getElementById('imoveis');
+    if (section) requestAnimationFrame(()=> section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
 })();
 </script>
 
+  <!-- Botão “Destaques de hoje” (filtra os 3 picks; sem chip; sai do modo solo se estiver) -->
   <script>
 /* Disponibiliza globalmente a ação "mostrar só os 3 de hoje" (sem chip) */
 window.showPicksToday = function(){
@@ -1015,15 +1001,23 @@ window.showPicksToday = function(){
   const box     = document.getElementById('mini-highlights');
   if(!section || !grid || !box) return;
 
+  // Se estiver em modo solo, volta ao modo normal antes de filtrar
+  if (document.body.classList.contains('solo')) {
+    document.body.classList.remove('solo');
+    const filtersBar = document.getElementById('filters');
+    if (filtersBar) filtersBar.style.display = '';
+    const exit = document.getElementById('exit-solo');
+    if (exit) exit.remove();
+    history.replaceState(null, '', location.pathname + '#imoveis');
+  }
+
   const picksAttr = box.dataset.picks || '';
   const picks = picksAttr.split(',').map(s=>s.trim()).filter(Boolean);
   const cards = Array.from(grid.querySelectorAll('.card[id]'));
 
   if(!picks.length){
-    // só rola até a seção
     const anchor = section.querySelector('.container') || section;
-    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+    anchor.scrollIntoView({behavior:'smooth', block:'start'});
     return;
   }
 
@@ -1040,13 +1034,12 @@ window.showPicksToday = function(){
 
   // rola até a seção
   const anchor = section.querySelector('.container') || section;
-  if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-  else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+  anchor.scrollIntoView({behavior:'smooth', block:'start'});
 };
 
 /* Botão da hero (“Destaques de hoje”): usa a função global acima */
 (function(){
-  const btn = document.getElementById('btn-destaques'); // seu botão na hero
+  const btn = document.getElementById('btn-destaques');
   if(!btn) return;
   btn.addEventListener('click', (ev)=>{
     ev.preventDefault();
@@ -1108,13 +1101,11 @@ window.showPicksToday = function(){
       const dy=e.changedTouches[0].clientY - swipeSY;
       const dt=Date.now()-swipeTime;
 
-      // swipe horizontal: troca de foto (quando não há zoom relevante)
       if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy) && scale<=1.05){
         if(dx<0) show(idx+1); else show(idx-1);
         return;
       }
 
-      // swipe-down rápido para fechar (com zoom em 1)
       if(scale<=1.02 && dy>120 && dt<500){
         closeViewer();
       }
@@ -1164,7 +1155,6 @@ window.showPicksToday = function(){
     }, {passive:false});
 
     vp.addEventListener('touchend', e=>{
-      // se terminou e ficou "quase 1", normaliza para 1 e centraliza
       if(e.touches.length===0 && scale<=1.02){
         scale = 1;
         tx = 0; ty = 0;
@@ -1220,13 +1210,12 @@ window.showPicksToday = function(){
       setT();
     });
 
-    // MODAL abrir/fechar
     function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
     function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; grid.innerHTML=''; }
     modal.addEventListener('click',(e)=>{ if(e.target.hasAttribute('data-close')) closeModal(); });
     document.addEventListener('keydown',(e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
-    // CLICK em "Ver fotos" — monta grade e permite abrir visor (com exceção da 1ª foto)
+    // CLICK em "Ver fotos"
     document.addEventListener('click', (e)=>{
       const btn = e.target.closest('.btn-fotos');
       if(!btn) return;
@@ -1267,24 +1256,14 @@ window.showPicksToday = function(){
 
   <!-- Oculta o botão "Abrir em nova aba" no desktop -->
   <style id="hide-open-desktop">
-  /* Desktop e tablets com mouse/trackpad */
   @media (any-pointer: fine) {
-    #openNew {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-    }
+    #openNew { display: none !important; visibility: hidden !important; opacity: 0 !important; }
   }
   </style>
 
   <style id="hide-open-mobile">
-  /* Esconde o botão em telas touch (celulares/tablets) */
   @media (any-pointer: coarse) {
-    #openNew {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-    }
+    #openNew { display: none !important; visibility: hidden !important; opacity: 0 !important; }
   }
 
   /* Instagram – bloco do QR */
@@ -1301,16 +1280,10 @@ window.showPicksToday = function(){
     .ig-qr img{ width:170px; }
   }
 
-  /* Esconde o QR e o texto de instrução apenas no mobile */
   @media (max-width:640px), (any-pointer: coarse) {
-    .ig-qr img,
-    .ig-qr small {
-      display: none !important;
-      visibility: hidden !important;
-    }
+    .ig-qr img, .ig-qr small { display: none !important; visibility: hidden !important; }
   }
 
-  /* (opcional) estilo do link do Instagram se usar no header algum dia */
   .menu .ig-link{
     display:inline-flex; align-items:center; gap:6px; font-weight:600;
     padding:8px 10px; border:1px solid var(--line); border-radius:999px;
@@ -1342,7 +1315,6 @@ window.showPicksToday = function(){
     background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
   }
   #map{ width:100%; height:100%; }
-  /* Botão dentro do card do imóvel */
   .btn-map{
     display:inline-block; padding:.60rem .9rem; margin-left:6px;
     border:1px solid var(--line); border-radius:.5rem; background:#fff; cursor:pointer;
@@ -1387,27 +1359,16 @@ window.showPicksToday = function(){
 </style>
 
   <style id="anchor-offset">
-  /* Altura estimada do header (desktop x mobile) */
-  :root{ --header-h: 72px; }              /* desktop */
-  @media (max-width:900px){ :root{ --header-h: 64px; } } /* mobile/tablet */
+  :root{ --header-h: 72px; }
+  @media (max-width:900px){ :root{ --header-h: 64px; } }
 
-  /* Compensa o header fixo ao navegar para âncoras/IDs */
   #imoveis, #sobre, #contato,
-  article.card[id]{
-    scroll-margin-top: calc(var(--header-h) + 12px);
-  }
+  article.card[id]{ scroll-margin-top: calc(var(--header-h) + 12px); }
 </style>
 
   <style id="solo-cosmetics">
-  /* Em modo solo, esconda a seção hero inteira (inclui o card “Destaques de hoje”) */
-  body.solo .hero{
-    display: none !important;
-  }
-
-  /* Opcional: tira a linha sob o cabeçalho no modo solo */
-  body.solo header{
-    border-bottom-color: transparent !important;
-  }
+  body.solo .hero{ display: none !important; }
+  body.solo header{ border-bottom-color: transparent !important; }
 </style>
 
 
@@ -1422,17 +1383,14 @@ window.showPicksToday = function(){
   </div>
 </div>
 
-  <!-- Leaflet JS (precisa vir antes do script do mapa) -->
+  <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
   
 <script>
 (function(){
-  // === COORDENADAS por chave ===
-  // Use 'data-geo' do card como chave aqui.
   const GEO = {
-    // agrupamento Alphaville (vários anúncios usam data-geo="alphaville")
     alphaville: [-19.392604, -40.025909],
    'alphaville-casa-217': [-19.397728, -40.022248], 
    'alphaville-lote-360': [-19.392500, -40.024900], 
@@ -1442,9 +1400,6 @@ window.showPicksToday = function(){
    'alphaville-casa-186': [-19.397728, -40.022248], 
    'alphaville-lote-437c': [-19.391600, -40.026000],
 
-    
-
-    // demais locais individuais
     unique: [-19.327982, -40.075060],
     'complexo-sao-mateus': [-18.731801, -39.790920],
     'casa-simples-laguna': [-19.376735, -40.053552],
@@ -1454,12 +1409,9 @@ window.showPicksToday = function(){
     'area-planalto-20000': [-19.341756, -40.057675],
   };
 
-  // cria botão "📍 Ver localização aproximada" automaticamente
   document.querySelectorAll('article.card[data-geo]').forEach(card=>{
-    // evita duplicar se já existir
     if(card.querySelector('.btn-map')) return;
-
-    const wrapP = card.querySelector('p'); // mesmo lugar dos botões
+    const wrapP = card.querySelector('p');
     if(!wrapP) return;
 
     const b = document.createElement('button');
@@ -1473,15 +1425,13 @@ window.showPicksToday = function(){
     wrapP.appendChild(b);
   });
 
-  // === Modal & Leaflet ===
   const modal  = document.getElementById('map-modal');
   const btnX   = modal.querySelector('.map-close');
   let map, circle;
 
   function openMap(key){
-    // 1) Adicione isso no início da openMap:
     const isMobile = window.matchMedia('(any-pointer: coarse), (max-width: 640px)').matches;
-    const desiredZoom = isMobile ? 15 : 15; // mobile 13 (mais aberto), desktop mantém 15
+    const desiredZoom = isMobile ? 15 : 15;
     const coords = GEO[key];
     if(!coords){ alert('Localização indisponível.'); return; }
 
@@ -1489,7 +1439,7 @@ window.showPicksToday = function(){
     modal.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow='hidden';
 
-    setTimeout(()=>{ // garante que o container já está visível
+    setTimeout(()=>{
       if(!map){
         map = L.map('map', { zoomControl: true, attributionControl: true });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1497,23 +1447,22 @@ window.showPicksToday = function(){
           attribution: '&copy; OpenStreetMap'
         }).addTo(map);
       }
-      map.setView(coords, desiredZoom); // zoom aproximado de bairro
+      map.setView(coords, desiredZoom);
 
       if(circle){ circle.remove(); }
       circle = L.circle(coords, {
-        radius: 500,          // 500 metros = estilo Airbnb
+        radius: 500,
         color: '#2b7',
         fillColor: '#2b7',
         fillOpacity: 0.12,
         weight: 2
       }).addTo(map);
 
-      // Ajusta o mapa para caber o círculo com folga
       map.fitBounds(circle.getBounds(), {
-  padding: [24, 24],
-  ...(isMobile ? { maxZoom: desiredZoom } : {})
-});
-      map.invalidateSize(); // corrige dimensionamento em modal
+        padding: [24, 24],
+        ...(isMobile ? { maxZoom: desiredZoom } : {})
+      });
+      map.invalidateSize();
     }, 50);
   }
 
@@ -1525,14 +1474,13 @@ window.showPicksToday = function(){
 
   btnX.addEventListener('click', closeMap);
   modal.addEventListener('click', (e)=>{
-    if(e.target === modal) closeMap(); // clique fora fecha
+    if(e.target === modal) closeMap();
   });
   window.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeMap();
   });
 })();
 </script>
-<!-- ====== /MAPA ====== -->
 
   <!-- Botão flutuante: Voltar ao topo -->
 <button id="toTop" class="to-top" title="Voltar ao topo" aria-label="Voltar ao topo" type="button">↑</button>
@@ -1543,7 +1491,7 @@ window.showPicksToday = function(){
     if(!btn) return;
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const showAt = 240; // px de rolagem para exibir o botão
+    const showAt = 240;
 
     function onScroll(){
       const y = window.pageYOffset || document.documentElement.scrollTop;
@@ -1567,15 +1515,13 @@ window.showPicksToday = function(){
 
 <script>
 (function(){
-  // Util: monta URL absoluta com hash
   function makeUrl(hash){
     const base = location.origin + location.pathname;
     return base.replace(/#.*$/,'') + hash;
   }
-  // Util: tenta compartilhar nativamente; fallback: copia
   async function shareOrCopy({title, text, url, button}){
     if(navigator.share){
-      try{ await navigator.share({title, text, url}); return true; }catch(e){ /* cancelado */ }
+      try{ await navigator.share({title, text, url}); return true; }catch(e){}
     }
     try{
       await navigator.clipboard.writeText(url);
@@ -1592,9 +1538,8 @@ window.showPicksToday = function(){
     }
   }
 
-  /* === 2.1) Botão "Compartilhar" em cada CARD === */
   document.querySelectorAll('article.card[id]').forEach(card=>{
-    const actionsRow = card.querySelector('.content p'); // mesma linha dos botões
+    const actionsRow = card.querySelector('.content p');
     if(!actionsRow) return;
     if(actionsRow.querySelector('.share-btn')) return;
 
@@ -1606,19 +1551,17 @@ window.showPicksToday = function(){
     shareBtn.setAttribute('title', 'Compartilhar este imóvel');
 
     shareBtn.addEventListener('click', ()=>{
-    const id    = '#' + card.id;
-    const url   = location.origin + location.pathname + '?solo=1' + id;
-    const title = (card.querySelector('h3')?.textContent || 'Imóvel') + ' – Cinaldo Imóveis';
-    const price = (card.querySelector('.price')?.textContent || '').trim();
-    const text  = price ? `${price}` : 'Veja este imóvel';
-    shareOrCopy({ title, text, url, button: shareBtn });
-  });
-
+      const id    = '#' + card.id;
+      const url   = location.origin + location.pathname + '?solo=1' + id;
+      const title = (card.querySelector('h3')?.textContent || 'Imóvel') + ' – Cinaldo Imóveis';
+      const price = (card.querySelector('.price')?.textContent || '').trim();
+      const text  = price ? `${price}` : 'Veja este imóvel';
+      shareOrCopy({ title, text, url, button: shareBtn });
+    });
 
     actionsRow.appendChild(shareBtn);
   });
 
-  /* === 2.2) Botão "Compartilhar categoria" na BARRA DE FILTROS === */
   const bar = document.getElementById('filters');
   if(bar && !bar.querySelector('.share-cat')){
     const btnCat = document.createElement('button');
@@ -1641,27 +1584,22 @@ window.showPicksToday = function(){
     bar.appendChild(btnCat);
   }
 
-          /* === 3) Modo solo (robusto): ?solo=1#<id> mostra apenas o imóvel e rola compensando header === */
   (function activateSoloMode(){
     const qs = new URLSearchParams(location.search);
     if(qs.get('solo') !== '1' || !location.hash) return;
 
     const targetId = location.hash.slice(1);
-        const targetEl = document.getElementById(targetId);
+    const targetEl = document.getElementById(targetId);
     if(!targetEl) return;
 
-    // ativa o modo solo no <body> (habilita o CSS "body.solo …")
     document.body.classList.add('solo');
 
-    // 1) Esconde todos os outros cards, mantendo apenas o alvo visível
     const allCards = Array.from(document.querySelectorAll('#imoveis .grid .card'));
     allCards.forEach(card => { card.hidden = (card !== targetEl); });
 
-    // 2) Esconde a barra de filtros (para deixar “modo imóvel” mais limpo)
     const filtersBar = document.getElementById('filters');
     if(filtersBar) filtersBar.style.display = 'none';
 
-    // 3) Adiciona o botão “← Ver todos os imóveis” se ainda não existir
     const container = document.querySelector('#imoveis .container');
     const title = container?.querySelector('h2');
     if(container && title && !document.getElementById('exit-solo')){
@@ -1670,95 +1608,45 @@ window.showPicksToday = function(){
       exit.className = 'btn';
       exit.href = location.pathname + '#imoveis';
       exit.textContent = '← Ver todos os imóveis';
-      // 👉 clique volta ao modo normal e restaura todos os cards
       exit.addEventListener('click', ev=>{
         ev.preventDefault();
         history.replaceState(null, '', location.pathname + '#imoveis');
         document.body.classList.remove('solo');
         if(filtersBar) filtersBar.style.display = '';
         allCards.forEach(c=>c.hidden=false);
-        if(typeof smartScrollToWithRetries==='function'){
-          smartScrollToWithRetries(container);
-        }else{
-          container.scrollIntoView({behavior:'smooth', block:'start'});
-        }
+        container.scrollIntoView({behavior:'smooth', block:'start'});
+        // remove o botão ao voltar
+        const me = document.getElementById('exit-solo');
+        if (me) me.remove();
       });
       title.insertAdjacentElement('afterend', exit);
     }
 
-    // Opcional: após preparar a seção, “congela” a URL em #imoveis para evitar re-rolagens pelo hash
     setTimeout(()=>{
       history.replaceState(null, '', location.pathname + '?solo=1#imoveis');
     }, 20);
 
-
-    // 4) Em modo solo: rola até a SEÇÃO de imóveis (mostra título + botão completamente)
     const anchorEl =
       document.querySelector('#imoveis .container') ||
       document.getElementById('imoveis') ||
       targetEl;
 
-    smartScrollToWithRetries(anchorEl);
-  })(); // fecha o activateSoloMode()
+    const top = window.pageYOffset + anchorEl.getBoundingClientRect().top - ((document.querySelector('header')?.offsetHeight||72)+12);
+    window.scrollTo({ top, behavior:'auto' });
+  })();
 
-  /* === Funções de rolagem com compensação de cabeçalho e re-tentativas === */
-  function getHeaderOffset(){
-    const h = document.querySelector('header');
-    let extra = 12; // respiro padrão abaixo do cabeçalho
-
-    // Em modo solo, some também a altura do botão "← Ver todos os imóveis"
-    if (new URLSearchParams(location.search).get('solo') === '1') {
-      const exit = document.getElementById('exit-solo');
-      if (exit) {
-        const cs = getComputedStyle(exit);
-        const exitH =
-          exit.offsetHeight +
-          parseFloat(cs.marginTop || 0) +
-          parseFloat(cs.marginBottom || 0);
-        extra += exitH + 8; // folga extra para o botão não ficar coberto
-      }
-    }
-
-    return (h?.offsetHeight || 72) + extra;
-  }
-
-  function scrollToElOnce(el, behavior = 'auto'){
-    const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
-    window.scrollTo({ top, behavior });
-  }
-
-  function smartScrollToWithRetries(el){
-    // 1) salto imediato (sem animação) pro posicionamento base
-    scrollToElOnce(el, 'auto');
-
-    // 2) re-tentativas para quando imagens e fontes mudam o layout
-    const delays = [60, 250, 700, 1400];
-    delays.forEach(d=>{
-      setTimeout(()=> scrollToElOnce(el, 'auto'), d);
-    });
-
-    // 3) se o card tiver imagens, rola novamente quando cada uma terminar de carregar
-    el.querySelectorAll('img').forEach(img=>{
-      if(img.complete) return;     // já carregou
-      img.addEventListener('load', ()=> scrollToElOnce(el, 'auto'), { once:true });
-    });
-  }
-
-    /* Reforço: hash normal (sem ?solo=1) também compensa o header e re-tenta */
   const isSolo = () => new URLSearchParams(location.search).get('solo') === '1';
 
   function scrollToHashSmart(){
-    // Em modo solo, NÃO faça a rolagem automática para o hash (evita conflito)
     if (isSolo()) return;
-
     if(!location.hash) return;
     const el = document.querySelector(location.hash);
     if(!el) return;
-    smartScrollToWithRetries(el);
+    const top = window.pageYOffset + el.getBoundingClientRect().top - ((document.querySelector('header')?.offsetHeight||72)+12);
+    window.scrollTo({ top, behavior:'auto' });
   }
   window.addEventListener('hashchange', scrollToHashSmart, { passive: true });
   window.addEventListener('load', scrollToHashSmart, { passive: true });
-
 
 })();
 </script>
