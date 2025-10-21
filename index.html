@@ -1044,6 +1044,86 @@ box.style.opacity = '0'; box.style.transform = 'translateY(4px)';
 })();
 </script>
 
+  <script>
+(function(){
+  // botão na hero
+  const btn     = document.getElementById('btn-destaques');
+  const section = document.getElementById('imoveis');
+  const grid    = section?.querySelector('.grid');
+  const box     = document.getElementById('mini-highlights'); // tem data-picks
+  const bar     = document.getElementById('filters');
+
+  if(!btn || !grid || !box) return;
+
+  function resetToAll(){
+    const cards = Array.from(grid.querySelectorAll('.card[id]'));
+    cards.forEach(c => c.hidden = false);
+
+    if(bar){
+      // ativa “Todos”
+      const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
+      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+      if(allBtn) allBtn.classList.add('is-active');
+      // remove o chip
+      const chip = document.getElementById('chip-hoje');
+      if(chip) chip.remove();
+    }
+
+    // rola de volta para a seção
+    const anchor = section.querySelector('.container') || section;
+    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }
+
+  function showPicks(){
+    const picksAttr = box.dataset.picks || '';
+    const picks = picksAttr.split(',').map(s=>s.trim()).filter(Boolean);
+
+    const anchor = section.querySelector('.container') || section;
+
+    if(!picks.length){
+      if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+      else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+      return;
+    }
+
+    // mostra só os 3 destaques
+    const cards = Array.from(grid.querySelectorAll('.card[id]'));
+    cards.forEach(c => { c.hidden = !picks.includes(c.id); });
+
+    // adiciona o chip “⭐ Destaques de hoje” que volta a ver todos
+    if(bar && !document.getElementById('chip-hoje')){
+      const chip = document.createElement('button');
+      chip.id = 'chip-hoje';
+      chip.type = 'button';
+      chip.className = 'fbtn is-active';
+      chip.innerHTML = '⭐ Destaques de hoje';
+      chip.title = 'Voltar a ver todos os imóveis';
+      chip.setAttribute('aria-label', 'Voltar a ver todos os imóveis');
+      chip.addEventListener('click', resetToAll);
+
+      // deixa o chip ativo e desmarca os outros
+      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+      bar.insertAdjacentElement('afterbegin', chip);
+      chip.classList.add('is-active');
+    }else if(bar){
+      const chip = document.getElementById('chip-hoje');
+      bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+      if(chip) chip.classList.add('is-active');
+    }
+
+    // rola até a seção
+    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }
+
+  // clique no botão “Destaques de hoje”
+  btn.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+    showPicks();
+  });
+})();
+</script>
 
   <!-- Galeria: grade empilhada + visor com zoom (mobile e desktop) -->
   <script>
