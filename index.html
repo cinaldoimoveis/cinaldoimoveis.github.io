@@ -1294,14 +1294,15 @@
 
   <style id="share-style">
   .share-btn{
-    display:inline-flex; align-items:center; gap:6px;
-    padding:.60rem .9rem; border:1px solid var(--line); border-radius:.5rem;
-    background:#fff; font-weight:600; cursor:pointer;
-    transition:.18s ease; box-shadow:0 1px 0 rgba(0,0,0,.04);
+    display:inline-grid; place-items:center;
+    width:36px; height:36px; padding:0;
+    border:1px solid var(--line); border-radius:.5rem;
+    background:#fff; font-weight:700; font-size:18px; line-height:1;
+    cursor:pointer; transition:.18s ease; box-shadow:0 1px 0 rgba(0,0,0,.04);
   }
   .share-btn:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.10); }
   .share-btn:disabled{ opacity:.55; cursor:not-allowed; }
-  .filters .share-cat{ margin-left:auto; }
+  .filters .share-cat{ margin-left:auto; } /* botão de compartilhar categoria (texto pode ficar) */
 </style>
 
 <!-- Modal do mapa -->
@@ -1494,16 +1495,19 @@
     const shareBtn = document.createElement('button');
     shareBtn.type = 'button';
     shareBtn.className = 'share-btn';
-    shareBtn.textContent = 'Compartilhar';
+    shareBtn.textContent = '📤';
+    shareBtn.setAttribute('aria-label', 'Compartilhar este imóvel');
+    shareBtn.setAttribute('title', 'Compartilhar este imóvel');
 
     shareBtn.addEventListener('click', ()=>{
-      const id    = '#' + card.id;
-      const url   = makeUrl(id);
-      const title = (card.querySelector('h3')?.textContent || 'Imóvel') + ' – Cinaldo Imóveis';
-      const price = (card.querySelector('.price')?.textContent || '').trim();
-      const text  = price ? `${price}` : 'Veja este imóvel';
-      shareOrCopy({ title, text, url, button: shareBtn });
-    });
+    const id    = '#' + card.id;
+    const url   = location.origin + location.pathname + '?solo=1' + id;
+    const title = (card.querySelector('h3')?.textContent || 'Imóvel') + ' – Cinaldo Imóveis';
+    const price = (card.querySelector('.price')?.textContent || '').trim();
+    const text  = price ? `${price}` : 'Veja este imóvel';
+    shareOrCopy({ title, text, url, button: shareBtn });
+  });
+
 
     actionsRow.appendChild(shareBtn);
   });
@@ -1514,7 +1518,9 @@
     const btnCat = document.createElement('button');
     btnCat.type = 'button';
     btnCat.className = 'fbtn share-cat';
-    btnCat.textContent = 'Compartilhar categoria';
+    btnCat.textContent = '📤';
+    btnCat.setAttribute('aria-label', 'Compartilhar esta categoria');
+    btnCat.setAttribute('title', 'Compartilhar esta categoria');
 
     btnCat.addEventListener('click', ()=>{
       const active = bar.querySelector('.fbtn.is-active');
@@ -1528,6 +1534,43 @@
 
     bar.appendChild(btnCat);
   }
+
+    /* === 3) Modo solo: ?solo=1#<id> mostra apenas o imóvel alvo === */
+  (function activateSoloMode(){
+    const qs = new URLSearchParams(location.search);
+    if(qs.get('solo') !== '1' || !location.hash) return;
+
+    const targetId = location.hash.slice(1);
+    const targetEl = document.getElementById(targetId);
+    if(!targetEl) return;
+
+    // esconde outros cards
+    const allCards = Array.from(document.querySelectorAll('#imoveis .grid .card'));
+    allCards.forEach(card => { card.hidden = (card !== targetEl); });
+
+    // esconde barra de filtros (opcional; fica mais “limpo”)
+    const bar = document.getElementById('filters');
+    if(bar) bar.style.display = 'none';
+
+    // adiciona um botão "ver todos" logo após o título
+    const container = document.querySelector('#imoveis .container');
+    const title = container?.querySelector('h2');
+    if(container && title && !document.getElementById('exit-solo')){
+      const exit = document.createElement('a');
+      exit.id = 'exit-solo';
+      exit.className = 'btn';
+      exit.href = location.pathname + '#imoveis'; // remove ?solo=1
+      exit.textContent = '← Ver todos os imóveis';
+      title.insertAdjacentElement('afterend', exit);
+    }
+
+    // rola até a seção
+    const section = document.getElementById('imoveis');
+    if(section){
+      requestAnimationFrame(()=> section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
+  })();
+
 })();
 </script>
 
