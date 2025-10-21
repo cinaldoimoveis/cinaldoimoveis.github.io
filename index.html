@@ -1292,6 +1292,17 @@
   }
 </style>
 
+  <style id="share-style">
+  .share-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:.60rem .9rem; border:1px solid var(--line); border-radius:.5rem;
+    background:#fff; font-weight:600; cursor:pointer;
+    transition:.18s ease; box-shadow:0 1px 0 rgba(0,0,0,.04);
+  }
+  .share-btn:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.10); }
+  .share-btn:disabled{ opacity:.55; cursor:not-allowed; }
+  .filters .share-cat{ margin-left:auto; }
+</style>
 
 <!-- Modal do mapa -->
 <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
