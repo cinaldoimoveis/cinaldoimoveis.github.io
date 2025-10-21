@@ -1596,6 +1596,54 @@ window.showPicksToday = function(){
     bar.appendChild(btnCat);
   }
 
+    <!-- === Helpers de rolagem com compensação de header e re-tentativas === -->
+  <script>
+  // calcula a altura a compensar (header + folgas + botão "← Ver todos os imóveis" no modo solo)
+  function getHeaderOffset(){
+    const h = document.querySelector('header');
+    let extra = 12; // respiro padrão
+
+    // em modo solo, reserve espaço extra para título + botão
+    const isSolo = new URLSearchParams(location.search).get('solo') === '1';
+    if (isSolo) extra += 56;
+
+    // se o botão já existe, some a altura real dele
+    const exit = document.getElementById('exit-solo');
+    if (isSolo && exit) {
+      const cs = getComputedStyle(exit);
+      const exitH =
+        exit.offsetHeight +
+        parseFloat(cs.marginTop || 0) +
+        parseFloat(cs.marginBottom || 0);
+      extra += exitH + 8;
+    }
+    return (h?.offsetHeight || 72) + extra;
+  }
+
+  // rola uma única vez até o elemento, compensando o header
+  function scrollToElOnce(el, behavior = 'auto'){
+    const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
+    window.scrollTo({ top, behavior });
+  }
+
+  // rolagem “inteligente”: tenta de novo após reflow de imagens/fontes
+  function smartScrollToWithRetries(el){
+    // 1) salto imediato
+    scrollToElOnce(el, 'auto');
+
+    // 2) re-tentativas (layout assentando)
+    const delays = [60, 250, 700, 1400];
+    delays.forEach(d=> setTimeout(()=> scrollToElOnce(el, 'auto'), d));
+
+    // 3) re-rolar quando imagens terminarem de carregar
+    el.querySelectorAll('img').forEach(img=>{
+      if(img.complete) return;
+      img.addEventListener('load', ()=> scrollToElOnce(el, 'auto'), { once:true });
+    });
+  }
+  </script>
+
+
   (function activateSoloMode(){
     const qs = new URLSearchParams(location.search);
     if(qs.get('solo') !== '1' || !location.hash) return;
@@ -1639,24 +1687,24 @@ window.showPicksToday = function(){
     }, 20);
 
     const anchorEl =
-      document.querySelector('#imoveis .container') ||
-      document.getElementById('imoveis') ||
-      targetEl;
+  document.querySelector('#imoveis .container') ||
+  document.getElementById('imoveis') ||
+  targetEl;
 
-    const top = window.pageYOffset + anchorEl.getBoundingClientRect().top - ((document.querySelector('header')?.offsetHeight||72)+12);
-    window.scrollTo({ top, behavior:'auto' });
+// rolagem inteligente (compensa header e re-tenta após imagens)
+smartScrollToWithRetries(anchorEl);
   })();
 
   const isSolo = () => new URLSearchParams(location.search).get('solo') === '1';
 
   function scrollToHashSmart(){
-    if (isSolo()) return;
-    if(!location.hash) return;
-    const el = document.querySelector(location.hash);
-    if(!el) return;
-    const top = window.pageYOffset + el.getBoundingClientRect().top - ((document.querySelector('header')?.offsetHeight||72)+12);
-    window.scrollTo({ top, behavior:'auto' });
-  }
+  if (isSolo()) return;
+  if(!location.hash) return;
+  const el = document.querySelector(location.hash);
+  if(!el) return;
+  smartScrollToWithRetries(el);
+}
+
   window.addEventListener('hashchange', scrollToHashSmart, { passive: true });
   window.addEventListener('load', scrollToHashSmart, { passive: true });
 
