@@ -1328,47 +1328,44 @@ window.showPicksToday = function(){
   }
   #map{ width:100%; height:100%; }
 
-  /* ======= BLOCO .btn-map COM ESPAÇAMENTO EQUILIBRADO ======= */
+  /* ======= BLOCO .btn-wrap + .btn-map (ESPAÇAMENTO VIA CONTAINER) ======= */
+.btn-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0 0 6px; /* 10px abaixo das pílulas; 6px mantém seu recuo lateral */
+}
+
+.btn-map{
+  display:inline-block;
+  padding:.60rem .9rem;
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  background:#fff;
+  cursor:pointer;
+  font-weight:600;
+  line-height:1.2;
+  margin:0; /* <— sem margem própria; o wrap controla o espaçamento */
+}
+
+.btn-map:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+
+/* mantém 10px de distância entre o grupo de botões e o preço */
+.content .btn-wrap + .price{
+  margin-top:10px;
+}
+
+/* mobile: leve ajuste de altura visual */
+@media (max-width:640px){
   .btn-map{
-    display:inline-block;
-    padding:.60rem .9rem;
-    border:1px solid var(--line);
-    border-radius:.5rem;
-    background:#fff;
-    cursor:pointer;
-    font-weight:600;
-
-    /* distância proporcional entre pílulas e preço */
-    margin:10px 0 0 6px;
-    line-height:1.2;
+    font-size:13px;
+    padding:.45rem .75rem;
   }
+}
 
-  .btn-map:hover{
-    transform:translateY(-1px);
-    box-shadow:0 4px 10px rgba(0,0,0,.08);
-  }
-
-  /* garante 10px entre o botão e o preço quando ele vem antes do preço */
-  .content .btn-map + .price{
-    margin-top:10px;
-  }
-
-  /* leve ajuste em telas pequenas */
-  @media (max-width:640px){
-    .btn-map{
-      font-size:13px;
-      padding:.45rem .75rem;
-      margin-top:8px;
-    }
-  }
-
-  /* ===== CSS COMPLEMENTAR NOVO ===== */
-  .btn-wrap{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin:10px 0 0 6px;
-  }
 
   .btn-share{
     display:inline-block;
@@ -1481,8 +1478,16 @@ window.showPicksToday = function(){
 
       const priceEl = card.querySelector('.content .price');
 
-  // botão do mapa
-  const bMap = document.createElement('button');
+// garante um único contêiner
+let btnWrap = card.querySelector('.btn-wrap');
+if (!btnWrap) {
+  btnWrap = document.createElement('div');
+  btnWrap.className = 'btn-wrap';
+}
+
+let bMap = btnWrap.querySelector('.btn-map');
+if (!bMap) {
+  bMap = document.createElement('button');
   bMap.className = 'btn-map';
   bMap.type = 'button';
   bMap.textContent = '📍 Ver localização aproximada';
@@ -1490,38 +1495,35 @@ window.showPicksToday = function(){
     const key = card.getAttribute('data-geo');
     openMap(key);
   });
+  btnWrap.appendChild(bMap);
+}
 
-  // botão de compartilhamento
-  const bShare = document.createElement('button');
-  bShare.className = 'btn-share';
-  bShare.type = 'button';
-  bShare.textContent = '🔗 Compartilhar';
-  bShare.addEventListener('click', ()=>{
-    const url = window.location.href.split('#')[0];
-    const cardTitle = card.querySelector('h3')?.textContent?.trim() || 'Imóvel em destaque';
-    const shareText = `Veja este imóvel: ${cardTitle}\n${url}`;
-    
-    if (navigator.share) {
-      navigator.share({ title: cardTitle, text: shareText, url })
-        .catch(()=>{}); // evita erros se o usuário cancelar
-    } else {
-      navigator.clipboard.writeText(shareText).then(()=>{
-        alert('Link copiado para a área de transferência!');
-      });
+// tenta pegar o .share-btn existente
+let shareBtn = card.querySelector('.share-btn');
+if (shareBtn && shareBtn.parentElement !== btnWrap) {
+  btnWrap.appendChild(shareBtn);
+}
+
+// posiciona o contêiner antes do preço
+if (priceEl && priceEl.parentElement) {
+  if (btnWrap.parentElement !== priceEl.parentElement || btnWrap.nextElementSibling !== priceEl) {
+    priceEl.parentElement.insertBefore(btnWrap, priceEl);
+  }
+} else {
+  (card.querySelector('.content p') || card.querySelector('.content') || card).appendChild(btnWrap);
+}
+
+// se o .share-btn ainda não existe, observa o card e move quando aparecer
+if (!shareBtn) {
+  const mo = new MutationObserver(()=>{
+    const s = card.querySelector('.share-btn');
+    if (s) {
+      if (s.parentElement !== btnWrap) btnWrap.appendChild(s);
+      mo.disconnect();
     }
   });
-
-  // container para alinhar os dois botões lado a lado
-  const btnWrap = document.createElement('div');
-  btnWrap.className = 'btn-wrap';
-  btnWrap.appendChild(bMap);
-  btnWrap.appendChild(bShare);
-
-  if(priceEl && priceEl.parentElement){
-    priceEl.parentElement.insertBefore(btnWrap, priceEl); // insere antes do preço
-  } else {
-    wrapP.appendChild(btnWrap); // fallback
-  }
+  mo.observe(card, { childList:true, subtree:true });
+}
 });
 
 
