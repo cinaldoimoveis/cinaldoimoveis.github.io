@@ -1457,17 +1457,17 @@ window.showPicksToday = function(){
   /* altura do header + respiro extra calibrado para desktop e mobile */
   :root{
     --header-h: 72px;
-    --scroll-extra: 24px;   /* desktop: um pouco maior p/ evitar corte */
+    --scroll-extra: 24px;   /* desktop base */
   }
 
   @media (max-width:900px){
     :root{
       --header-h: 64px;
-      --scroll-extra: 44px; /* mobile: garante H2 + chips 100% visíveis */
+      --scroll-extra: 44px; /* mobile base */
     }
   }
 
-  /* aplica o offset em todos os alvos de ancoragem relevantes */
+  /* aplica o offset padrão aos alvos de ancoragem */
   #imoveis,
   #imoveis .container,
   #imoveis .filters,
@@ -1477,7 +1477,20 @@ window.showPicksToday = function(){
   article.card[id]{
     scroll-margin-top: calc(var(--header-h) + var(--scroll-extra));
   }
+
+  /* empurra SÓ o H2 um pouquinho a mais (esconde a linha de cima sem cortar o título) */
+  #imoveis .container > h2{
+    /* desktop: +8px além do padrão */
+    scroll-margin-top: calc(var(--header-h) + var(--scroll-extra) + 8px);
+  }
+  @media (max-width:900px){
+    #imoveis .container > h2{
+      /* mobile: +12px além do padrão (um pouco mais por causa do zoom/teclagem) */
+      scroll-margin-top: calc(var(--header-h) + var(--scroll-extra) + 12px);
+    }
+  }
 </style>
+
 
 
   <style id="solo-cosmetics">
