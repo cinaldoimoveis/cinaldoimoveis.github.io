@@ -1440,9 +1440,17 @@ window.showPicksToday = function(){
   :root{ --header-h: 72px; }
   @media (max-width:900px){ :root{ --header-h: 64px; } }
 
-  #imoveis, #sobre, #contato,
-  article.card[id]{ scroll-margin-top: calc(var(--header-h) + 12px); }
+  /* adiciona offset também no .container e na barra de filtros */
+  #imoveis,
+  #imoveis .container,
+  #imoveis .filters,
+  #sobre,
+  #contato,
+  article.card[id]{
+    scroll-margin-top: calc(var(--header-h) + 20px);
+  }
 </style>
+
 
   <style id="solo-cosmetics">
   body.solo .hero{ display: none !important; }
