@@ -1332,8 +1332,9 @@ window.showPicksToday = function(){
 .btn-wrap{
   display:flex;
   flex-wrap:wrap;
+  align-items:center;      /* alinha verticalmente o ícone do share com o 📍 */
   gap:8px;
-  margin:10px 0 0 6px; /* 10px abaixo das pílulas; 6px mantém seu recuo lateral */
+  margin:10px 0 0 6px;     /* 10px abaixo das pílulas; 6px de recuo lateral */
 }
 
 .btn-map{
@@ -1345,7 +1346,7 @@ window.showPicksToday = function(){
   cursor:pointer;
   font-weight:600;
   line-height:1.2;
-  margin:0; /* <— sem margem própria; o wrap controla o espaçamento */
+  margin:0;                /* o wrap controla espaçamento */
 }
 
 .btn-map:hover{
@@ -1358,7 +1359,7 @@ window.showPicksToday = function(){
   margin-top:10px;
 }
 
-/* mobile: leve ajuste de altura visual */
+/* MOBILE (mantém como já estava — perfeito) */
 @media (max-width:640px){
   .btn-map{
     font-size:13px;
@@ -1366,26 +1367,37 @@ window.showPicksToday = function(){
   }
 }
 
+/* DESKTOP “semelhante ao mobile”: compacto e sem largura mínima */
+@media (min-width:641px){
+  /* 📍 deixa o mapa com o mesmo “feel” do mobile */
+  .btn-map{
+    font-size:14px;         /* levemente maior que mobile */
+    padding:.45rem .75rem;  /* mesmo padding do mobile */
+    height:auto;            /* sem altura fixa */
+    min-width: unset;       /* remove largura mínima */
+  }
 
-  /* ===== AJUSTE VISUAL DOS BOTÕES (DESKTOP) ===== */
-@media (min-width: 641px) {
-  .btn-map,
-  .btn-wrap .share-btn {
-    /* altura aproximada das pílulas; ajuste se quiser 36/40px exatos */
-    padding: 6px 14px;
-    font-size: 14px;
-    line-height: 1.2;
-    height: 38px;
-
-    /* alinhamento e aparência uniforme */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    /* opcional: parear largura mínima dos dois botões */
-    min-width: 150px;
+  /* 📤 share compacto só-ícone, quadradinho ao lado do 📍 */
+  .btn-wrap .share-btn{
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--line);
+    border-radius:.5rem;
+    background:#fff;
+    cursor:pointer;
+    line-height:1;          /* centraliza melhor o glifo */
+    font-size:18px;         /* deixa o ícone legível no quadrado */
+  }
+  .btn-wrap .share-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
   }
 }
+
 </style>
 
 
