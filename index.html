@@ -828,25 +828,33 @@
   <p>Sou o <strong>Cinaldo O Ferreira</strong>, corretor de imóveis em Linhares – ES. Trabalho com foco total em segurança, clareza e atendimento direto.</p></div></section>
 
   <section id="contato"><div class="container"><h2 class="title">Contato</h2>
-<p>📲 <strong>WhatsApp:</strong> 
+<!-- Contato -->
+<p class="contato-item">
+  📲 <strong>WhatsApp:</strong> 
   <a href="https://wa.me/5527999567000" target="_blank" rel="noopener">(27) 99956-7000</a>
 </p>
 
-<!-- Instagram + QR -->
-<p>📸 <strong>Instagram:</strong>
+<p class="contato-item">
+  📸 <strong>Instagram:</strong>
   <a href="https://www.instagram.com/cinaldo_imoveis" target="_blank" rel="noopener" class="ig-handle">
     @cinaldo_imoveis
   </a>
 </p>
 
-<div class="ig-qr" aria-label="QR code do Instagram @cinaldo_imoveis">
+<div class="ig-qr contato-item" aria-label="QR code do Instagram @cinaldo_imoveis">
   <img src="assets/qr-instagram.jpeg" alt="QR do Instagram @cinaldo_imoveis" loading="lazy">
   <div>
     <div style="font-weight:700; margin-bottom:4px;">Siga no Instagram</div>
     <small>Aponte a câmera do celular para o QR para abrir o perfil.</small>
   </div>
 </div>
-  <p>✉️ <strong>E-mail:</strong> <a href="mailto:cinaldo@cinaldoimoveis.com.br">cinaldo@cinaldoimoveis.com.br</a></p></div></section>
+
+<p class="contato-item">
+  ✉️ <strong>E-mail:</strong>
+  <a href="mailto:cinaldo@cinaldoimoveis.com.br">cinaldo@cinaldoimoveis.com.br</a>
+</p>
+</div></section>
+
 
   <footer><div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap"><div>© <span id="y"></span> Cinaldo Imóveis • Linhares – ES</div><div style="color:#777">CRECI 8356-F</div></div></footer>
 
@@ -1335,19 +1343,34 @@ window.showPicksToday = function(){
 <!-- destaque azul-bic no @cinaldo_imoveis -->
 <style>
   .ig-handle{
-    color:#0033cc;              /* azul-bic clássico */
+    color:#0033cc;
     font-weight:600;
     text-decoration:none;
     transition:color .2s ease;
   }
   .ig-handle:hover{
-    color:#0026a3;              /* tom mais escuro no hover */
-    text-decoration:underline;  /* opcional */
+    color:#0026a3;
+    text-decoration:underline;
+  }
+</style>
+
+<!-- espaçamento uniforme entre os itens de contato -->
+<style>
+  .contato-item{
+    margin:14px 0;
+    line-height:1.6;
+  }
+  .contato-item:first-child{ margin-top:0; }
+  .contato-item:last-child{  margin-bottom:0; }
+
+  @media (max-width:640px){
+    .contato-item{ margin:12px 0; }
   }
 </style>
 
 <!-- ====== MAPA: Modal + Estilos + Script ====== -->
 <style>
+
   .map-modal[hidden]{display:none}
   .map-modal{
     position:fixed; inset:0; z-index:2500;
