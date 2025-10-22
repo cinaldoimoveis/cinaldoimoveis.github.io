@@ -1025,10 +1025,21 @@ window.showPicksToday = function(){
   const picks = picksAttr.split(',').map(s=>s.trim()).filter(Boolean);
   const cards = Array.from(grid.querySelectorAll('.card[id]'));
 
+  // alvo preferencial da rolagem: H2; fallback container; fallback seção
+  const anchor =
+    section.querySelector('.container > h2') ||
+    section.querySelector('.container') ||
+    section;
+
   if(!picks.length){
-    const anchor = section.querySelector('.container') || section;
-    if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-    else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+    if(typeof smartScrollToWithRetries === 'function'){
+      smartScrollToWithRetries(anchor);
+    } else if (typeof getHeaderOffset === 'function') {
+      const top = window.pageYOffset + anchor.getBoundingClientRect().top - getHeaderOffset(anchor);
+      window.scrollTo({ top, behavior: 'smooth' });
+    } else {
+      anchor.scrollIntoView({behavior:'smooth', block:'start'});
+    }
     return;
   }
 
@@ -1042,11 +1053,17 @@ window.showPicksToday = function(){
     if(allBtn) allBtn.classList.add('is-active');
   }
 
-  // rola até a seção
-  const anchor = section.querySelector('.container') || section;
-  if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-  else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+  // rola até o H2/contêiner com compensação de header (mobile/desktop)
+  if(typeof smartScrollToWithRetries === 'function'){
+    smartScrollToWithRetries(anchor);
+  } else if (typeof getHeaderOffset === 'function') {
+    const top = window.pageYOffset + anchor.getBoundingClientRect().top - getHeaderOffset(anchor);
+    window.scrollTo({ top, behavior: 'smooth' });
+  } else {
+    anchor.scrollIntoView({behavior:'smooth', block:'start'});
+  }
 };
+
 
 /* Botão da hero (“Destaques de hoje”) usa a função acima */
 (function(){
@@ -1437,17 +1454,28 @@ window.showPicksToday = function(){
 </style>
 
   <style id="anchor-offset">
-  :root{ --header-h: 72px; }
-  @media (max-width:900px){ :root{ --header-h: 64px; } }
+  /* altura do header + respiro extra calibrado para desktop e mobile */
+  :root{
+    --header-h: 72px;
+    --scroll-extra: 24px;   /* desktop: um pouco maior p/ evitar corte */
+  }
 
-  /* adiciona offset também no .container e na barra de filtros */
+  @media (max-width:900px){
+    :root{
+      --header-h: 64px;
+      --scroll-extra: 44px; /* mobile: garante H2 + chips 100% visíveis */
+    }
+  }
+
+  /* aplica o offset em todos os alvos de ancoragem relevantes */
   #imoveis,
   #imoveis .container,
   #imoveis .filters,
+  #imoveis .container > h2,
   #sobre,
   #contato,
   article.card[id]{
-    scroll-margin-top: calc(var(--header-h) + 20px);
+    scroll-margin-top: calc(var(--header-h) + var(--scroll-extra));
   }
 </style>
 
