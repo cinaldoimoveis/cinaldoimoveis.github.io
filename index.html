@@ -1367,22 +1367,27 @@ window.showPicksToday = function(){
 }
 
 
-  .btn-share{
-    display:inline-block;
-    padding:.60rem .9rem;
-    border:1px solid var(--line);
-    border-radius:.5rem;
-    background:#fff;
-    cursor:pointer;
-    font-weight:600;
-    line-height:1.2;
-  }
+  /* ===== AJUSTE VISUAL DOS BOTÕES (DESKTOP) ===== */
+@media (min-width: 641px) {
+  .btn-map,
+  .btn-wrap .share-btn {
+    /* altura aproximada das pílulas; ajuste se quiser 36/40px exatos */
+    padding: 6px 14px;
+    font-size: 14px;
+    line-height: 1.2;
+    height: 38px;
 
-  .btn-share:hover{
-    transform:translateY(-1px);
-    box-shadow:0 4px 10px rgba(0,0,0,.08);
+    /* alinhamento e aparência uniforme */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    /* opcional: parear largura mínima dos dois botões */
+    min-width: 150px;
   }
+}
 </style>
+
 
   <style id="to-top-style">
   .to-top{
