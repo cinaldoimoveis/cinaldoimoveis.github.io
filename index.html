@@ -1327,7 +1327,8 @@ window.showPicksToday = function(){
     background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
   }
   #map{ width:100%; height:100%; }
-    /* ======= BLOCO NOVO .btn-map COM ESPAÇAMENTO EQUILIBRADO ======= */
+
+  /* ======= BLOCO .btn-map COM ESPAÇAMENTO EQUILIBRADO ======= */
   .btn-map{
     display:inline-block;
     padding:.60rem .9rem;
@@ -1360,8 +1361,30 @@ window.showPicksToday = function(){
       margin-top:8px;
     }
   }
-  /* ======= FIM DO BLOCO NOVO ======= */
 
+  /* ===== CSS COMPLEMENTAR NOVO ===== */
+  .btn-wrap{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:10px 0 0 6px;
+  }
+
+  .btn-share{
+    display:inline-block;
+    padding:.60rem .9rem;
+    border:1px solid var(--line);
+    border-radius:.5rem;
+    background:#fff;
+    cursor:pointer;
+    font-weight:600;
+    line-height:1.2;
+  }
+
+  .btn-share:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
+  }
 </style>
 
   <style id="to-top-style">
@@ -1456,20 +1479,48 @@ window.showPicksToday = function(){
 
   if(!wrapP) return;
 
-    const priceEl = card.querySelector('.content .price');
-  const b = document.createElement('button');
-  b.className = 'btn-map';
-  b.type = 'button';
-  b.textContent = '📍 Ver localização aproximada';
-  b.addEventListener('click', ()=>{
+      const priceEl = card.querySelector('.content .price');
+
+  // botão do mapa
+  const bMap = document.createElement('button');
+  bMap.className = 'btn-map';
+  bMap.type = 'button';
+  bMap.textContent = '📍 Ver localização aproximada';
+  bMap.addEventListener('click', ()=>{
     const key = card.getAttribute('data-geo');
     openMap(key);
   });
 
+  // botão de compartilhamento
+  const bShare = document.createElement('button');
+  bShare.className = 'btn-share';
+  bShare.type = 'button';
+  bShare.textContent = '🔗 Compartilhar';
+  bShare.addEventListener('click', ()=>{
+    const url = window.location.href.split('#')[0];
+    const cardTitle = card.querySelector('h3')?.textContent?.trim() || 'Imóvel em destaque';
+    const shareText = `Veja este imóvel: ${cardTitle}\n${url}`;
+    
+    if (navigator.share) {
+      navigator.share({ title: cardTitle, text: shareText, url })
+        .catch(()=>{}); // evita erros se o usuário cancelar
+    } else {
+      navigator.clipboard.writeText(shareText).then(()=>{
+        alert('Link copiado para a área de transferência!');
+      });
+    }
+  });
+
+  // container para alinhar os dois botões lado a lado
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'btn-wrap';
+  btnWrap.appendChild(bMap);
+  btnWrap.appendChild(bShare);
+
   if(priceEl && priceEl.parentElement){
-    priceEl.parentElement.insertBefore(b, priceEl); // insere antes do preço
+    priceEl.parentElement.insertBefore(btnWrap, priceEl); // insere antes do preço
   } else {
-    wrapP.appendChild(b); // fallback
+    wrapP.appendChild(btnWrap); // fallback
   }
 });
 
