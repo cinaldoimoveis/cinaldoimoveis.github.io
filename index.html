@@ -1327,12 +1327,41 @@ window.showPicksToday = function(){
     background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
   }
   #map{ width:100%; height:100%; }
+    /* ======= BLOCO NOVO .btn-map COM ESPAÇAMENTO EQUILIBRADO ======= */
   .btn-map{
-    display:inline-block; padding:.60rem .9rem; margin-left:6px;
-    border:1px solid var(--line); border-radius:.5rem; background:#fff; cursor:pointer;
+    display:inline-block;
+    padding:.60rem .9rem;
+    border:1px solid var(--line);
+    border-radius:.5rem;
+    background:#fff;
+    cursor:pointer;
     font-weight:600;
+
+    /* distância proporcional entre pílulas e preço */
+    margin:10px 0 0 6px;
+    line-height:1.2;
   }
-  .btn-map:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.08); }
+
+  .btn-map:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
+  }
+
+  /* garante 10px entre o botão e o preço quando ele vem antes do preço */
+  .content .btn-map + .price{
+    margin-top:10px;
+  }
+
+  /* leve ajuste em telas pequenas */
+  @media (max-width:640px){
+    .btn-map{
+      font-size:13px;
+      padding:.45rem .75rem;
+      margin-top:8px;
+    }
+  }
+  /* ======= FIM DO BLOCO NOVO ======= */
+
 </style>
 
   <style id="to-top-style">
