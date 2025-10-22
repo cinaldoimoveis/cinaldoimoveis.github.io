@@ -1427,6 +1427,7 @@ window.showPicksToday = function(){
 
   if(!wrapP) return;
 
+    const priceEl = card.querySelector('.content .price');
   const b = document.createElement('button');
   b.className = 'btn-map';
   b.type = 'button';
@@ -1435,8 +1436,14 @@ window.showPicksToday = function(){
     const key = card.getAttribute('data-geo');
     openMap(key);
   });
-  wrapP.appendChild(b);
+
+  if(priceEl && priceEl.parentElement){
+    priceEl.parentElement.insertBefore(b, priceEl); // insere antes do preço
+  } else {
+    wrapP.appendChild(b); // fallback
+  }
 });
+
 
 /* tamanho visual menor e mais leve */
 const css = document.createElement('style');
