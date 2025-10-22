@@ -1743,7 +1743,7 @@ function getHeaderOffset(){
   // se a barra de filtros existe/visível, dá um bônus de respiro
   const filters = document.getElementById('filters');
   if (filters && filters.offsetHeight > 0) {
-    extra += 6; // ajuste fino para garantir que não apareça “meio cortada”
+    extra += 8; // ajuste fino para garantir que não apareça “meio cortada”
   }
 
   return (h?.offsetHeight || 72) + extra;
