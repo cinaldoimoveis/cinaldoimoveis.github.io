@@ -1727,17 +1727,21 @@ document.head.appendChild(css);
   }
 
       // === Helpers de rolagem com compensação de header e re-tentativas ===
-function getHeaderOffset(){
+// Agora recebe o alvo para calibrar melhor o offset (especialmente no mobile)
+function getHeaderOffset(targetEl){
   const h = document.querySelector('header');
+  const base = (h?.offsetHeight || 72);
 
-  // respiro levemente maior para evitar “corte” da barra de filtros
+  // respiro padrão (um pouco maior p/ evitar corte)
   let extra = 20;
+
+  const isMobile = window.matchMedia('(max-width: 900px)').matches;
 
   // em modo solo, reserve espaço extra para título + botão
   const isSolo = new URLSearchParams(location.search).get('solo') === '1';
   if (isSolo) extra += 56;
 
-  // se o botão já existe, some a altura real dele
+  // se o botão “ver todos” existe, soma a altura real dele
   const exit = document.getElementById('exit-solo');
   if (isSolo && exit) {
     const cs = getComputedStyle(exit);
@@ -1748,19 +1752,29 @@ function getHeaderOffset(){
     extra += exitH + 8;
   }
 
-  // se a barra de filtros existe/visível, dá um bônus de respiro
+  // se a barra de filtros está visível, dá um bônus (maior no mobile)
   const filters = document.getElementById('filters');
   if (filters && filters.offsetHeight > 0) {
-    extra += 6; // ajuste fino para garantir que não apareça “meio cortada”
+    extra += isMobile ? 26 : 6;
   }
 
-  return (h?.offsetHeight || 72) + extra;
+  // se o alvo é o container do #imoveis (ou algo dentro dele), no mobile
+  // damos mais um “bônus” para garantir o H2 totalmente visível
+  if (isMobile) {
+    const imvContainer = document.querySelector('#imoveis .container');
+    if (imvContainer && (targetEl === imvContainer || imvContainer.contains(targetEl))) {
+      extra += 18;
+    }
+  }
+
+  return base + extra;
 }
 
 function scrollToElOnce(el, behavior = 'auto'){
-  const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
+  const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset(el);
   window.scrollTo({ top, behavior });
 }
+
 
 
   function smartScrollToWithRetries(el){
