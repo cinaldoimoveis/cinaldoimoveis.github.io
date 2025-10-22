@@ -1453,21 +1453,30 @@ window.showPicksToday = function(){
     .to-top{ right: 14px; bottom: 14px; width: 52px; height: 52px; font-size: 20px; }
   }
 </style>
+<style id="anchor-offset">
+  /* altura do header + respiro extra para evitar “corte” do título/filtros */
+  :root{
+    --header-h: 72px;
+    --scroll-extra: 20px;   /* desktop */
+  }
+  @media (max-width:900px){
+    :root{
+      --header-h: 64px;
+      --scroll-extra: 36px; /* mobile: mais respiro pro H2 e chips */
+    }
+  }
 
-  <style id="anchor-offset">
-  :root{ --header-h: 72px; }
-  @media (max-width:900px){ :root{ --header-h: 64px; } }
-
-  /* adiciona offset também no .container e na barra de filtros */
+  /* aplica o offset em todos os alvos de ancoragem relevantes */
   #imoveis,
   #imoveis .container,
   #imoveis .filters,
   #sobre,
   #contato,
   article.card[id]{
-    scroll-margin-top: calc(var(--header-h) + 20px);
+    scroll-margin-top: calc(var(--header-h) + var(--scroll-extra));
   }
 </style>
+
 
 
   <style id="solo-cosmetics">
