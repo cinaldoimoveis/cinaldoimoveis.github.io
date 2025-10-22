@@ -1004,7 +1004,6 @@
   <!-- Botão “Destaques de hoje” (filtra os 3 picks; sem chip; sai do modo solo se estiver) -->
   <script>
 /* Mostra só os 3 “de hoje” (sem chip) e assegura sair do modo solo, se estiver */
-/* Mostra só os 3 “de hoje” (sem chip) e assegura sair do modo solo, se estiver */
 window.showPicksToday = function(){
   const section = document.getElementById('imoveis');
   const grid    = section?.querySelector('.grid');
@@ -1018,6 +1017,7 @@ window.showPicksToday = function(){
     const exit = document.getElementById('exit-solo');
     if (exit) exit.remove();
     if (bar) bar.style.display = '';
+    // “congela” a URL sem ?solo
     history.replaceState(null, '', location.pathname + '#imoveis');
   }
 
@@ -1026,13 +1026,27 @@ window.showPicksToday = function(){
   const cards = Array.from(grid.querySelectorAll('.card[id]'));
 
   if(!picks.length){
-    // 👉 ANCORAR NO H2 QUANDO EXISTE (evita “corte” no mobile)
-    const titleEl = section.querySelector('h2');
-    const anchor = titleEl || section.querySelector('.container') || section;
+    const anchor = section.querySelector('.container') || section;
     if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
     else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
     return;
   }
+
+  // mostra só os 3
+  cards.forEach(c => { c.hidden = !picks.includes(c.id); });
+
+  // marca “Todos” nos filtros (sem chip)
+  if(bar){
+    const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
+    bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
+    if(allBtn) allBtn.classList.add('is-active');
+  }
+
+  // rola até a seção
+  const anchor = section.querySelector('.container') || section;
+  if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
+  else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
+};
 
   // mostra só os 3 “de hoje”
   cards.forEach(c => { c.hidden = !picks.includes(c.id); });
