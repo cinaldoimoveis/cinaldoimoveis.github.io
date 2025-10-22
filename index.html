@@ -78,7 +78,7 @@
       .btn-whats{font-size:14px;line-height:1}
     }
 
-    .hero{padding:32px 0 32px;border-bottom:1px solid var(--line)}
+    .hero{padding:64px 0 32px;border-bottom:1px solid var(--line)}
     .hero-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center}
     @media (max-width:900px){.hero-inner{grid-template-columns:1fr}}
     .title{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0 0 8px}
@@ -1048,24 +1048,6 @@ window.showPicksToday = function(){
   else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
 };
 
-  // mostra só os 3 “de hoje”
-  cards.forEach(c => { c.hidden = !picks.includes(c.id); });
-
-  // marca “Todos” nos filtros (sem chip)
-  if(bar){
-    const allBtn = bar.querySelector('.fbtn[data-filter="all"]');
-    bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
-    if(allBtn) allBtn.classList.add('is-active');
-  }
-
-  // 👉 ANCORAR NO H2 QUANDO EXISTE (evita “corte” no mobile)
-  const titleEl = section.querySelector('h2');
-  const anchor = titleEl || section.querySelector('.container') || section;
-  if(typeof smartScrollToWithRetries === 'function'){ smartScrollToWithRetries(anchor); }
-  else { anchor.scrollIntoView({behavior:'smooth', block:'start'}); }
-};
-
-
 /* Botão da hero (“Destaques de hoje”) usa a função acima */
 (function(){
   const btn = document.getElementById('btn-destaques');
@@ -1453,31 +1435,14 @@ window.showPicksToday = function(){
     .to-top{ right: 14px; bottom: 14px; width: 52px; height: 52px; font-size: 20px; }
   }
 </style>
-<style id="anchor-offset">
-  /* altura do header + respiro extra para evitar “corte” do título/filtros */
-  :root{
-    --header-h: 72px;
-    --scroll-extra: 20px;   /* desktop */
-  }
-  @media (max-width:900px){
-    :root{
-      --header-h: 64px;
-      --scroll-extra: 36px; /* mobile: mais respiro pro H2 e chips */
-    }
-  }
 
-  /* aplica o offset em todos os alvos de ancoragem relevantes */
-  #imoveis,
-  #imoveis .container,
-  #imoveis .filters,
-  #sobre,
-  #contato,
-  article.card[id]{
-    scroll-margin-top: calc(var(--header-h) + var(--scroll-extra));
-  }
+  <style id="anchor-offset">
+  :root{ --header-h: 72px; }
+  @media (max-width:900px){ :root{ --header-h: 64px; } }
+
+  #imoveis, #sobre, #contato,
+  article.card[id]{ scroll-margin-top: calc(var(--header-h) + 12px); }
 </style>
-
-
 
   <style id="solo-cosmetics">
   body.solo .hero{ display: none !important; }
@@ -1754,55 +1719,31 @@ document.head.appendChild(css);
   }
 
       // === Helpers de rolagem com compensação de header e re-tentativas ===
-// Agora recebe o alvo para calibrar melhor o offset (especialmente no mobile)
-function getHeaderOffset(targetEl){
-  const h = document.querySelector('header');
-  const base = (h?.offsetHeight || 72);
+  function getHeaderOffset(){
+    const h = document.querySelector('header');
+    let extra = 12; // respiro padrão
 
-  // respiro padrão (um pouco maior p/ evitar corte)
-  let extra = 20;
+    // em modo solo, reserve espaço extra para título + botão
+    const isSolo = new URLSearchParams(location.search).get('solo') === '1';
+    if (isSolo) extra += 56;
 
-  const isMobile = window.matchMedia('(max-width: 900px)').matches;
-
-  // em modo solo, reserve espaço extra para título + botão
-  const isSolo = new URLSearchParams(location.search).get('solo') === '1';
-  if (isSolo) extra += 56;
-
-  // se o botão “ver todos” existe, soma a altura real dele
-  const exit = document.getElementById('exit-solo');
-  if (isSolo && exit) {
-    const cs = getComputedStyle(exit);
-    const exitH =
-      exit.offsetHeight +
-      parseFloat(cs.marginTop || 0) +
-      parseFloat(cs.marginBottom || 0);
-    extra += exitH + 8;
-  }
-
-  // se a barra de filtros está visível, dá um bônus (maior no mobile)
-  const filters = document.getElementById('filters');
-  if (filters && filters.offsetHeight > 0) {
-    extra += isMobile ? 26 : 6;
-  }
-
-  // se o alvo é o container do #imoveis (ou algo dentro dele), no mobile
-  // damos mais um “bônus” para garantir o H2 totalmente visível
-  if (isMobile) {
-    const imvContainer = document.querySelector('#imoveis .container');
-    if (imvContainer && (targetEl === imvContainer || imvContainer.contains(targetEl))) {
-      extra += 18;
+    // se o botão já existe, some a altura real dele
+    const exit = document.getElementById('exit-solo');
+    if (isSolo && exit) {
+      const cs = getComputedStyle(exit);
+      const exitH =
+        exit.offsetHeight +
+        parseFloat(cs.marginTop || 0) +
+        parseFloat(cs.marginBottom || 0);
+      extra += exitH + 8;
     }
+    return (h?.offsetHeight || 72) + extra;
   }
 
-  return base + extra;
-}
-
-function scrollToElOnce(el, behavior = 'auto'){
-  const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset(el);
-  window.scrollTo({ top, behavior });
-}
-
-
+  function scrollToElOnce(el, behavior = 'auto'){
+    const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
+    window.scrollTo({ top, behavior });
+  }
 
   function smartScrollToWithRetries(el){
     scrollToElOnce(el, 'auto');
