@@ -1422,20 +1422,36 @@ window.showPicksToday = function(){
   };
 
   document.querySelectorAll('article.card[data-geo]').forEach(card=>{
-    if(card.querySelector('.btn-map')) return;
-    const wrapP = card.querySelector('p');
-    if(!wrapP) return;
+  if(card.querySelector('.btn-map')) return;
+  const wrapP = card.querySelector('.content p:last-of-type'); // fix: botão agora no <p> certo
 
-    const b = document.createElement('button');
-    b.className = 'btn-map';
-    b.type = 'button';
-    b.textContent = '📍 Ver localização aproximada';
-    b.addEventListener('click', ()=>{
-      const key = card.getAttribute('data-geo');
-      openMap(key);
-    });
-    wrapP.appendChild(b);
+  if(!wrapP) return;
+
+  const b = document.createElement('button');
+  b.className = 'btn-map';
+  b.type = 'button';
+  b.textContent = '📍 Ver localização aproximada';
+  b.addEventListener('click', ()=>{
+    const key = card.getAttribute('data-geo');
+    openMap(key);
   });
+  wrapP.appendChild(b);
+});
+
+/* tamanho visual menor e mais leve */
+const css = document.createElement('style');
+css.textContent = `
+  .btn-map {
+    padding: .45rem .75rem;
+    font-size: 14px;
+    border-radius: .4rem;
+    line-height: 1.2;
+  }
+  @media (max-width:640px){
+    .btn-map{ font-size: 13px; padding: .4rem .7rem; }
+  }
+`;
+document.head.appendChild(css);
 
   const modal  = document.getElementById('map-modal');
   const btnX   = modal.querySelector('.map-close');
