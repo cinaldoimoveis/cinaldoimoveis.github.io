@@ -1719,31 +1719,41 @@ document.head.appendChild(css);
   }
 
       // === Helpers de rolagem com compensação de header e re-tentativas ===
-  function getHeaderOffset(){
-    const h = document.querySelector('header');
-    let extra = 12; // respiro padrão
+function getHeaderOffset(){
+  const h = document.querySelector('header');
 
-    // em modo solo, reserve espaço extra para título + botão
-    const isSolo = new URLSearchParams(location.search).get('solo') === '1';
-    if (isSolo) extra += 56;
+  // respiro levemente maior para evitar “corte” da barra de filtros
+  let extra = 20;
 
-    // se o botão já existe, some a altura real dele
-    const exit = document.getElementById('exit-solo');
-    if (isSolo && exit) {
-      const cs = getComputedStyle(exit);
-      const exitH =
-        exit.offsetHeight +
-        parseFloat(cs.marginTop || 0) +
-        parseFloat(cs.marginBottom || 0);
-      extra += exitH + 8;
-    }
-    return (h?.offsetHeight || 72) + extra;
+  // em modo solo, reserve espaço extra para título + botão
+  const isSolo = new URLSearchParams(location.search).get('solo') === '1';
+  if (isSolo) extra += 56;
+
+  // se o botão já existe, some a altura real dele
+  const exit = document.getElementById('exit-solo');
+  if (isSolo && exit) {
+    const cs = getComputedStyle(exit);
+    const exitH =
+      exit.offsetHeight +
+      parseFloat(cs.marginTop || 0) +
+      parseFloat(cs.marginBottom || 0);
+    extra += exitH + 8;
   }
 
-  function scrollToElOnce(el, behavior = 'auto'){
-    const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
-    window.scrollTo({ top, behavior });
+  // se a barra de filtros existe/visível, dá um bônus de respiro
+  const filters = document.getElementById('filters');
+  if (filters && filters.offsetHeight > 0) {
+    extra += 6; // ajuste fino para garantir que não apareça “meio cortada”
   }
+
+  return (h?.offsetHeight || 72) + extra;
+}
+
+function scrollToElOnce(el, behavior = 'auto'){
+  const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
+  window.scrollTo({ top, behavior });
+}
+
 
   function smartScrollToWithRetries(el){
     scrollToElOnce(el, 'auto');
