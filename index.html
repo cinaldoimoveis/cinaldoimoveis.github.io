@@ -1545,36 +1545,49 @@ window.showPicksToday = function(){
 </style>
 
  <style id="hide-header-border-on-type">
-  /* Esconde totalmente a linha do header quando filtro ≠ "Todos" */
+  /* Quando um filtro ≠ "Todos" estiver ativo */
   body.has-type-filter header{
-    border-bottom-color: transparent !important;
-    box-shadow: none !important;        /* remove qualquer sombra residual */
-    background: rgba(255,255,255,0.98); /* reforça o fundo para tapar subpixel da linha */
-    position: relative;
-    z-index: 51;                        /* garante sobreposição sobre o conteúdo logo abaixo */
+    border-bottom: 0 !important;        /* zera a borda */
+    box-shadow: none !important;         /* zera possíveis sombras */
+    background: rgba(255,255,255,0.98);  /* tampa qualquer subpixel */
+    position: sticky;                    /* mantém sticky como o original */
+    top: 0;
+    z-index: 51;                         /* acima do conteúdo */
   }
 
-  /* opcional: quando filtrado, dá leve elevação no conteúdo pra eliminar traço */
-  body.has-type-filter main.hero {
-    margin-top: -1px;                   /* sobe 1 px pra “colar” e tapar a linha */
-  }
+  /* Não precisamos mais do margin-top negativo no .hero */
+  /* (removido de propósito para evitar corte de cards no mobile) */
 </style>
 
-  <!-- 👇 cole aqui o novo bloco -->
-<style id="share-site-icon-fine">
-  /* Ajuste visual do botão "📤" (compartilhar site) */
-  .menu .share-site {
-    width: 42px;
-    padding: 10px 0;
-    font-size: 20px;
-    text-align: center;
+
+ <style id="share-site-icon-fine">
+  /* Estilo inspirado nas pílulas de filtro */
+  .menu .share-site{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:#fff;
+    box-shadow:0 1px 0 rgba(0,0,0,.04);
+    font-weight:600;
+    line-height:1;
+    font-size:18px;
+    min-width:auto;
+    height:36px;
+  }
+  .menu .share-site:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
   }
   @media (max-width:640px){
-    .menu .share-site {
-      width: 38px;
-      font-size: 18px;
-      padding: 8px 0;
+    .menu .share-site{
+      height:32px;
+      padding:6px 8px;
+      font-size:16px;
     }
+    .menu{ gap:10px !important; }
   }
 </style>
 
@@ -1869,16 +1882,12 @@ if (bar && !bar.querySelector('.share-cat')) {
   if (menu && !menu.querySelector('.share-site')) {
 const btnSite = document.createElement('button');
 btnSite.type = 'button';
-btnSite.className = 'btn share-site';
+btnSite.className = 'share-site';      // <<< sem 'btn' para não herdar a borda preta
 btnSite.textContent = '📤';
 btnSite.setAttribute('aria-label', 'Compartilhar o site');
 btnSite.setAttribute('title', 'Compartilhar o site');
+// sem estilos inline: tudo pelo CSS abaixo
 
-btnSite.style.padding = '10px 14px';     // deixa o tamanho igual aos outros
-btnSite.style.display = 'inline-flex';
-btnSite.style.alignItems = 'center';
-btnSite.style.justifyContent = 'center';
-btnSite.style.minWidth = 'unset';        // impede que o texto crie largura fixa
 
 btnSite.addEventListener('click', () => {
   const url   = location.origin + location.pathname;
@@ -1915,14 +1924,15 @@ btnSite.addEventListener('click', () => {
     extra += exitH + 8;
   }
 
-  // quando um filtro diferente de "Todos" estiver ativo, dá um respiro extra
-  // (classe aplicada no syncUI: document.body.classList.toggle('has-type-filter', isFiltered))
+  // bônus quando filtrado (≠ 'all'): dá mais folga no mobile
   if (document.body.classList.contains('has-type-filter')) {
-    extra += 6; // ajuste fino para evitar a “linha” aparecer ao abrir links filtrados
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    extra += isMobile ? 18 : 10; // MOBILE: +18px | DESKTOP: +10px
   }
 
   return (h?.offsetHeight || 72) + extra;
 }
+
 
 
   function scrollToElOnce(el, behavior = 'auto'){
