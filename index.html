@@ -591,33 +591,37 @@
           </div>
         </article>
 
-        <!-- Lote Residencial 630 m² – Condomínio Unique -->
-        <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique">
-          <div class="thumb">
-            <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
-          </div>
-          <div class="content">
-            <h3>Lote Residencial 630m² – Condomínio Unique</h3>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <span class="pill">630m²</span>
-              <span class="pill">18m × 35m</span>
-              <span class="pill">Acesso à Lagoa Juparanã</span>
-              <span class="pill">Segurança 24h</span>
-              <span class="pill">Lazer completo</span>
-              <span class="pill">Ref: CI-LO-UNIQ-630</span>
-            </div>
-            <p class="price">R$ 650.000,00</p>
-            <ul class="ul">
-              <li>Quadra poliesportiva e tênis, brinquedoteca, sala de jogos, academia, sauna</li>
-              <li>Piscinas adulto e infantil • Parque infantil</li>
-              <li>Aprox. 10km do Centro de Linhares</li>
-            </ul>
-            <p>
-              <button class="btn-fotos" data-gallery-prefix="unique-lote-" data-gallery-count="5">Ver fotos</button>
-              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
-            </p>
-          </div>
-        </article>
+        <!-- Lote Residencial 630 m² – Condomínio Unique (Preço reduzido) -->
+<article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique" data-discount>
+  <div class="thumb">
+    <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
+  </div>
+  <div class="content">
+    <h3>Lote Residencial 630m² – Condomínio Unique</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="pill">630m²</span>
+      <span class="pill">18m × 35m</span>
+      <span class="pill">Acesso à Lagoa Juparanã</span>
+      <span class="pill">Segurança 24h</span>
+      <span class="pill">Lazer completo</span>
+      <span class="pill">Ref: CI-LO-UNIQ-630</span>
+    </div>
+
+    <!-- 💰 Preço com valor antigo e novo -->
+    <p class="price" data-old="R$ 650.000,00">R$ 599.000,00</p>
+
+    <ul class="ul">
+      <li>Quadra poliesportiva e tênis, brinquedoteca, sala de jogos, academia, sauna</li>
+      <li>Piscinas adulto e infantil • Parque infantil</li>
+      <li>Aprox. 10km do Centro de Linhares</li>
+    </ul>
+    <p>
+      <button class="btn-fotos" data-gallery-prefix="unique-lote-" data-gallery-count="5">Ver fotos</button>
+      <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+    </p>
+  </div>
+</article>
+
 
         <!-- Área Comercial 20.000 m² – Bairro Planalto (NOVO) -->
         <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000" data-type="comercial" data-tags="area, comercial" data-geo="area-planalto-20000">
@@ -1627,6 +1631,66 @@ window.showPicksToday = function(){
     .menu{ gap:10px !important; }
   }
 </style>
+
+<!-- 👇 Cole logo aqui -->
+<style id="price-reduced-style">
+  /* Exibe o preço antigo riscado e destaca o novo */
+  .card .price[data-old] {
+    position: relative;
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #111;
+  }
+  .card .price[data-old]::before {
+    content: "de " attr(data-old);
+    display: block;
+    text-decoration: line-through;
+    color: #888;
+    font-weight: 400;
+    font-size: .9em;
+    margin-bottom: 2px;
+  }
+  .card .price[data-old]::after {
+    content: " ↓ preço reduzido!";
+    color: #c00;
+    font-size: .9em;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+</style>
+
+  <style id="price-badge-style">
+  /* garante ancoragem para o selo */
+  .card { position: relative; }
+
+  /* selo "Baixou" no canto superior esquerdo do card */
+  .card[data-discount]::before {
+    content: "🔥 Preço reduzido";
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #ff4646;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8em;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 5;
+  }
+
+  /* versão compacta em telas pequenas */
+  @media (max-width:640px) {
+    .card[data-discount]::before {
+      font-size: 0.75em;
+      padding: 3px 7px;
+      top: 6px;
+      left: 6px;
+    }
+  }
+</style>
+
 
 <!-- Modal do mapa -->
 <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
