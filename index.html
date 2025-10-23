@@ -985,15 +985,36 @@
   }
 
   function applyFilter(type){
-    grid.classList.add('filtering');
-    const f = (type||'all').toLowerCase();
-    cards.forEach(card=>{
-      const tags = getTags(card);
-      const show = (f==='all') || tags.includes(f);
-      card.hidden = !show;
+  grid.classList.add('filtering');
+
+  const f = (type||'all').toLowerCase();
+  cards.forEach(card=>{
+    const tags = getTags(card);
+    const show = (f==='all') || tags.includes(f);
+    card.hidden = !show;
+  });
+
+  // IDs que devem subir pro topo quando visíveis
+  const PIN_TOP_IDS = ['lote-unique-630'];
+
+  // 1) Se filtrou "lote", garante o destaque primeiro
+  if (f === 'lote') {
+    PIN_TOP_IDS.forEach(id=>{
+      const el = document.getElementById(id);
+      if (el && !el.hidden) grid.prepend(el);
     });
-    grid.classList.remove('filtering');
   }
+
+  // 2) Se filtrou "todos" (Imóveis em destaque), também sobe pro topo
+  if (f === 'all') {
+    PIN_TOP_IDS.forEach(id=>{
+      const el = document.getElementById(id);
+      if (el && !el.hidden) grid.prepend(el);
+    });
+  }
+
+  grid.classList.remove('filtering');
+}
 
    bar.addEventListener('click', (e)=>{
     const btn = e.target.closest('.fbtn');
