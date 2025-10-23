@@ -1544,13 +1544,39 @@ window.showPicksToday = function(){
   body.solo header{ border-bottom-color: transparent !important; }
 </style>
 
-  <style id="hide-header-border-on-type">
-  /* Esconde a linha do header quando um filtro diferente de "Todos" está ativo */
+ <style id="hide-header-border-on-type">
+  /* Esconde totalmente a linha do header quando filtro ≠ "Todos" */
   body.has-type-filter header{
     border-bottom-color: transparent !important;
+    box-shadow: none !important;        /* remove qualquer sombra residual */
+    background: rgba(255,255,255,0.98); /* reforça o fundo para tapar subpixel da linha */
+    position: relative;
+    z-index: 51;                        /* garante sobreposição sobre o conteúdo logo abaixo */
+  }
+
+  /* opcional: quando filtrado, dá leve elevação no conteúdo pra eliminar traço */
+  body.has-type-filter main.hero {
+    margin-top: -1px;                   /* sobe 1 px pra “colar” e tapar a linha */
   }
 </style>
 
+  <!-- 👇 cole aqui o novo bloco -->
+<style id="share-site-icon-fine">
+  /* Ajuste visual do botão "📤" (compartilhar site) */
+  .menu .share-site {
+    width: 42px;
+    padding: 10px 0;
+    font-size: 20px;
+    text-align: center;
+  }
+  @media (max-width:640px){
+    .menu .share-site {
+      width: 38px;
+      font-size: 18px;
+      padding: 8px 0;
+    }
+  }
+</style>
 
 <!-- Modal do mapa -->
 <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
@@ -1841,18 +1867,26 @@ if (bar && !bar.querySelector('.share-cat')) {
   // ===== Botão "Compartilhar site" no header (antes do WhatsApp) =====
   const menu = document.querySelector('nav.menu');
   if (menu && !menu.querySelector('.share-site')) {
-    const btnSite = document.createElement('button');
-    btnSite.type = 'button';
-    btnSite.className = 'btn share-site';
-    btnSite.textContent = 'Compartilhar site';
-    btnSite.setAttribute('aria-label', 'Compartilhar o site');
+const btnSite = document.createElement('button');
+btnSite.type = 'button';
+btnSite.className = 'btn share-site';
+btnSite.textContent = '📤';
+btnSite.setAttribute('aria-label', 'Compartilhar o site');
+btnSite.setAttribute('title', 'Compartilhar o site');
 
-    btnSite.addEventListener('click', () => {
-      const url   = location.origin + location.pathname;  // sempre sem hash/filtro
-      const title = 'Cinaldo Imóveis – Linhares/ES';
-      const text  = 'Imóveis selecionados em Linhares – ES.';
-      shareOrCopy({ title, text, url, button: btnSite });
-    });
+btnSite.style.padding = '10px 14px';     // deixa o tamanho igual aos outros
+btnSite.style.display = 'inline-flex';
+btnSite.style.alignItems = 'center';
+btnSite.style.justifyContent = 'center';
+btnSite.style.minWidth = 'unset';        // impede que o texto crie largura fixa
+
+btnSite.addEventListener('click', () => {
+  const url   = location.origin + location.pathname;
+  const title = 'Cinaldo Imóveis – Linhares/ES';
+  const text  = 'Imóveis selecionados em Linhares – ES.';
+  shareOrCopy({ title, text, url, button: btnSite });
+});
+
 
     const wa = menu.querySelector('.btn-whats');
     if (wa) menu.insertBefore(btnSite, wa); else menu.appendChild(btnSite);
