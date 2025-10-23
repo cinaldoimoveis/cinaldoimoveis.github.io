@@ -991,15 +991,52 @@
     grid.classList.remove('filtering');
   }
 
-  bar.addEventListener('click', (e)=>{
+   bar.addEventListener('click', (e)=>{
     const btn = e.target.closest('.fbtn');
     if(!btn) return;
+
+    const type = (btn.dataset.filter || 'all').toLowerCase();
+
+    // visual do chip ativo
     bar.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('is-active'));
     btn.classList.add('is-active');
-    applyFilter(btn.dataset.filter);
-    const hash = btn.dataset.filter === 'all' ? '' : '#tipo=' + btn.dataset.filter;
+
+    // Se estiver no modo solo (?solo=1), sai do solo antes de filtrar (mesma ideia do "Destaques de hoje")
+    if (document.body.classList.contains('solo')) {
+      document.body.classList.remove('solo');
+      const exit = document.getElementById('exit-solo');
+      if (exit) exit.remove();
+      const filtersBar = document.getElementById('filters');
+      if (filtersBar) filtersBar.style.display = '';
+      document.querySelectorAll('#imoveis .grid .card').forEach(c=> c.hidden = false);
+    }
+
+    // aplica o filtro selecionado
+    applyFilter(type);
+
+    // atualiza URL (hash) sem recarregar
+    const hash = (type === 'all') ? '' : '#tipo=' + type;
     history.replaceState(null, '', location.pathname + location.search + hash);
+
+    // rolagem idêntica ao botão "Destaques de hoje" (sempre rola, inclusive "Todos")
+    const section = document.getElementById('imoveis');
+    const anchor =
+      section?.querySelector('.container > h2') ||
+      section?.querySelector('.container') ||
+      section;
+
+    if (anchor) {
+      if (typeof smartScrollToWithRetries === 'function') {
+        smartScrollToWithRetries(anchor);
+      } else if (typeof getHeaderOffset === 'function') {
+        const top = window.pageYOffset + anchor.getBoundingClientRect().top - getHeaderOffset(anchor);
+        window.scrollTo({ top, behavior: 'smooth' });
+      } else {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
   });
+
 
   const m = location.hash.match(/tipo=([\w-]+)/i);
   const startType = m ? m[1].toLowerCase() : 'all';
