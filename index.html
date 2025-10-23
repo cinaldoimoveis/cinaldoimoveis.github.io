@@ -1539,11 +1539,16 @@ window.showPicksToday = function(){
   }
 </style>
 
-
-
   <style id="solo-cosmetics">
   body.solo .hero{ display: none !important; }
   body.solo header{ border-bottom-color: transparent !important; }
+</style>
+
+  <style id="hide-header-border-on-type">
+  /* Esconde a linha do header quando um filtro diferente de "Todos" está ativo */
+  body.has-type-filter header{
+    border-bottom-color: transparent !important;
+  }
 </style>
 
 
@@ -1795,13 +1800,13 @@ document.head.appendChild(css);
 
   const bar = document.getElementById('filters');
 if (bar && !bar.querySelector('.share-cat')) {
+  // botão "compartilhar categoria" (começa oculto)
   const btnCat = document.createElement('button');
   btnCat.type = 'button';
   btnCat.className = 'fbtn share-cat';
   btnCat.textContent = '📤';
   btnCat.setAttribute('aria-label', 'Compartilhar esta categoria');
   btnCat.setAttribute('title', 'Compartilhar esta categoria');
-  // começa oculto; só mostra quando filtro != 'all'
   btnCat.style.display = 'none';
 
   // ação de compartilhar a categoria atual
@@ -1811,48 +1816,80 @@ if (bar && !bar.querySelector('.share-cat')) {
     const hash = (f && f !== 'all') ? `#tipo=${f}` : '#imoveis';
     const url = makeUrl(hash);
     const title = f && f !== 'all' ? `Imóveis – ${f}` : 'Imóveis em destaque';
-    const text = 'Veja esta seleção no site Cinaldo Imóveis';
+    const text  = 'Veja esta seleção no site Cinaldo Imóveis';
     shareOrCopy({ title, text, url, button: btnCat });
   });
 
-  // função que controla a visibilidade conforme o filtro ativo
-  function syncShareVisibility() {
+  // sincroniza visibilidade do botão E aplica classe para esconder a borda do header
+  function syncUI() {
     const active = bar.querySelector('.fbtn.is-active');
     const f = (active?.dataset.filter || 'all').toLowerCase();
-    // mostra apenas quando NÃO for 'all'
-    btnCat.style.display = (f !== 'all') ? '' : 'none';
+    const isFiltered = (f !== 'all');
+    btnCat.style.display = isFiltered ? '' : 'none';
+    document.body.classList.toggle('has-type-filter', isFiltered);
   }
 
-  // sincroniza em interações relevantes
-  bar.addEventListener('click', syncShareVisibility, { passive: true });
-  window.addEventListener('load', syncShareVisibility, { passive: true });
-  window.addEventListener('hashchange', syncShareVisibility, { passive: true });
+  // eventos que podem mudar o filtro (clique nos chips, carregar página filtrada, trocar hash)
+  bar.addEventListener('click', syncUI, { passive: true });
+  window.addEventListener('load', syncUI, { passive: true });
+  window.addEventListener('hashchange', syncUI, { passive: true });
 
+  // cria o botão e já sincroniza
   bar.appendChild(btnCat);
+  syncUI();
+
+  // ===== Botão "Compartilhar site" no header (antes do WhatsApp) =====
+  const menu = document.querySelector('nav.menu');
+  if (menu && !menu.querySelector('.share-site')) {
+    const btnSite = document.createElement('button');
+    btnSite.type = 'button';
+    btnSite.className = 'btn share-site';
+    btnSite.textContent = 'Compartilhar site';
+    btnSite.setAttribute('aria-label', 'Compartilhar o site');
+
+    btnSite.addEventListener('click', () => {
+      const url   = location.origin + location.pathname;  // sempre sem hash/filtro
+      const title = 'Cinaldo Imóveis – Linhares/ES';
+      const text  = 'Imóveis selecionados em Linhares – ES.';
+      shareOrCopy({ title, text, url, button: btnSite });
+    });
+
+    const wa = menu.querySelector('.btn-whats');
+    if (wa) menu.insertBefore(btnSite, wa); else menu.appendChild(btnSite);
+  }
 }
+
 
 
       // === Helpers de rolagem com compensação de header e re-tentativas ===
   function getHeaderOffset(){
-    const h = document.querySelector('header');
-    let extra = 12; // respiro padrão
+  const h = document.querySelector('header');
+  let extra = 12; // respiro padrão
 
-    // em modo solo, reserve espaço extra para título + botão
-    const isSolo = new URLSearchParams(location.search).get('solo') === '1';
-    if (isSolo) extra += 56;
+  // em modo solo, reserve espaço extra para título + botão
+  const isSolo = new URLSearchParams(location.search).get('solo') === '1';
+  if (isSolo) extra += 56;
 
-    // se o botão já existe, some a altura real dele
-    const exit = document.getElementById('exit-solo');
-    if (isSolo && exit) {
-      const cs = getComputedStyle(exit);
-      const exitH =
-        exit.offsetHeight +
-        parseFloat(cs.marginTop || 0) +
-        parseFloat(cs.marginBottom || 0);
-      extra += exitH + 8;
-    }
-    return (h?.offsetHeight || 72) + extra;
+  // se o botão já existe, some a altura real dele
+  const exit = document.getElementById('exit-solo');
+  if (isSolo && exit) {
+    const cs = getComputedStyle(exit);
+    const exitH =
+      exit.offsetHeight +
+      parseFloat(cs.marginTop || 0) +
+      parseFloat(cs.marginBottom || 0);
+    extra += exitH + 8;
   }
+
+  // quando um filtro diferente de "Todos" estiver ativo, dá um respiro extra
+  // (classe aplicada no syncUI: document.body.classList.toggle('has-type-filter', isFiltered))
+  if (document.body.classList.contains('has-type-filter')) {
+    extra += 6; // ajuste fino para evitar a “linha” aparecer ao abrir links filtrados
+  }
+
+  return (h?.offsetHeight || 72) + extra;
+}
+
 
   function scrollToElOnce(el, behavior = 'auto'){
     const top = window.pageYOffset + el.getBoundingClientRect().top - getHeaderOffset();
