@@ -823,39 +823,34 @@
   </div>
 </article>
 
-        <!-- Chácaras documentadas – Povoação, Linhares/ES (NOVO) -->
-<article class="card" id="chacara-povoacao"
+       <!-- Chácaras documentadas – Povoação, Linhares/ES (NOVO) -->
+<article class="card" id="chacara-povoacao-20000"
   data-code="CI-CH-POV-20000"
-  data-type="area"
-  data-tags="area,chacara,rural">
+  data-type="fazenda"
+  data-tags="area,fazenda,chacara,rural"
+  data-geo="povoacao-chacaras"> <!-- TODO: adicione as coords no GEO['povoacao-chacaras'] -->
   <div class="thumb">
-    <img src="assets/chacara-povoacao-01.jpeg" alt="Chácaras documentadas à venda – Povoação, Linhares/ES" loading="lazy">
+    <img src="assets/chacara-povoacao-01.jpeg" alt="Chácaras documentadas em Povoação, Linhares/ES" loading="lazy">
   </div>
   <div class="content">
-    <h3>Chácaras documentadas – Povoação, Linhares ES</h3>
-
+    <h3>Chácaras Documentadas – Povoação, Linhares ES</h3>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <span class="pill">20.000m² (cada)</span>
-      <span class="pill">≈ 2 hectares</span>
-      <span class="pill">Frente 30m</span>
-      <span class="pill">Prof. 667m</span>
-      <span class="pill">Aprox. 3km do balneário</span>
-      <span class="pill">Acesso facilitado</span>
+      <span class="pill">30m × 667m</span>
+      <span class="pill">3km do balneário</span>
+      <span class="pill">Cacau ~1.000 pés/ha</span>
       <span class="pill">Ref: CI-CH-POV-20000</span>
     </div>
 
     <p class="price">R$ 250.000,00</p>
 
     <ul class="ul">
-      <li>Região em desenvolvimento, alto potencial de valorização</li>
-      <li>Uso para lazer, cultivo e moradia</li>
-      <li>Aprox. 5km sem asfalto (previsão de pavimentação até meados de 2026)</li>
-      <li>Área cultivada com cacau (≈ 1.000pés/hectare)</li>
-      <li>Documentação completa: georreferenciada (2024), desmembramento individual, escritura</li>
-    </ul>
-
-    <ul class="ul">
-      <li><strong>Condições:</strong> entrada de 50% + saldo em até 36 parcelas de R$ 4.010,00</li>
+      <li>Áreas de 2ha ideais para lazer, cultivo e moradia, a 3km do balneário de Povoação.</li>
+      <li>Apenas 5km sem asfalto no acesso; pavimentação prevista até 2026.</li>
+      <li>Totalmente georreferenciadas (2024); desmembramento individual por venda.</li>
+      <li>Escritura e documentação em dia.</li>
+      <li>Plantio de cacau (média ~1.000 pés/ha).</li>
+      <li>Condições: entrada 50% + saldo em até 36x de R$ 4.010,00.</li>
     </ul>
 
     <p>
@@ -867,6 +862,7 @@
     </p>
   </div>
 </article>
+
 
 
 
@@ -1778,23 +1774,25 @@ window.showPicksToday = function(){
 <script>
 (function(){
   const GEO = {
-    alphaville: [-19.392604, -40.025909],
-   'alphaville-casa-217': [-19.397728, -40.022248], 
-   'alphaville-lote-360': [-19.392500, -40.024900], 
-   'alphaville-lote-420': [-19.397728, -40.022248], 
-   'alphaville-lote-717': [-19.391800, -40.025300], 
-   'alphaville-lote-390': [-19.397728, -40.022248], 
-   'alphaville-casa-186': [-19.397728, -40.022248], 
-   'alphaville-lote-437c': [-19.391600, -40.026000],
+  alphaville: [-19.392604, -40.025909],
+  'alphaville-casa-217': [-19.397728, -40.022248],
+  'alphaville-lote-360': [-19.392500, -40.024900],
+  'alphaville-lote-420': [-19.397728, -40.022248],
+  'alphaville-lote-717': [-19.391800, -40.025300],
+  'alphaville-lote-390': [-19.397728, -40.022248],
+  'alphaville-casa-186': [-19.397728, -40.022248],
+  'alphaville-lote-437c': [-19.391600, -40.026000],
 
-    unique: [-19.327982, -40.075060],
-    'complexo-sao-mateus': [-18.731801, -39.790920],
-    'casa-simples-laguna': [-19.376735, -40.053552],
-    laguna: [-19.374194, -40.055102],
-    'apto-tres-barras': [-19.378666, -40.069564],
-    'fazenda-linhares': [-19.257191, -39.801592],
-    'area-planalto-20000': [-19.341756, -40.057675],
-  };
+  unique: [-19.327982, -40.075060],
+  'complexo-sao-mateus': [-18.731801, -39.790920],
+  'casa-simples-laguna': [-19.376735, -40.053552],
+  laguna: [-19.374194, -40.055102],
+  'apto-tres-barras': [-19.378666, -40.069564],
+  'fazenda-linhares': [-19.257191, -39.801592],
+  'area-planalto-20000': [-19.341756, -40.057675],
+  'povoacao-chacaras': [-19.557919, -39.818109] 
+};
+
 
   document.querySelectorAll('article.card[data-geo]').forEach(card=>{
   if(card.querySelector('.btn-map')) return;
