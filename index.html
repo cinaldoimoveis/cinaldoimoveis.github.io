@@ -1994,10 +1994,12 @@ document.head.appendChild(css);
     shareBtn.addEventListener('click', ()=>{
       const id    = '#' + card.id;
       const url   = location.origin + location.pathname + '?solo=1' + id;
-      const title = (card.querySelector('h3')?.textContent || 'Imóvel') + ' – Cinaldo Imóveis';
-      const price = (card.querySelector('.price')?.textContent || '').trim();
-      const text  = price ? `${price}` : 'Veja este imóvel';
-      shareOrCopy({ title, text, url, button: shareBtn });
+      const rawTitle = (card.querySelector('h3')?.textContent || 'Imóvel').trim();
+// para compatibilidade entre apps, envio o mesmo texto em title e text:
+const title = rawTitle;                         // ex.: "Casa no Jardim Laguna 2"
+const text  = rawTitle;                         // idem
+shareOrCopy({ title, text, url, button: shareBtn });
+
     });
 
     actionsRow.appendChild(shareBtn);
