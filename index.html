@@ -2008,11 +2008,16 @@ window.showPicksToday = function(){
   :target::before{
     content: "";
     display: block;
-    height: var(--header-h);   /* altura igual à do cabeçalho fixo */
-    margin-top: calc(-1 * var(--header-h));
+    height: calc(var(--header-h) + 16px);  /* aumenta compensação */
+    margin-top: calc(-1 * (var(--header-h) + 16px));
+  }
+
+  /* remove margem extra se existir logo após o target */
+  section:target,
+  div:target{
+    scroll-margin-top: calc(var(--header-h) + 16px);
   }
 </style>
-
 
   <style id="anchor-offset">
   /* altura do header + respiro extra calibrado para desktop e mobile */
