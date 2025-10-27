@@ -2003,6 +2003,15 @@ window.showPicksToday = function(){
   }
 </style>
 
+  <style id="anchor-fix">
+  /* Corrige o recorte do cabeçalho fixo ao rolar até âncoras como #imoveis */
+  :target::before{
+    content: "";
+    display: block;
+    height: var(--header-h);   /* altura igual à do cabeçalho fixo */
+    margin-top: calc(-1 * var(--header-h));
+  }
+</style>
 
 
   <style id="anchor-offset">
