@@ -2008,14 +2008,14 @@ window.showPicksToday = function(){
   :target::before{
     content: "";
     display: block;
-    height: calc(var(--header-h) + 16px);  /* aumenta compensação */
-    margin-top: calc(-1 * (var(--header-h) + 16px));
+    height: calc(var(--header-h) + 20px);  /* aumenta compensação */
+    margin-top: calc(-1 * (var(--header-h) + 20px));
   }
 
   /* remove margem extra se existir logo após o target */
   section:target,
   div:target{
-    scroll-margin-top: calc(var(--header-h) + 16px);
+    scroll-margin-top: calc(var(--header-h) + 20px);
   }
 </style>
 
