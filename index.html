@@ -1996,12 +1996,13 @@ window.showPicksToday = function(){
 
   <style id="hide-toTop-when-modal">
   /* Esconde o botão flutuante quando qualquer overlay estiver ativo */
-  .gallery-modal:not([hidden]) ~ #toTop,
+  .gallery-modal.open ~ #toTop,
   .viewer:not([hidden]) ~ #toTop,
   #map-modal:not([hidden]) ~ #toTop{
     display: none !important;
   }
 </style>
+
 
 
   <style id="anchor-offset">
