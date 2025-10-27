@@ -1762,6 +1762,13 @@ window.showPicksToday = function(){
   }
 </style>
 
+  <style id="hide-card-descriptions">
+  /* Esconde as descrições dentro dos cards, mantendo visíveis apenas no popup */
+  #imoveis .card .content .ul{
+    display: none !important;
+  }
+</style>
+
 
 <!-- 👇 Cole logo aqui -->
 <style id="price-reduced-style">
@@ -1894,7 +1901,7 @@ window.showPicksToday = function(){
     if(e.key === 'Escape' && modal?.getAttribute('aria-hidden') === 'false') closeDesc();
   });
 
-  // Cria o botão em todos os cards, antes do WhatsApp
+    // Cria o botão em todos os cards e o posiciona como PRIMEIRO da linha de ações
   document.querySelectorAll('article.card').forEach(card=>{
     const actionsRow = card.querySelector('.content p:last-of-type');
     if(!actionsRow) return;
@@ -1906,12 +1913,11 @@ window.showPicksToday = function(){
     b.textContent = 'ℹ️ Descrição completa';
     b.addEventListener('click', ()=> openDescFor(card));
 
-    // Insere antes do botão WhatsApp, se existir; senão, ao final
-    const wa = actionsRow.querySelector('.btn.btn-whats');
-    if(wa) actionsRow.insertBefore(b, wa);
-    else actionsRow.appendChild(b);
+    // Garante que o botão fique acima/à frente de "Ver fotos" e "Agendar visita"
+    actionsRow.insertBefore(b, actionsRow.firstChild);
   });
 })();
+
 </script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
