@@ -1704,6 +1704,65 @@ window.showPicksToday = function(){
   }
 </style>
 
+  <style id="desc-modal-style">
+  .desc-modal[hidden]{display:none}
+  .desc-modal{
+    position:fixed; inset:0; z-index:2600;
+    display:grid; place-items:center; background:rgba(0,0,0,.55);
+  }
+  .desc-card{
+    width:min(900px, 92vw);
+    max-height:85vh;
+    background:#fff; border-radius:14px; overflow:hidden;
+    box-shadow:0 18px 60px rgba(0,0,0,.25);
+    display:grid; grid-template-rows:52px 1fr;
+    border:1px solid var(--line);
+  }
+  .desc-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:8px 12px; background:#f7f7f7; border-bottom:1px solid #e8e8e8;
+  }
+  .desc-title{ font-weight:800; font-size:16px; }
+  .desc-close{
+    background:transparent; border:0; font-size:24px; cursor:pointer; line-height:1;
+  }
+  .desc-body{
+    padding:14px; overflow:auto;
+  }
+
+  /* conteúdo interno clonado do card */
+  .desc-body h3{ margin:0 0 8px; font-size:20px; line-height:1.2; }
+  .desc-body .pill{ margin:0 6px 6px 0; display:inline-block; }
+  .desc-body .price{ margin:10px 0 10px; font-size:18px; font-weight:800; }
+  .desc-body ul{ margin:8px 0 0 18px; }
+
+  /* botão */
+  .btn-desc{
+    display:inline-block;
+    padding:.60rem .9rem;
+    border:1px solid var(--line);
+    border-radius:.5rem;
+    background:#fff;
+    cursor:pointer;
+    font-weight:600;
+    line-height:1.2;
+    margin:0;
+  }
+  .btn-desc:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
+  }
+
+  /* compactação semelhante ao mobile */
+  @media (max-width:640px){
+    .btn-desc{
+      font-size:13px;
+      padding:.45rem .75rem;
+    }
+  }
+</style>
+
+
 <!-- 👇 Cole logo aqui -->
 <style id="price-reduced-style">
   /* Exibe o preço antigo riscado e destaca o novo */
@@ -1765,6 +1824,18 @@ window.showPicksToday = function(){
 
 
 <!-- Modal do mapa -->
+
+  <!-- Modal de Descrição Completa -->
+<div id="desc-modal" class="desc-modal" hidden aria-hidden="true" role="dialog" aria-label="Descrição completa do imóvel">
+  <div class="desc-card">
+    <div class="desc-head">
+      <div class="desc-title">Descrição completa</div>
+      <button class="desc-close" title="Fechar" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="desc-body" id="desc-body"></div>
+  </div>
+</div>
+
 <div id="map-modal" class="map-modal" hidden aria-hidden="true" role="dialog" aria-label="Localização aproximada">
   <div class="map-card">
     <div class="map-head">
@@ -1776,6 +1847,73 @@ window.showPicksToday = function(){
 </div>
 
   <!-- Leaflet JS -->
+  <script>
+(function(){
+  const modal = document.getElementById('desc-modal');
+  const body  = document.getElementById('desc-body');
+  const btnX  = modal?.querySelector('.desc-close');
+
+  function openDescFor(card){
+    if(!modal || !body) return;
+
+    // Monta conteúdo a partir do card
+    const titleEl = card.querySelector('h3');
+    const priceEl = card.querySelector('.price');
+    const pills   = Array.from(card.querySelectorAll('.pill'));
+    const ul      = card.querySelector('ul, .ul'); // sua classe .ul é um UL estilizado
+    const ref     = (card.getAttribute('data-code') || '').trim();
+
+    const pillsHTML = pills.map(p=>`<span class="pill">${p.textContent.trim()}</span>`).join(' ');
+
+    body.innerHTML = `
+      ${titleEl ? `<h3>${titleEl.textContent.trim()}</h3>` : ''}
+      ${pillsHTML ? `<div style="margin:6px 0 4px">${pillsHTML}</div>` : ''}
+      ${priceEl ? priceEl.outerHTML : ''}
+      ${ul ? ul.outerHTML : ''}
+      ${ref ? `<p style="margin-top:10px;color:#666"><strong>Ref:</strong> ${ref}</p>` : ''}
+    `;
+
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow='hidden';
+  }
+
+  function closeDesc(){
+    if(!modal) return;
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow='';
+    if(body) body.innerHTML = '';
+  }
+
+  if(btnX) btnX.addEventListener('click', closeDesc);
+  modal?.addEventListener('click', (e)=>{
+    if(e.target === modal) closeDesc();
+  });
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && modal?.getAttribute('aria-hidden') === 'false') closeDesc();
+  });
+
+  // Cria o botão em todos os cards, antes do WhatsApp
+  document.querySelectorAll('article.card').forEach(card=>{
+    const actionsRow = card.querySelector('.content p:last-of-type');
+    if(!actionsRow) return;
+    if(actionsRow.querySelector('.btn-desc')) return;
+
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn-desc';
+    b.textContent = 'ℹ️ Descrição completa';
+    b.addEventListener('click', ()=> openDescFor(card));
+
+    // Insere antes do botão WhatsApp, se existir; senão, ao final
+    const wa = actionsRow.querySelector('.btn.btn-whats');
+    if(wa) actionsRow.insertBefore(b, wa);
+    else actionsRow.appendChild(b);
+  });
+})();
+</script>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
