@@ -621,7 +621,7 @@
         </article>
 
         <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
-        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento,vendido" data-geo="apto-tres-barras"></div>
+        <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras">
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
@@ -1994,8 +1994,7 @@ window.showPicksToday = function(){
   }
 </style>
 
-  <!-- ===== estilo do vendido ===== -->
-<style id="sold-style">
+  <style id="sold-style">
   /* Tarja diagonal “Vendido” com centralização refinada */
   .card.sold {
     opacity: 0.85;
@@ -2035,6 +2034,15 @@ window.showPicksToday = function(){
   }
 </style>
 
+
+  <style id="hide-toTop-when-modal">
+  /* Esconde o botão flutuante quando qualquer overlay estiver ativo */
+  .gallery-modal.open ~ #toTop,
+  .viewer:not([hidden]) ~ #toTop,
+  #map-modal:not([hidden]) ~ #toTop{
+    display: none !important;
+  }
+</style>
 
 
 
