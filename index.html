@@ -2297,10 +2297,25 @@ window.showPicksToday = function(){
 
 /* mantém aparência elegante do preço */
 .card.sold .price {
-  color: #d62828;
-  font-weight: 700;
+  color: #444;              /* cinza escuro neutro */
+  font-weight: 600;         /* um pouco menos chamativo */
   font-size: 20px;
+  opacity: 0.8;             /* deixa o texto mais suave */
 }
+
+/* Botões neutros desativados */
+.card.sold .btn-fotos,
+.card.sold .btn-whats,
+.card.sold .btn-map,
+.card.sold .btn-desc,
+.card.sold .share-btn {
+  pointer-events: none;     /* sem ação */
+  color: #444 !important;   /* mesma cor do preço */
+  border-color: #666 !important;
+  opacity: 0.5;             /* aparência desabilitada */
+  cursor: default !important;
+}
+
 
 /* esconde botões e impede cliques */
 .card.sold .btn-fotos,
