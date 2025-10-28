@@ -2830,23 +2830,13 @@ smartScrollToWithRetries(anchorEl);
 
   <!-- Script que move imóveis vendidos para o final da lista -->
 <script>
-  window.addEventListener('load', () => {
+  document.addEventListener('DOMContentLoaded', ()=>{
     const grid = document.querySelector('.grid');
-    if (!grid) return;
-
-    // Move todos os cards vendidos para o final da lista
     const vendidos = [...grid.querySelectorAll('.card.sold')];
     vendidos.forEach(card => grid.appendChild(card));
-
-    // Oculta imóveis vendidos dos destaques fixos
-    const destaques = document.querySelectorAll('#imoveis .card');
-    destaques.forEach(card => {
-      if (card.classList.contains('sold')) {
-        card.style.display = 'none';
-      }
-    });
   });
 </script>
+
 
 
 </body>
