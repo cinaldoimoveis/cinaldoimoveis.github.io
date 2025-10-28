@@ -1984,6 +1984,19 @@ window.showPicksToday = function(){
   }
 </style>
 
+  <style id="hero-spacing-fine">
+  /* Ajuste do espaçamento entre a badge e o título principal */
+  .hero .title {
+    margin-top: 16px; /* ajuste fino — aumente se quiser mais espaço */
+  }
+
+  @media (max-width:640px){
+    .hero .title {
+      margin-top: 12px; /* menor no mobile */
+    }
+  }
+</style>
+
   <style id="hide-toTop-when-modal">
   /* Esconde o botão flutuante quando qualquer overlay estiver ativo */
   .gallery-modal.open ~ #toTop,
