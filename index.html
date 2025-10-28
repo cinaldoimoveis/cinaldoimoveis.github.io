@@ -2843,21 +2843,69 @@ smartScrollToWithRetries(anchorEl);
 })();
 </script>
 
-  <!-- Script que move imóveis vendidos e retira dos destaques -->
+  <!-- Script que move vendidos, aplica estado e remove dos Destaques de hoje -->
 <script>
   window.addEventListener('load', () => {
-    const grid = document.querySelector('.grid');
-    if (!grid) return;
+    // 1) Garante que todo card com <p class="price sold"> ganhe .card.sold
+    document.querySelectorAll('#imoveis .grid article.card').forEach(card => {
+      const price = card.querySelector('.price');
+      if (price && price.classList.contains('sold')) {
+        card.classList.add('sold');
+      }
+    });
 
-    // Move os vendidos para o final da lista principal
-    const vendidos = [...grid.querySelectorAll('.card.sold')];
-    vendidos.forEach(card => grid.appendChild(card));
+    // 2) Move os vendidos para o final da grade principal
+    const grid = document.querySelector('#imoveis .grid');
+    if (grid) {
+      [...grid.querySelectorAll('.card.sold')].forEach(card => grid.appendChild(card));
+    }
 
-    // Remove dos destaques de hoje (primeira grade fixa)
-    const destaquesHoje = document.querySelectorAll('main .card.sold, .hero .card.sold');
-    destaquesHoje.forEach(card => card.remove());
+    // 3) Remove dos "Destaques de hoje" (qualquer coisa FORA de #imoveis)
+    //    Critério: links que apontem para hashes dos IDs vendidos (ex.: ?solo=1#apto-tres-barras ou #apto-tres-barras)
+    const soldIds = [...document.querySelectorAll('#imoveis .grid .card.sold')]
+      .map(c => c.id)
+      .filter(Boolean);
+
+    if (soldIds.length) {
+      // Procura QUALQUER link com hash correspondente, mas ignora tudo que estiver DENTRO de #imoveis
+      const allLinks = document.querySelectorAll('a[href*="#"]');
+      allLinks.forEach(a => {
+        // Ignora links dentro da seção principal
+        if (a.closest('#imoveis')) return;
+
+        const href = a.getAttribute('href') || '';
+        const m = href.match(/#([A-Za-z0-9_-]+)/);
+        if (!m) return;
+
+        const hashId = m[1];
+        if (!soldIds.includes(hashId)) return;
+
+        // Sobe até um "container de destaque" e remove
+        const container =
+          a.closest('.card, article, li, .mini-card, .item, .highlight, .destaque') ||
+          a.parentElement;
+
+        if (container) container.remove();
+      });
+
+      // Caso os destaques usem cards "espelhados" (sem links), mas com data-code igual:
+      const soldCodes = [...document.querySelectorAll('#imoveis .grid .card.sold')]
+        .map(c => c.getAttribute('data-code'))
+        .filter(Boolean);
+
+      if (soldCodes.length) {
+        // Remove quaisquer "cards de destaque" fora de #imoveis com mesmo data-code
+        const mirrorCards = document.querySelectorAll('article.card[data-code], .card[data-code]');
+        mirrorCards.forEach(mc => {
+          if (mc.closest('#imoveis')) return; // só fora da seção principal
+          const code = mc.getAttribute('data-code');
+          if (soldCodes.includes(code)) mc.remove();
+        });
+      }
+    }
   });
 </script>
+
 
 
 
