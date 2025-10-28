@@ -621,8 +621,7 @@
         </article>
 
         <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
-        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento,vendido" data-geo="apto-tres-barras">
-  <div class="sold-tag">Vendido</div>
+        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento,vendido" data-geo="apto-tres-barras"></div>
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
@@ -1997,27 +1996,26 @@ window.showPicksToday = function(){
 
   <!-- ===== estilo do vendido ===== -->
 <style id="sold-style">
-  /* Tarja diagonal “Vendido” e efeito visual */
+  /* Tarja diagonal “Vendido” com centralização refinada */
   .card.sold {
     opacity: 0.85;
     position: relative;
     pointer-events: none;
     filter: grayscale(100%);
-    overflow: hidden; /* evita que a tarja passe do limite do card */
+    overflow: hidden;
   }
 
-  /* Tarja diagonal */
   .card.sold::before {
     content: "VENDIDO";
     position: absolute;
-    top: 14px;
-    left: -40px;
-    width: 160px;
+    top: 40px; /* ↓ move um pouco mais pra baixo */
+    left: -50px; /* ↔ ajusta centralização */
+    width: 180px;
     text-align: center;
-    background: #d62828;
+    background: #d62828; /* vermelho padrão */
     color: #fff;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 16px;
     transform: rotate(-45deg);
     box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     letter-spacing: 1px;
@@ -2025,7 +2023,6 @@ window.showPicksToday = function(){
     padding: 6px 0;
   }
 
-  /* Preço e botões */
   .card.sold .price {
     color: #d62828;
     font-weight: 700;
@@ -2038,15 +2035,6 @@ window.showPicksToday = function(){
   }
 </style>
 
-
-  <style id="hide-toTop-when-modal">
-  /* Esconde o botão flutuante quando qualquer overlay estiver ativo */
-  .gallery-modal.open ~ #toTop,
-  .viewer:not([hidden]) ~ #toTop,
-  #map-modal:not([hidden]) ~ #toTop{
-    display: none !important;
-  }
-</style>
 
 
 
