@@ -621,7 +621,8 @@
         </article>
 
         <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
-        <article class="card" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras">
+        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento,vendido" data-geo="apto-tres-barras">
+  <div class="sold-tag">Vendido</div>
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
@@ -629,7 +630,7 @@
               <span class="pill">90,76m²</span><span class="pill">Varanda c/ gourmet</span><span class="pill">2 vagas</span>
               <span class="pill">Ref: CI-AP-TB-90</span>
             </div>
-            <p class="price">R$ 759.000,00</p>
+            <p class="price sold">Vendido</p>
             <ul class="ul">
   <li><strong>Detalhes do imóvel:</strong></li>
   <li>3 quartos (sendo 1 suíte);</li>
@@ -1994,6 +1995,50 @@ window.showPicksToday = function(){
   }
 </style>
 
+  <!-- ===== estilo do vendido ===== -->
+<style id="sold-style">
+  /* Tarja diagonal “Vendido” e efeito visual */
+  .card.sold {
+    opacity: 0.85;
+    position: relative;
+    pointer-events: none;
+    filter: grayscale(100%);
+    overflow: hidden; /* evita que a tarja passe do limite do card */
+  }
+
+  /* Tarja diagonal */
+  .card.sold::before {
+    content: "VENDIDO";
+    position: absolute;
+    top: 14px;
+    left: -40px;
+    width: 160px;
+    text-align: center;
+    background: #d62828;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    letter-spacing: 1px;
+    z-index: 3;
+    padding: 6px 0;
+  }
+
+  /* Preço e botões */
+  .card.sold .price {
+    color: #d62828;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .card.sold .btn-fotos,
+  .card.sold .btn-whats {
+    display: none !important;
+  }
+</style>
+
+
   <style id="hide-toTop-when-modal">
   /* Esconde o botão flutuante quando qualquer overlay estiver ativo */
   .gallery-modal.open ~ #toTop,
@@ -2775,6 +2820,15 @@ smartScrollToWithRetries(anchorEl);
   window.addEventListener('load', scrollToHashSmart, { passive: true });
 
 })();
+</script>
+
+  <!-- Script que move imóveis vendidos para o final da lista -->
+<script>
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const grid = document.querySelector('.grid');
+    const vendidos = [...grid.querySelectorAll('.card.sold')];
+    vendidos.forEach(card => grid.appendChild(card));
+  });
 </script>
 
 </body>
