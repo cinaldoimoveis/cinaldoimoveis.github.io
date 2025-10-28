@@ -1994,47 +1994,6 @@ window.showPicksToday = function(){
   }
 </style>
 
-  <style id="sold-style">
-  /* Tarja diagonal “Vendido” com centralização refinada */
-  .card.sold {
-    opacity: 0.85;
-    position: relative;
-    pointer-events: none;
-    filter: grayscale(100%);
-    overflow: hidden;
-  }
-
-  .card.sold::before {
-    content: "VENDIDO";
-    position: absolute;
-    top: 40px; /* ↓ move um pouco mais pra baixo */
-    left: -50px; /* ↔ ajusta centralização */
-    width: 180px;
-    text-align: center;
-    background: #d62828; /* vermelho padrão */
-    color: #fff;
-    font-weight: 700;
-    font-size: 16px;
-    transform: rotate(-45deg);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    letter-spacing: 1px;
-    z-index: 3;
-    padding: 6px 0;
-  }
-
-  .card.sold .price {
-    color: #d62828;
-    font-weight: 700;
-    font-size: 20px;
-  }
-
-  .card.sold .btn-fotos,
-  .card.sold .btn-whats {
-    display: none !important;
-  }
-</style>
-
-
   <style id="hide-toTop-when-modal">
   /* Esconde o botão flutuante quando qualquer overlay estiver ativo */
   .gallery-modal.open ~ #toTop,
@@ -2297,6 +2256,46 @@ window.showPicksToday = function(){
       top: 6px;
       left: 6px;
     }
+  }
+</style>
+
+    <style id="sold-style">
+  /* Tarja diagonal “Vendido” com centralização refinada */
+  .card.sold {
+    opacity: 0.85;
+    position: relative;
+    pointer-events: none;
+    filter: grayscale(100%);
+    overflow: hidden;
+  }
+
+    .card.sold::before {
+    content: "VENDIDO";
+    position: absolute;
+    top: 58px;       /* ↓ move mais pra baixo */
+    left: -65px;     /* ↔ centraliza no meio da imagem */
+    width: 210px;    /* mais larga, mais equilibrada */
+    text-align: center;
+    background: #d62828; /* vermelho padrão */
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    transform: rotate(-42deg); /* ângulo mais suave e elegante */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    letter-spacing: 1px;
+    z-index: 3;
+    padding: 7px 0;
+  }
+
+  .card.sold .price {
+    color: #d62828;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .card.sold .btn-fotos,
+  .card.sold .btn-whats {
+    display: none !important;
   }
 </style>
 
