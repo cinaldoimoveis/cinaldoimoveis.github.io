@@ -2843,14 +2843,22 @@ smartScrollToWithRetries(anchorEl);
 })();
 </script>
 
-  <!-- Script que move imóveis vendidos para o final da lista -->
+  <!-- Script que move imóveis vendidos e retira dos destaques -->
 <script>
-  document.addEventListener('DOMContentLoaded', ()=>{
+  window.addEventListener('load', () => {
     const grid = document.querySelector('.grid');
+    if (!grid) return;
+
+    // Move os vendidos para o final da lista principal
     const vendidos = [...grid.querySelectorAll('.card.sold')];
     vendidos.forEach(card => grid.appendChild(card));
+
+    // Remove dos destaques de hoje (primeira grade fixa)
+    const destaquesHoje = document.querySelectorAll('main .card.sold, .hero .card.sold');
+    destaquesHoje.forEach(card => card.remove());
   });
 </script>
+
 
 
 
