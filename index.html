@@ -2269,25 +2269,26 @@ window.showPicksToday = function(){
   overflow: hidden;
 }
 
-/* tarja diagonal centralizada atravessando o card */
+/* tarja diagonal atravessando o topo do card */
 .card.sold::before {
   content: "VENDIDO";
   position: absolute;
-  top: 45%;                /* posiciona no meio vertical do card */
-  left: -75px;             /* empurra à esquerda para atravessar todo o card */
-  width: 280px;            /* comprimento total para cruzar de canto a canto */
+  top: 58px;                /* volta para a posição correta (mais próxima do topo) */
+  left: -90px;              /* desloca um pouco mais à esquerda */
+  width: 320px;             /* alonga a faixa para cruzar todo o card */
   text-align: center;
-  background: #d62828;     /* vermelho vibrante */
+  background: #d62828;      /* vermelho vibrante */
   color: #fff;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 17px;
   transform: rotate(-42deg);
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
   letter-spacing: 1px;
   z-index: 5;
-  padding: 10px 0;
-  border: 2px solid rgba(255,255,255,0.8); /* contorno branco sutil */
+  padding: 8px 0;
+  border: 2px solid rgba(255,255,255,0.8);
   opacity: 0.98;
+  filter: none !important;  /* 🔥 impede que o grayscale afete a tarja */
 }
 
 /* mantém aparência elegante do preço */
