@@ -2260,45 +2260,50 @@ window.showPicksToday = function(){
 </style>
 
     <style id="sold-style">
-  /* Tarja diagonal “Vendido” com centralização refinada */
-  .card.sold {
-    opacity: 0.85;
-    position: relative;
-    pointer-events: none;
-    filter: grayscale(100%);
-    overflow: hidden;
-  }
-
-    .card.sold::before {
-  content: "VENDIDO";
-  position: absolute;
-  top: 50px;           /* centralizado verticalmente na miniatura */
-  left: -60px;         /* ajuste fino horizontal */
-  width: 220px;        /* largura perfeita para o ângulo */
-  text-align: center;
-  background: #d62828; /* vermelho vibrante */
-  color: #fff;
-  font-weight: 800;
-  font-size: 17px;
-  transform: rotate(-41deg); /* ângulo natural e mais legível */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  letter-spacing: 1px;
-  z-index: 4;
-  padding: 8px 0;
-  opacity: 0.97;       /* leve transparência pra suavizar */
+/* Tarja diagonal “Vendido” com atravessamento completo e cor vermelha */
+.card.sold {
+  opacity: 0.85;
+  position: relative;
+  pointer-events: none;
+  filter: grayscale(100%);
+  overflow: hidden;
 }
 
-  .card.sold .price {
-    color: #d62828;
-    font-weight: 700;
-    font-size: 20px;
-  }
+/* tarja diagonal centralizada atravessando o card */
+.card.sold::before {
+  content: "VENDIDO";
+  position: absolute;
+  top: 45%;                /* posiciona no meio vertical do card */
+  left: -75px;             /* empurra à esquerda para atravessar todo o card */
+  width: 280px;            /* comprimento total para cruzar de canto a canto */
+  text-align: center;
+  background: #d62828;     /* vermelho vibrante */
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  transform: rotate(-42deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  letter-spacing: 1px;
+  z-index: 5;
+  padding: 10px 0;
+  border: 2px solid rgba(255,255,255,0.8); /* contorno branco sutil */
+  opacity: 0.98;
+}
 
-  .card.sold .btn-fotos,
-  .card.sold .btn-whats {
-    display: none !important;
-  }
+/* mantém aparência elegante do preço */
+.card.sold .price {
+  color: #d62828;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* esconde botões e impede cliques */
+.card.sold .btn-fotos,
+.card.sold .btn-whats {
+  display: none !important;
+}
 </style>
+
 
 
 <!-- Modal do mapa -->
