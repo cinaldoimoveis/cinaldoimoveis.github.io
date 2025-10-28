@@ -2265,8 +2265,12 @@ window.showPicksToday = function(){
   opacity: 0.85;
   position: relative;
   pointer-events: none;
-  filter: grayscale(100%);
   overflow: hidden;
+}
+
+/* aplica o preto e branco só na imagem */
+.card.sold img {
+  filter: grayscale(100%);
 }
 
 /* tarja diagonal atravessando o topo do card */
@@ -2826,12 +2830,24 @@ smartScrollToWithRetries(anchorEl);
 
   <!-- Script que move imóveis vendidos para o final da lista -->
 <script>
-  document.addEventListener('DOMContentLoaded', ()=>{
+  window.addEventListener('load', () => {
     const grid = document.querySelector('.grid');
+    if (!grid) return;
+
+    // Move todos os cards vendidos para o final da lista
     const vendidos = [...grid.querySelectorAll('.card.sold')];
     vendidos.forEach(card => grid.appendChild(card));
+
+    // Oculta imóveis vendidos dos destaques fixos
+    const destaques = document.querySelectorAll('#imoveis .card');
+    destaques.forEach(card => {
+      if (card.classList.contains('sold')) {
+        card.style.display = 'none';
+      }
+    });
   });
 </script>
+
 
 </body>
 </html>
