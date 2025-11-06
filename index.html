@@ -783,7 +783,7 @@
         </article>
 
         <!-- Lote Residencial 630 m² – Condomínio Unique (Preço reduzido) -->
-<article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique" data-discount>
+  <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique">
   <div class="thumb">
     <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
   </div>
@@ -798,8 +798,8 @@
       <span class="pill">Ref: CI-LO-UNIQ-630</span>
     </div>
 
-    <!-- 💰 Preço com valor antigo e novo -->
-    <p class="price" data-old="R$ 650.000,00">R$ 599.000,00</p>
+      <!-- 💰 Vendido -->
+    <p class="price sold">Vendido</p>
 
     <ul class="ul">
   <li><strong>Dimensões do lote:</strong></li>
@@ -1449,11 +1449,15 @@
   };
 
   // aplica o pinning conforme o filtro atual
-  const pinList = PIN_TOP_MAP[f] || [];
+    const pinList = PIN_TOP_MAP[f] || [];
   pinList.forEach(id=>{
     const el = document.getElementById(id);
-    if (el && !el.hidden) grid.prepend(el);
+    // não pina se estiver oculto OU se já for “vendido”
+    if (el && !el.hidden && !el.classList.contains('sold')) {
+      grid.prepend(el);
+    }
   });
+
 
   grid.classList.remove('filtering');
 }
