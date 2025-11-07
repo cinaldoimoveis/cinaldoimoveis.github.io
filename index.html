@@ -1341,12 +1341,20 @@
   </a>
 </p>
 
-<div class="ig-qr contato-item" aria-label="QR code do Instagram @cinaldo_imoveis">
-  <img src="assets/qr-instagram.jpeg" alt="QR do Instagram @cinaldo_imoveis" loading="lazy">
+<div class="ig-qr-box" aria-label="QR code do Instagram @cinaldo_imoveis" style="
+  text-align:center;
+  margin-top:20px;
+">
+  <img src="assets/qr-instagram.jpeg" alt="QR do Instagram @cinaldo_imoveis" loading="lazy" style="
+    max-width:130px;
+    width:100%;
+    margin-bottom:6px;
+  ">
   <div>
     <small>Aponte a câmera do celular para o QR para abrir o perfil.</small>
   </div>
 </div>
+
 
 
 
@@ -3017,6 +3025,18 @@ smartScrollToWithRetries(anchorEl);
       width:100% !important;
       margin:22px auto 12px auto !important;
       text-align:center !important;
+    }
+  }
+</style>
+
+    <style>
+  @media(max-width:600px){
+    .ig-qr-box {
+      margin-top:25px !important;
+      margin-bottom:10px !important;
+      text-align:center !important;
+      display:block !important;
+      width:100% !important;
     }
   }
 </style>
