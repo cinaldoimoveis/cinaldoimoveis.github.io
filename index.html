@@ -1350,15 +1350,42 @@
 </div></section>
 
 
-  <footer>
-  <div class="container" style="padding:18px 0;text-align:center;line-height:1.5;">
-    <div style="font-size:.9rem;color:#666;">
-      © 2019 – <span id="y"></span> <span style="color:#222;">Cinaldo Imóveis</span> • Linhares – ES
-    </div>
-    
+ <footer>
+  <div class="container footer-box">
+    <div class="footer-text">
+      © 2019 – <span id="y"></span> <span class="footer-brand">Cinaldo Imóveis</span> • Linhares – ES
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-box{
+    padding:16px 0 22px 0;    /* superior menor / inferior um pouco maior → centra visualmente */
+    text-align:center;
+  }
+
+  .footer-text{
+    font-size:.90rem;
+    color:#666;
+    line-height:1.4;          /* ideal para 1 linha */
+  }
+
+  .footer-brand{
+    color:#222;               /* marca em destaque leve */
+    font-weight:500;          /* NÃO é negrito — é apenas mais firme */
+  }
+
+  @media(max-width:640px){
+    .footer-box{
+      padding:18px 0 26px 0;  /* pequeno ajuste para compensar mobile */
+    }
+    .footer-text{
+      font-size:.88rem;
+      line-height:1.45;
+    }
+  }
+</style>
+
 
 <script>
   document.getElementById('y').textContent = new Date().getFullYear();
