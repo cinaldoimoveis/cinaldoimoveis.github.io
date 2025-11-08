@@ -1265,32 +1265,40 @@
   </div>
 </article>
 
-        <article class="card sold" id="lote-alphaville-891" data-code="CI-LO-ALPHA-891" data-type="lote" data-geo="alphaville" data-sold="2025-08-17">
+        <!-- Lote 891m² – Terras Alphaville Linhares -->
+<article class="card sold" id="lote-alphaville-891" data-code="CI-LO-ALPHA-891" data-type="lote" data-tags="lote" data-geo="alphaville" data-sold="2025-08-17">
   <div class="thumb">
     <img src="assets/lote-alphaville-891.jpeg" alt="Lote 891m² – Terras Alphaville Linhares ES" loading="lazy">
   </div>
 
   <div class="content">
     <h3>Lote 891m² – Terras Alphaville Linhares ES</h3>
-    <div class="pills">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="pill">891m²</span>
       <span class="pill">Condomínio fechado</span>
       <span class="pill">Portaria 24h</span>
       <span class="pill">Clube completo</span>
+      <span class="pill">Ref: CI-LO-ALPHA-891</span>
     </div>
 
-    <p class="ul">
-      <ul>
-        <li>Condomínio horizontal de alto padrão</li>
-        <li>Portaria 24h com segurança equipada</li>
-        <li>Clube com brinquedoteca, academia, área de festa e piscina</li>
-        <li>Quadras de tênis, basquete, futebol e vôlei de areia</li>
-        <li>Apenas 2,5km do bairro Aviso, sentido Pontal do Ipiranga</li>
-      </ul>
-    </p>
-
+    <!-- 💰 Vendido -->
     <p class="price sold">Vendido</p>
+
+    <ul class="ul">
+      <li><strong>Condomínio Terras Alphaville Linhares:</strong></li>
+      <li>Portaria 24h com seguranças bem equipados;</li>
+      <li>Clube com brinquedoteca, academia, área de festa e piscina;</li>
+      <li>Quadras de tênis, basquete, futebol e vôlei de areia;</li>
+      <li>Apenas 2,5km do bairro Aviso, sentido Pontal do Ipiranga.</li>
+    </ul>
+
+    <p>
+      <button class="btn-fotos" data-gallery-prefix="lote-alphaville-891-" data-gallery-count="1">Ver fotos</button>
+      <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+    </p>
   </div>
 </article>
+
 
 
 
@@ -2964,6 +2972,30 @@ smartScrollToWithRetries(anchorEl);
 
 })();
 </script>
+
+    <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
+<script>
+window.addEventListener('load', () => {
+  const grid = document.querySelector('#imoveis .grid');
+  if (!grid) return;
+
+  // coleta todos os vendidos com data
+  const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
+
+  if (soldCards.length > 1) {
+    // ordena pela data do atributo data-sold (AAAA-MM-DD)
+    soldCards.sort((a, b) => {
+      const da = new Date(a.getAttribute('data-sold'));
+      const db = new Date(b.getAttribute('data-sold'));
+      return da - db; // mais antigo primeiro
+    });
+
+    // reanexa na ordem ordenada
+    soldCards.forEach(card => grid.appendChild(card));
+  }
+});
+</script>
+
 
   <!-- Script que move vendidos, aplica estado e remove dos Destaques de hoje -->
 <script>
