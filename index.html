@@ -621,7 +621,8 @@
         </article>
 
         <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) -->
-        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras">
+        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras" data-sold="2025-10-25"
+>
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
@@ -783,7 +784,8 @@
         </article>
 
         <!-- Lote Residencial 630 m² – Condomínio Unique (Preço reduzido) -->
-  <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique">
+  <article class="card" id="lote-unique-630" data-code="CI-LO-UNIQ-630" data-type="lote" data-tags="lote" data-geo="unique" data-sold="2025-11-06"
+>
   <div class="thumb">
     <img src="assets/unique-lote-01.jpeg" alt="Lote 630 m² no Condomínio Unique, Linhares/ES" loading="lazy">
   </div>
@@ -3060,23 +3062,26 @@ window.addEventListener('load', () => {
   });
 </script>
 
-    <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
+   <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
 <script>
 window.addEventListener('load', () => {
-  const grid = document.querySelector('#imoveis .grid');
-  if (!grid) return;
+  // Espera o script "mover vendidos" terminar antes de reordenar
+  setTimeout(() => {
+    const grid = document.querySelector('#imoveis .grid');
+    if (!grid) return;
 
-  const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
+    const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
 
-  if (soldCards.length > 1) {
-    soldCards.sort((a, b) => {
-      const da = new Date(a.getAttribute('data-sold'));
-      const db = new Date(b.getAttribute('data-sold'));
-      return da - db; // mais antigo primeiro
-    });
+    if (soldCards.length > 1) {
+      soldCards.sort((a, b) => {
+        const da = new Date(a.getAttribute('data-sold'));
+        const db = new Date(b.getAttribute('data-sold'));
+        return da - db; // mais antigo primeiro
+      });
 
-    soldCards.forEach(card => grid.appendChild(card));
-  }
+      soldCards.forEach(card => grid.appendChild(card));
+    }
+  }, 300); // ⏳ pequeno atraso garante que o outro script já rodou
 });
 </script>
 
