@@ -1622,15 +1622,23 @@
     'casa': ['complexo-sao-mateus']
   };
 
-  // aplica o pinning conforme o filtro atual
-    const pinList = PIN_TOP_MAP[f] || [];
+    // aplica o pinning conforme o filtro atual,
+  // garantindo que vendidos nunca sejam fixados no topo
+  const pinList = PIN_TOP_MAP[f] || [];
   pinList.forEach(id=>{
     const el = document.getElementById(id);
-    // não pina se estiver oculto OU se já for “vendido”
-    if (el && !el.hidden && !el.classList.contains('sold')) {
-      grid.prepend(el);
-    }
+    if (!el) return;
+
+    const isSold = el.classList.contains('sold');
+    const isHidden = el.hidden;
+
+    // se estiver vendido OU oculto, ignora completamente
+    if (isSold || isHidden) return;
+
+    // só então fixa no topo
+    grid.prepend(el);
   });
+
 
 
   grid.classList.remove('filtering');
