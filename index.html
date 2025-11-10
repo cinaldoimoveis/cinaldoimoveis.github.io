@@ -3131,8 +3131,12 @@ window.addEventListener('load', () => {
       }
     }
 
-    // 🟢 Reaplica o filtro após marcar vendidos (corrige caso Unique apareça no "Todos")
-    if (typeof applyFilter === 'function') applyFilter('all');
+    // 🟢 Reaplica o filtro “Todos” após marcar vendidos
+// e aguarda um pequeno intervalo para garantir que as classes .sold já estejam aplicadas
+setTimeout(() => {
+  if (typeof applyFilter === 'function') applyFilter('all');
+}, 200);
+
   });
 </script>
 
