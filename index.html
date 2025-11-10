@@ -424,7 +424,7 @@
   <section id="imoveis">
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
-<div class="filters" id="filters">
+  <div class="filters" id="filters">
   <button class="fbtn is-active" data-filter="all">Todos</button>
   <button class="fbtn" data-filter="casa">Casas</button>
   <button class="fbtn" data-filter="apartamento">Apartamentos</button>
@@ -433,7 +433,9 @@
   <button class="fbtn" data-filter="chacara">Chácaras</button> <!-- ✅ novo botão -->
   <button class="fbtn" data-filter="fazenda">Fazendas</button>
   <button class="fbtn" data-filter="comercial">Comercial</button>
-</div>
+  <button class="fbtn" data-filter="vendido">Vendidos</button>
+  </div> <!-- fecha a barra de filtros -->
+
 
 
       <div class="grid">
@@ -1595,10 +1597,21 @@
 
   const f = (type||'all').toLowerCase();
   cards.forEach(card=>{
-    const tags = getTags(card);
-    const show = (f==='all') || tags.includes(f);
-    card.hidden = !show;
-  });
+  const tags = getTags(card);
+  const isSold = card.classList.contains('sold');
+
+  // Lógica de exibição:
+  // "Todos" → mostra tudo, exceto vendidos
+  // "Vendidos" → mostra só os vendidos
+  // Outros → segue o filtro normal
+  const show =
+    (f === 'all' && !isSold) ||
+    (f === 'vendido' && isSold) ||
+    (f !== 'all' && f !== 'vendido' && tags.includes(f));
+
+  card.hidden = !show;
+});
+
 
     // Regras de PIN por filtro:
   // - 'all'  → Unique 630 + Complexo São Mateus
