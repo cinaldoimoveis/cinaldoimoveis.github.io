@@ -1596,21 +1596,20 @@
   grid.classList.add('filtering');
 
   const f = (type||'all').toLowerCase();
-  cards.forEach(card=>{
-  const tags = getTags(card);
-  const isSold = card.classList.contains('sold');
+   cards.forEach(card=>{
+    const tags = getTags(card);
+    const isSold = card.classList.contains('sold');
 
-  // Lógica de exibição:
-  // "Todos" → mostra tudo, exceto vendidos
-  // "Vendidos" → mostra só os vendidos
-  // Outros → segue o filtro normal
-  const show =
-    (f === 'all' && !isSold) ||
-    (f === 'vendido' && isSold) ||
-    (f !== 'all' && f !== 'vendido' && tags.includes(f));
+    // 🔹 Regras de exibição:
+    // - "Vendidos": mostra apenas imóveis vendidos
+    // - Qualquer outro filtro: mostra apenas imóveis NÃO vendidos
+    // - "Todos": também mostra apenas imóveis NÃO vendidos
+    const show =
+      (f === 'vendido' && isSold) ||                             // só vendidos
+      (f !== 'vendido' && !isSold && (f === 'all' || tags.includes(f))); // não vendidos
 
-  card.hidden = !show;
-});
+    card.hidden = !show;
+  });
 
 
     // Regras de PIN por filtro:
