@@ -3121,7 +3121,7 @@ window.addEventListener('load', () => {
         .map(c => c.getAttribute('data-code'))
         .filter(Boolean);
 
-      if (soldCodes.length) {
+            if (soldCodes.length) {
         // Remove quaisquer "cards de destaque" fora de #imoveis com mesmo data-code
         const mirrorCards = document.querySelectorAll('article.card[data-code], .card[data-code]');
         mirrorCards.forEach(mc => {
@@ -3131,8 +3131,12 @@ window.addEventListener('load', () => {
         });
       }
     }
+
+    // 🟢 Reaplica o filtro após marcar vendidos (corrige caso Unique apareça no "Todos")
+    if (typeof applyFilter === 'function') applyFilter('all');
   });
 </script>
+
 
    <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
 <script>
