@@ -3657,54 +3657,32 @@ window.addEventListener('load', () => {
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
   const btnAll = document.getElementById('btn-all');
-  const grid = document.querySelector('#imoveis .grid') || document.getElementById('cards') || document.querySelector('.grid, #list');
 
-  function clearURLToRoot(){
-    // Remove ?solo=1 e #id da URL
+  if (!btnAll) return;
+
+  btnAll.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+
+    // 🔹 1. Remove parâmetros e hash (limpa modo solo)
     const clean = location.pathname;
     history.replaceState(null, '', clean);
-  }
 
-  function clearGrid(){
-    if (grid) grid.innerHTML = '';
-  }
+    // 🔹 2. Sobe para o topo sem “pular”
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    window.scrollTo(0,0);
+    html.style.scrollBehavior = prev || '';
 
-  function renderAll(){
-    // Se houver função global para reconstruir a lista
-    if (typeof renderCards === 'function'){
-      renderCards({ hideSold: true });
-      // Reaplica o filtro "Todos" para restaurar o estado normal
-      if (typeof applyFilter === 'function') applyFilter('all');
-    } else {
-      // Fallback: recarrega a página inteira (modo seguro)
-      location.href = location.origin + location.pathname;
-    }
-  }
-
-  if (btnAll){
-    btnAll.addEventListener('click', (ev)=>{
-      ev.preventDefault();
-
-      // Limpa a URL e o grid
-      clearURLToRoot();
-      clearGrid();
-
-      // Renderiza tudo de novo e volta o filtro padrão
-      renderAll();
-
-      // Sobe pro topo da página (sem animação no mobile)
-      const html = document.documentElement;
-      const prev = html.style.scrollBehavior;
-      html.style.scrollBehavior = 'auto';
-      window.scrollTo(0,0);
-      html.style.scrollBehavior = prev || '';
-
-      // Esconde o botão depois de voltar pra página principal
-      btnAll.style.display = 'none';
-    });
-  }
+    // 🔹 3. Aguarda um pequeno intervalo e reaplica o modo normal
+    setTimeout(()=>{
+      // Recarrega toda a seção de imóveis — modo seguro e simples
+      location.reload();
+    }, 150);
+  });
 });
 </script>
+
 
 <!-- Aviso de coleta de dados / cookies -->
 <div class="cookie-info" style="text-align:center;font-size:13px;color:#555;margin:20px auto;max-width:600px;padding:8px 16px;border-top:1px solid #ddd;">
