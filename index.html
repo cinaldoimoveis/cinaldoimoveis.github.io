@@ -3657,9 +3657,10 @@ window.addEventListener('load', () => {
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
   const btnAll = document.getElementById('btn-all');
-  const grid = document.getElementById('cards') || document.querySelector('.grid, #imoveis .grid, #list');
+  const grid = document.querySelector('#imoveis .grid') || document.getElementById('cards') || document.querySelector('.grid, #list');
 
   function clearURLToRoot(){
+    // Remove ?solo=1 e #id da URL
     const clean = location.pathname;
     history.replaceState(null, '', clean);
   }
@@ -3669,11 +3670,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
 
   function renderAll(){
-    // se tiver função global de renderização
+    // Se houver função global para reconstruir a lista
     if (typeof renderCards === 'function'){
       renderCards({ hideSold: true });
+      // Reaplica o filtro "Todos" para restaurar o estado normal
+      if (typeof applyFilter === 'function') applyFilter('all');
     } else {
-      // fallback: recarrega a página inteira
+      // Fallback: recarrega a página inteira (modo seguro)
       location.href = location.origin + location.pathname;
     }
   }
@@ -3681,16 +3684,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if (btnAll){
     btnAll.addEventListener('click', (ev)=>{
       ev.preventDefault();
+
+      // Limpa a URL e o grid
       clearURLToRoot();
       clearGrid();
+
+      // Renderiza tudo de novo e volta o filtro padrão
       renderAll();
 
-      // sobe para o topo da página sem “pular” no mobile
+      // Sobe pro topo da página (sem animação no mobile)
       const html = document.documentElement;
       const prev = html.style.scrollBehavior;
       html.style.scrollBehavior = 'auto';
       window.scrollTo(0,0);
       html.style.scrollBehavior = prev || '';
+
+      // Esconde o botão depois de voltar pra página principal
+      btnAll.style.display = 'none';
     });
   }
 });
