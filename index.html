@@ -479,8 +479,13 @@
 </ul>
 
             <p>
-              <button class="btn-fotos" data-gallery-prefix="alphaville-casa-" data-gallery-count="16">Ver fotos</button>
-              <a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+              <button class="btn-fotos"
+        data-gallery-prefix="..."
+        data-gallery-count="..."
+        data-gallery-ext=".jpeg">Ver fotos</button>
+<a class="btn btn-whats js-wa" href="#" target="_blank" rel="noopener">Agendar visita</a>
+<a id="btn-all" class="btn" href="." data-reset="1" rel="nofollow">Ver todos os imóveis</a>
+
             </p>
           </div>
         </article>
@@ -3626,6 +3631,86 @@ window.addEventListener('load', () => {
   }
 </style>
 
+    <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
+<script>
+window.addEventListener('load', () => {
+  // Espera o script "mover vendidos" terminar antes de reordenar
+  setTimeout(() => {
+    const grid = document.querySelector('#imoveis .grid');
+    if (!grid) return;
+
+    const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
+
+    if (soldCards.length > 1) {
+      soldCards.sort((a, b) => {
+        const da = new Date(a.getAttribute('data-sold'));
+        const db = new Date(b.getAttribute('data-sold'));
+        return da - db; // mais antigo primeiro
+      });
+
+      soldCards.forEach(card => grid.appendChild(card));
+    }
+  }, 300); // ⏳ pequeno atraso garante que o outro script já rodou
+});
+</script>
+
+<!-- 🟢 Controle do botão “Ver todos os imóveis” -->
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const btnAll = document.getElementById('btn-all');
+  const grid = document.getElementById('cards') || document.querySelector('.grid, #imoveis .grid, #list');
+
+  function clearURLToRoot(){
+    const clean = location.pathname;
+    history.replaceState(null, '', clean);
+  }
+
+  function clearGrid(){
+    if (grid) grid.innerHTML = '';
+  }
+
+  function renderAll(){
+    // se tiver função global de renderização
+    if (typeof renderCards === 'function'){
+      renderCards({ hideSold: true });
+    } else {
+      // fallback: recarrega a página inteira
+      location.href = location.origin + location.pathname;
+    }
+  }
+
+  if (btnAll){
+    btnAll.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      clearURLToRoot();
+      clearGrid();
+      renderAll();
+
+      // sobe para o topo da página sem “pular” no mobile
+      const html = document.documentElement;
+      const prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = 'auto';
+      window.scrollTo(0,0);
+      html.style.scrollBehavior = prev || '';
+    });
+  }
+});
+</script>
+
+<!-- Aviso de coleta de dados / cookies -->
+<div class="cookie-info" style="text-align:center;font-size:13px;color:#555;margin:20px auto;max-width:600px;padding:8px 16px;border-top:1px solid #ddd;">
+  Este site utiliza cookies e tecnologias semelhantes para melhorar sua experiência de navegação e coletar estatísticas de acesso (Google Analytics). 
+  Ao continuar, você concorda com nossa <a href="#" style="color:#0033cc;text-decoration:none;">Política de Privacidade</a>.
+</div>
+
+<style>
+  @media(max-width:600px){
+    .ig-qr {
+      display:none !important;
+    }
+  }
+</style>
 
 </body>
 </html>
+
