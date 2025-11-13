@@ -3654,6 +3654,46 @@ window.addEventListener('load', () => {
 </script>
 
   
+<!-- 🟢 Controle do botão “Ver todos os imóveis” -->
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+
+  const btnAll    = document.getElementById('btn-all');                 // botão dentro do card do imóvel solo
+  const filterAll = document.querySelector('.fbtn[data-filter="all"]'); // botão do filtro “Todos”
+
+  if (!btnAll || !filterAll) return;
+
+  btnAll.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+
+    // 🔹 1. Remove ?solo=1 e #id
+    const clean = location.pathname;
+    history.replaceState(null, '', clean);
+
+    // 🔹 2. Sai do modo solo
+    document.body.classList.remove('solo');
+
+    const filters = document.getElementById('filters');
+    if (filters) filters.style.display = '';
+
+    // 🔹 3. Exibe novamente todos os cards que estavam escondidos
+    document.querySelectorAll('#imoveis .grid .card').forEach(c => c.hidden = false);
+
+    // 🔹 4. Aciona o filtro “Todos” (como se o usuário clicasse)
+    filterAll.click();
+
+    // 🔹 5. Rola até o início da seção de imóveis
+    const section = document.getElementById('imoveis');
+    if (section) {
+      section.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+
+    // 🔹 6. Esconde o botão após usar
+    btnAll.style.display = 'none';
+  });
+
+});
+</script>
 
 
 </body>
