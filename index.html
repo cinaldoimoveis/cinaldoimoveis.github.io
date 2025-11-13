@@ -3653,50 +3653,37 @@ window.addEventListener('load', () => {
 });
 </script>
 
-<!-- 🟢 Controle do botão “Ver todos os imóveis” -->
+    <!-- 🟢 Controle do botão “Ver todos os imóveis” -->
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
   const btnAll = document.getElementById('btn-all');
+  const filterAll = document.querySelector('[data-filter="all"]');
 
-  if (!btnAll) return;
+  if (!btnAll || !filterAll) return;
 
   btnAll.addEventListener('click', (ev)=>{
     ev.preventDefault();
 
-    // 🔹 1. Remove parâmetros e hash (limpa modo solo)
+    // Remove ?solo=1 e #id da URL
     const clean = location.pathname;
     history.replaceState(null, '', clean);
 
-    // 🔹 2. Sobe para o topo sem “pular”
+    // Sobe pro topo sem pulo
     const html = document.documentElement;
     const prev = html.style.scrollBehavior;
     html.style.scrollBehavior = 'auto';
     window.scrollTo(0,0);
     html.style.scrollBehavior = prev || '';
 
-    // 🔹 3. Aguarda um pequeno intervalo e reaplica o modo normal
-    setTimeout(()=>{
-      // Recarrega toda a seção de imóveis — modo seguro e simples
-      location.reload();
-    }, 150);
+    // Aciona o filtro "Todos" como se o usuário tivesse clicado nele
+    filterAll.click();
+
+    // Remove o botão após voltar
+    btnAll.style.display = 'none';
   });
 });
 </script>
 
-
-<!-- Aviso de coleta de dados / cookies -->
-<div class="cookie-info" style="text-align:center;font-size:13px;color:#555;margin:20px auto;max-width:600px;padding:8px 16px;border-top:1px solid #ddd;">
-  Este site utiliza cookies e tecnologias semelhantes para melhorar sua experiência de navegação e coletar estatísticas de acesso (Google Analytics). 
-  Ao continuar, você concorda com nossa <a href="#" style="color:#0033cc;text-decoration:none;">Política de Privacidade</a>.
-</div>
-
-<style>
-  @media(max-width:600px){
-    .ig-qr {
-      display:none !important;
-    }
-  }
-</style>
 
 </body>
 </html>
