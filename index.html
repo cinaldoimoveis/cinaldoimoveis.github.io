@@ -3658,7 +3658,7 @@ window.addEventListener('load', () => {
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
 
-  const btnAll    = document.getElementById('btn-all');                 // botão dentro do card do imóvel solo
+  const btnAll    = document.getElementById('btn-all');                 // botão dentro do card SOLO
   const filterAll = document.querySelector('.fbtn[data-filter="all"]'); // botão do filtro “Todos”
 
   if (!btnAll || !filterAll) return;
@@ -3676,10 +3676,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const filters = document.getElementById('filters');
     if (filters) filters.style.display = '';
 
-    // 🔹 3. Exibe novamente todos os cards que estavam escondidos
-    document.querySelectorAll('#imoveis .grid .card').forEach(c => c.hidden = false);
+    // 🔹 2.1 Remove o botão "exit-solo" se existir
+    const exit = document.getElementById('exit-solo');
+    if (exit) exit.remove();
 
-    // 🔹 4. Aciona o filtro “Todos” (como se o usuário clicasse)
+    // 🔹 3. Exibe novamente todos os cards
+    document.querySelectorAll('#imoveis .grid .card')
+      .forEach(c => c.hidden = false);
+
+    // 🔹 4. Aciona o filtro “Todos”
     filterAll.click();
 
     // 🔹 5. Rola até o início da seção de imóveis
@@ -3688,12 +3693,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
       section.scrollIntoView({ behavior:'smooth', block:'start' });
     }
 
-    // 🔹 6. Esconde o botão após usar
+    // 🔹 6. Some com o botão depois que usar
     btnAll.style.display = 'none';
   });
 
 });
 </script>
+
 
 
 </body>
