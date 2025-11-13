@@ -3653,36 +3653,7 @@ window.addEventListener('load', () => {
 });
 </script>
 
-    <!-- 🟢 Controle do botão “Ver todos os imóveis” -->
-<script>
-document.addEventListener('DOMContentLoaded', ()=>{
-  const btnAll = document.getElementById('btn-all');
-  const filterAll = document.querySelector('[data-filter="all"]');
-
-  if (!btnAll || !filterAll) return;
-
-  btnAll.addEventListener('click', (ev)=>{
-    ev.preventDefault();
-
-    // Remove ?solo=1 e #id da URL
-    const clean = location.pathname;
-    history.replaceState(null, '', clean);
-
-    // Sobe pro topo sem pulo
-    const html = document.documentElement;
-    const prev = html.style.scrollBehavior;
-    html.style.scrollBehavior = 'auto';
-    window.scrollTo(0,0);
-    html.style.scrollBehavior = prev || '';
-
-    // Aciona o filtro "Todos" como se o usuário tivesse clicado nele
-    filterAll.click();
-
-    // Remove o botão após voltar
-    btnAll.style.display = 'none';
-  });
-});
-</script>
+  
 
 
 </body>
