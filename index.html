@@ -1813,8 +1813,6 @@
     </div>
   </section>
 
-    </section>
-
   <!-- ⭐ Card de Avaliações Google – Cinaldo Corretor -->
   <section>
     <div class="container">
@@ -3579,41 +3577,10 @@ window.addEventListener('load', () => {
         });
       }
     }
-
-    // 🟢 Reaplica o filtro “Todos” após marcar vendidos
-    // e aguarda um pequeno intervalo para garantir que as classes .sold já estejam aplicadas
-    setTimeout(() => {
-      if (typeof applyFilter === 'function') applyFilter('all');
-    }, 400);
+  
 
   });
 </script>
-
-
-
-   <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
-<script>
-window.addEventListener('load', () => {
-  // Espera o script "mover vendidos" terminar antes de reordenar
-  setTimeout(() => {
-    const grid = document.querySelector('#imoveis .grid');
-    if (!grid) return;
-
-    const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
-
-    if (soldCards.length > 1) {
-      soldCards.sort((a, b) => {
-        const da = new Date(a.getAttribute('data-sold'));
-        const db = new Date(b.getAttribute('data-sold'));
-        return da - db; // mais antigo primeiro
-      });
-
-      soldCards.forEach(card => grid.appendChild(card));
-    }
-  }, 300); // ⏳ pequeno atraso garante que o outro script já rodou
-});
-</script>
-
 
 
 <!-- Aviso de coleta de dados / cookies -->
@@ -3630,73 +3597,43 @@ window.addEventListener('load', () => {
   }
 </style>
 
-    <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
-<script>
-window.addEventListener('load', () => {
-  // Espera o script "mover vendidos" terminar antes de reordenar
-  setTimeout(() => {
-    const grid = document.querySelector('#imoveis .grid');
-    if (!grid) return;
-
-    const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
-
-    if (soldCards.length > 1) {
-      soldCards.sort((a, b) => {
-        const da = new Date(a.getAttribute('data-sold'));
-        const db = new Date(b.getAttribute('data-sold'));
-        return da - db; // mais antigo primeiro
-      });
-
-      soldCards.forEach(card => grid.appendChild(card));
-    }
-  }, 300); // ⏳ pequeno atraso garante que o outro script já rodou
-});
-</script>
-
   
-<!-- 🟢 Controle do botão “Ver todos os imóveis” -->
+<!-- 🟢 Botão “Ver todos os imóveis” aciona o filtro "Todos" DE VERDADE -->
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
 
-  const btnAll    = document.getElementById('btn-all');                 // botão dentro do card SOLO
-  const filterAll = document.querySelector('.fbtn[data-filter="all"]'); // botão do filtro “Todos”
+  const btnAll    = document.getElementById('btn-all');                 // botão do card
+  const filterAll = document.querySelector('.fbtn[data-filter="all"]'); // botão "Todos"
 
   if (!btnAll || !filterAll) return;
 
   btnAll.addEventListener('click', (ev)=>{
     ev.preventDefault();
 
-    // 🔹 1. Remove ?solo=1 e #id
-    const clean = location.pathname;
-    history.replaceState(null, '', clean);
-
-    // 🔹 2. Sai do modo solo
+    // 🔹 Sai completamente do modo solo, sem exceção
+    history.replaceState(null, '', location.pathname);
     document.body.classList.remove('solo');
-
-    const filters = document.getElementById('filters');
-    if (filters) filters.style.display = '';
-
-    // 🔹 2.1 Remove o botão "exit-solo" se existir
+    
     const exit = document.getElementById('exit-solo');
     if (exit) exit.remove();
 
-    // 🔹 3. Exibe novamente todos os cards
-    document.querySelectorAll('#imoveis .grid .card')
-      .forEach(c => c.hidden = false);
+    // reexibe barra de filtros
+    const filters = document.getElementById('filters');
+    if (filters) filters.style.display = '';
 
-    // 🔹 4. Aciona o filtro “Todos”
+    // garante que nenhum card esteja oculto
+    document.querySelectorAll('#imoveis .grid .card').forEach(c => c.hidden = false);
+
+    // 🔹 ACIONA o filtro “Todos” como se fosse um clique real
     filterAll.click();
 
-    // 🔹 5. Rola até o início da seção de imóveis
-    const section = document.getElementById('imoveis');
-    if (section) {
-      section.scrollIntoView({ behavior:'smooth', block:'start' });
-    }
-
-    // 🔹 6. Some com o botão depois que usar
+    // 🔹 some com o botão
     btnAll.style.display = 'none';
-  });
 
+    // 🔹 rola até o topo da seção
+    const section = document.getElementById('imoveis');
+    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 });
 </script>
 
