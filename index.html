@@ -3392,37 +3392,17 @@ btnSite.addEventListener('click', () => {
       history.replaceState(null, '', location.pathname + '?solo=1#imoveis');
     }, 20);
 
-    const anchorEl =
-  document.querySelector('#imoveis .container') ||
-  document.getElementById('imoveis') ||
-  targetEl;
+       // rola até o card alvo
+    smartScrollToWithRetries(
+      document.querySelector('#imoveis .container') ||
+      document.getElementById('imoveis') ||
+      targetEl
+    );
+
+})();
+  </script>
 
 
-    <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
-<script>
-window.addEventListener('load', () => {
-  const grid = document.querySelector('#imoveis .grid');
-  if (!grid) return;
-
-  // coleta todos os vendidos com data
-  const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
-
-  if (soldCards.length > 1) {
-    // ordena pela data do atributo data-sold (AAAA-MM-DD)
-    soldCards.sort((a, b) => {
-      const da = new Date(a.getAttribute('data-sold'));
-      const db = new Date(b.getAttribute('data-sold'));
-      return da - db; // mais antigo primeiro
-    });
-
-    // reanexa na ordem ordenada
-    soldCards.forEach(card => grid.appendChild(card));
-  }
-});
-</script>
-
-
-  <!-- Script que move vendidos, aplica estado e remove dos Destaques de hoje -->
 <script>
   window.addEventListener('load', () => {
     // 1) Garante que todo card com <p class="price sold"> ganhe .card.sold
