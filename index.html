@@ -3397,25 +3397,6 @@ btnSite.addEventListener('click', () => {
   document.getElementById('imoveis') ||
   targetEl;
 
-// rolagem inteligente (compensa header e re-tenta após imagens)
-smartScrollToWithRetries(anchorEl);
-  })();
-
-  const isSolo = () => new URLSearchParams(location.search).get('solo') === '1';
-
-  function scrollToHashSmart(){
-  if (isSolo()) return;
-  if(!location.hash) return;
-  const el = document.querySelector(location.hash);
-  if(!el) return;
-  smartScrollToWithRetries(el);
-}
-
-  window.addEventListener('hashchange', scrollToHashSmart, { passive: true });
-  window.addEventListener('load', scrollToHashSmart, { passive: true });
-
-})();
-</script>
 
     <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
 <script>
