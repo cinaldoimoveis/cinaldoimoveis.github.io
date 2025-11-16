@@ -3304,23 +3304,26 @@ btnSite.addEventListener('click', () => {
       exit.href = location.pathname + '#imoveis';
       exit.textContent = '← Ver todos os imóveis';
       exit.addEventListener('click', ev=>{
-        ev.preventDefault();
-        history.replaceState(null, '', location.pathname + '#imoveis');
-        document.body.classList.remove('solo');
-        if(filtersBar) filtersBar.style.display = '';
-        allCards.forEach(c=>c.hidden=false);
-        if (typeof smartScrollToWithRetries === 'function') {
-  smartScrollToWithRetries(container);
-} else {
-  const headerH = (document.querySelector('header')?.offsetHeight || 72) + 12;
-  const top = window.pageYOffset + container.getBoundingClientRect().top - headerH;
-  window.scrollTo({ top, behavior: 'smooth' });
-}
+  ev.preventDefault();
 
-        // remove o botão ao voltar
-        const me = document.getElementById('exit-solo');
-        if (me) me.remove();
-      });
+  // sai do modo solo
+  document.body.classList.remove('solo');
+
+  // mostra novamente a barra de filtros
+  if (filtersBar) filtersBar.style.display = '';
+
+  // remove o botão de saída
+  const me = document.getElementById('exit-solo');
+  if (me) me.remove();
+
+  // limpa URL deixando apenas a seção #imoveis
+  history.replaceState(null, '', location.pathname + '#imoveis');
+
+  // aciona o filtro "Todos"
+  const btnTodos = document.querySelector('#filters [data-filter="all"]');
+  if (btnTodos) btnTodos.click();
+});
+
       title.insertAdjacentElement('afterend', exit);
     }
 
