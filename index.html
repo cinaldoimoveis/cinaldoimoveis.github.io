@@ -3313,23 +3313,24 @@ btnSite.addEventListener('click', () => {
   if (filtersBar) filtersBar.style.display = '';
 
   // remove o botão de saída
-  const me = document.getElementById('exit-solo');
-  if (me) me.remove();
+const me = document.getElementById('exit-solo');
+if (me) me.remove();
 
-  // limpa URL deixando apenas a seção #imoveis
-  history.replaceState(null, '', location.pathname + '#imoveis');
+// limpa URL totalmente (sem hash)
+history.replaceState(null, '', location.pathname);
 
-  // aciona o filtro "Todos"
-  const btnTodos = document.querySelector('#filters [data-filter="all"]');
-  if (btnTodos) btnTodos.click();
+// aciona o filtro "Todos"
+const btnTodos = document.querySelector('#filters [data-filter="all"]');
+if (btnTodos) btnTodos.click();
 });
 
-      title.insertAdjacentElement('afterend', exit);
-    }
+title.insertAdjacentElement('afterend', exit);
+}
 
-    setTimeout(()=>{
-      history.replaceState(null, '', location.pathname + '?solo=1#imoveis');
-    }, 20);
+setTimeout(()=>{
+  // mantém apenas ?solo=1 para que o modo solo continue funcionando
+  history.replaceState(null, '', location.pathname + '?solo=1');
+}, 20);
 
     const anchorEl =
   document.querySelector('#imoveis .container') ||
