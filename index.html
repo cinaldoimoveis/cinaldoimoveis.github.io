@@ -2079,6 +2079,7 @@
   }
 })();
 </script>
+ 
 
   <!-- Galeria: grade empilhada + visor com zoom (mobile e desktop) -->
   <script>
@@ -3237,8 +3238,7 @@ btnSite.addEventListener('click', () => {
   let extra = 12; // respiro padrão
 
   // em modo solo, reserve espaço extra para título + botão
-  const isSolo = () => document.body.classList.contains('solo');
-    
+  const isSolo = new URLSearchParams(location.search).get('solo') === '1';
   if (isSolo) extra += 56;
 
   // se o botão já existe, some a altura real dele
@@ -3304,26 +3304,18 @@ btnSite.addEventListener('click', () => {
       exit.href = location.pathname + '#imoveis';
       exit.textContent = '← Ver todos os imóveis';
       exit.addEventListener('click', ev=>{
-  ev.preventDefault();
-
-  // limpa modo solo
-  document.body.classList.remove('solo');
-
-  // reexibe filtros
-  if (filtersBar) filtersBar.style.display = '';
-
-  // limpa URL
-  history.replaceState(null, '', location.pathname + '#imoveis');
-
-  // remove o botão
-  const me = document.getElementById('exit-solo');
-  if (me) me.remove();
-
-  // aciona o filtro "Todos" — comportamento 100% perfeito
-  const btnTodos = document.querySelector('#filters [data-filter="all"]');
-  if (btnTodos) btnTodos.click();
-});
-
+        ev.preventDefault();
+        history.replaceState(null, '', location.pathname + '#imoveis');
+        document.body.classList.remove('solo');
+        if(filtersBar) filtersBar.style.display = '';
+        allCards.forEach(c=>c.hidden=false);
+        if (typeof smartScrollToWithRetries === 'function') {
+  smartScrollToWithRetries(container);
+} else {
+  const headerH = (document.querySelector('header')?.offsetHeight || 72) + 12;
+  const top = window.pageYOffset + container.getBoundingClientRect().top - headerH;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
 
         // remove o botão ao voltar
         const me = document.getElementById('exit-solo');
@@ -3333,7 +3325,7 @@ btnSite.addEventListener('click', () => {
     }
 
     setTimeout(()=>{
-      history.replaceState(null, '', location.pathname + '#imoveis');
+      history.replaceState(null, '', location.pathname + '?solo=1#imoveis');
     }, 20);
 
     const anchorEl =
