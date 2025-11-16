@@ -3313,19 +3313,25 @@ btnSite.addEventListener('click', () => {
   if (filtersBar) filtersBar.style.display = '';
 
   // remove o botão de saída
-const me = document.getElementById('exit-solo');
-if (me) me.remove();
+  const me = document.getElementById('exit-solo');
+  if (me) me.remove();
 
-// limpa URL totalmente (sem hash)
-history.replaceState(null, '', location.pathname);
+  // 🔥 limpa completamente o hash (evita scroll automático)
+  location.hash = '';
 
-// aciona o filtro "Todos"
-const btnTodos = document.querySelector('#filters [data-filter="all"]');
-if (btnTodos) btnTodos.click();
+  // limpa URL sem hash
+  history.replaceState(null, '', location.pathname);
+
+  // aciona imediatamente o filtro "Todos"
+  const btnTodos = document.querySelector('#filters [data-filter="all"]');
+  if (btnTodos) btnTodos.click();
+
+  // 🔥 reforço rápido e imperceptível para eliminar o "puxão"
+  setTimeout(() => {
+    const b2 = document.querySelector('#filters [data-filter="all"]');
+    if (b2) b2.click();
+  }, 250);
 });
-
-title.insertAdjacentElement('afterend', exit);
-}
 
 setTimeout(()=>{
   // mantém apenas ?solo=1 para que o modo solo continue funcionando
