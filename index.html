@@ -3314,7 +3314,8 @@ btnSite.addEventListener('click', () => {
   let extra = 12; // respiro padrão
 
   // em modo solo, reserve espaço extra para título + botão
-  const isSolo = new URLSearchParams(location.search).get('solo') === '1';
+  const isSolo = () => document.body.classList.contains('solo');
+    
   if (isSolo) extra += 56;
 
   // se o botão já existe, some a altura real dele
@@ -3401,7 +3402,7 @@ btnSite.addEventListener('click', () => {
     }
 
     setTimeout(()=>{
-      history.replaceState(null, '', location.pathname + '?solo=1#imoveis');
+      history.replaceState(null, '', location.pathname + '#imoveis');
     }, 20);
 
     const anchorEl =
