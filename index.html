@@ -2670,6 +2670,45 @@
   }
 </style>
 
+  <style id="actions-row-grid">
+  /* Transforma a última <p> de ações em grid:
+     - linha 1: "Descrição completa" ocupando as 2 colunas (full width)
+     - linha 2: "Ver fotos" (coluna 1) + "Agendar visita" (coluna 2) */
+  #imoveis .card .content p:last-of-type{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;                 /* mesmo respiro visual dos seus cards */
+    align-items: stretch;     /* faz os botões preencherem a célula */
+  }
+
+  /* "Descrição completa" ocupa as 2 colunas, vira full width */
+  #imoveis .card .content p:last-of-type .btn-desc{
+    grid-column: 1 / -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Os dois botões de baixo preenchem suas colunas
+     (alinhando as bordas esquerda/direita com a linha acima) */
+  #imoveis .card .content p:last-of-type .btn-fotos,
+  #imoveis .card .content p:last-of-type .btn.btn-whats{
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Opcional: se existir um terceiro botão (ex.: share) nessa linha,
+     ele cai sozinho na próxima linha ocupando só 1 coluna */
+  #imoveis .card .content p:last-of-type .share-btn{
+    width: 100%;
+  }
+
+  /* Mobile mantém a lógica e o espaçamento */
+  @media (max-width:640px){
+    #imoveis .card .content p:last-of-type{ gap: 8px; }
+  }
+</style>
+
+
 
 <!-- 👇 Cole logo aqui -->
 <style id="price-reduced-style">
