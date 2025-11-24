@@ -2743,20 +2743,21 @@
 </style>
 
   <style id="actions-row-text-color">
-  /* Botões que devem ficar AZUIS (exceto nos anúncios vendidos) */
+  /* Botões AZUIS (exceto nos cards vendidos) */
   #imoveis .card:not(.sold) .content .btn-desc,
   #imoveis .card:not(.sold) .content .btn-map {
-    color: #4d94ff !important; /* 👉 TROQUE AQUI A TONALIDADE DO AZUL */
+    color: #4d94ff !important; /* azul suave escolhido */
+    font-weight: normal !important; /* remove negrito */
     text-decoration: none !important;
   }
 
-  /* Nos cards vendidos: texto volta a ser cinza esmaecido */
+  /* Nos cards vendidos: volta para cinza esmaecido */
   #imoveis .card.sold .content .btn-desc,
   #imoveis .card.sold .content .btn-map {
-    color: #666 !important; /* cinza discreto */
+    color: #666 !important;
+    font-weight: normal !important; /* mantém sem negrito */
   }
 </style>
-
 
 
 <!-- 👇 Cole logo aqui -->
