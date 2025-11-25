@@ -613,8 +613,7 @@
         </article>
 
         <!-- Apartamento Três Barras (01.PNG + 02..15.jpg) - vendido -->
-        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras" data-="2025-10-25"
->
+        <article class="card sold" id="apto-tres-barras" data-code="CI-AP-TB-90" data-type="apartamento" data-tags="apartamento" data-geo="apto-tres-barras" data-="2025-10-25">
           <div class="thumb"><img src="assets/apto-tres-barras-01.PNG" alt="Apartamento 3 quartos no Três Barras" loading="lazy"></div>
           <div class="content">
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
@@ -3432,12 +3431,7 @@ smartScrollToWithRetries(anchorEl);
       }
     });
 
-    // 2) Move os vendidos para o final da grade principal
-    const grid = document.querySelector('#imoveis .grid');
-    if (grid) {
-      [...grid.querySelectorAll('.card.sold')].forEach(card => grid.appendChild(card));
-    }
-
+   
     // 3) Remove dos "Destaques de hoje" (qualquer coisa FORA de #imoveis)
     //    Critério: links que apontem para hashes dos IDs vendidos (ex.: ?solo=1#apto-tres-barras ou #apto-tres-barras)
     const soldIds = [...document.querySelectorAll('#imoveis .grid .card.sold')]
