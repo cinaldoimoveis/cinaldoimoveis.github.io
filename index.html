@@ -3487,31 +3487,6 @@ smartScrollToWithRetries(anchorEl);
 
 
 
-   <!-- 🔁 Ordena automaticamente os vendidos por data (mais antigo primeiro) -->
-<script>
-window.addEventListener('load', () => {
-  // Espera o script "mover vendidos" terminar antes de reordenar
-  setTimeout(() => {
-    const grid = document.querySelector('#imoveis .grid');
-    if (!grid) return;
-
-    const soldCards = Array.from(grid.querySelectorAll('.card.sold[data-sold]'));
-
-    if (soldCards.length > 1) {
-      soldCards.sort((a, b) => {
-        const da = new Date(a.getAttribute('data-sold'));
-        const db = new Date(b.getAttribute('data-sold'));
-        return da - db; // mais antigo primeiro
-      });
-
-      soldCards.forEach(card => grid.appendChild(card));
-    }
-  }, 300); // ⏳ pequeno atraso garante que o outro script já rodou
-});
-</script>
-
-
-
 <!-- Aviso de coleta de dados / cookies -->
 <div class="cookie-info" style="text-align:center;font-size:13px;color:#555;margin:20px auto;max-width:600px;padding:8px 16px;border-top:1px solid #ddd;">
   Este site utiliza cookies e tecnologias semelhantes para melhorar sua experiência de navegação e coletar estatísticas de acesso (Google Analytics). 
