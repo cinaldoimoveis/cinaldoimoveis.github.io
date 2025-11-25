@@ -2020,6 +2020,20 @@
     card.hidden = !show;
   });
 
+      // 🆕 Ordenação correta dos VENDIDOS por data-sold (decrescente)
+  if (f === 'vendido') {
+    const soldCards = Array.from(grid.querySelectorAll('.card.sold'));
+
+    soldCards.sort((a, b) => {
+      const da = a.getAttribute('data-sold') || '0000-00-00';
+      const db = b.getAttribute('data-sold') || '0000-00-00';
+      return db.localeCompare(da); // mais recente primeiro
+    });
+
+    soldCards.forEach(card => grid.appendChild(card));
+  }
+
+
 
     // Regras de PIN por filtro:
   // - 'all'  → Unique 630 + Complexo São Mateus
