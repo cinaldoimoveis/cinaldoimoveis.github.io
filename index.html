@@ -3476,12 +3476,6 @@ smartScrollToWithRetries(anchorEl);
       }
     }
 
-    // 🟢 Reaplica o filtro “Todos” após marcar vendidos
-    // e aguarda um pequeno intervalo para garantir que as classes .sold já estejam aplicadas
-    setTimeout(() => {
-      if (typeof applyFilter === 'function') applyFilter('all');
-    }, 400);
-
   });
 </script>
 
