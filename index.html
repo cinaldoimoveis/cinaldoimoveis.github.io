@@ -428,24 +428,68 @@
   </div> <!-- fecha a barra de filtros -->
 
   <!-- ===================================================== -->
-  <!-- 🔽 SUBFILTRO DE BAIRROS (só aparece quando FILTRO=LOTE) -->
-  <!-- ===================================================== -->
-  <div id="subfilter-bairros" style="display:none;margin-top:12px;gap:6px;flex-wrap:wrap;" class="subfilters">
-    <button data-bairro="all" class="pill subfilter-btn active">Todos</button>
-    <button data-bairro="alphaville" class="pill subfilter-btn">Alphaville</button>
-    <button data-bairro="unique" class="pill subfilter-btn">Unique</button>
-    <button data-bairro="laguna" class="pill subfilter-btn">Jardim Laguna</button>
-    <button data-bairro="tresbarras" class="pill subfilter-btn">Três Barras</button>
-    <button data-bairro="interlagos" class="pill subfilter-btn">Interlagos</button>
-    <button data-bairro="bnh" class="pill subfilter-btn">BNH</button>
-    <button data-bairro="lagoadomeio" class="pill subfilter-btn">Lagoa do Meio</button>
-    <button data-bairro="conceicao" class="pill subfilter-btn">Conceição</button>
-    <button data-bairro="juparana" class="pill subfilter-btn">Juparanã</button>
-    <button data-bairro="colina" class="pill subfilter-btn">Colina</button>
-    <button data-bairro="centro" class="pill subfilter-btn">Centro</button>
-    <button data-bairro="shell" class="pill subfilter-btn">Shell</button>
-    <button data-bairro="rodriguesmaciel" class="pill subfilter-btn">Rodrigues Maciel</button>
+<!-- 🔽 SUBFILTRO DE CIDADES (aparece para TODAS as categorias, exceto LOTES) -->
+<!-- ===================================================== -->
+<div id="subfilter-cidades" style="display:none;margin-top:12px;gap:6px;flex-wrap:wrap;" class="subfilters">
+  <button data-cidade="all" class="pill subfilter-city-btn active">Todas as cidades</button>
+  <button data-cidade="c-linhares" class="pill subfilter-city-btn">Linhares</button>
+  <button data-cidade="c-jaguare" class="pill subfilter-city-btn">Jaguaré</button>
+  <button data-cidade="c-saomateus" class="pill subfilter-city-btn">São Mateus</button>
+  <button data-cidade="c-riobananal" class="pill subfilter-city-btn">Rio Bananal</button>
+  <button data-cidade="c-aracruz" class="pill subfilter-city-btn">Aracruz</button>
+  <button data-cidade="c-sooretama" class="pill subfilter-city-btn">Sooretama</button>
+</div>
+
+<!-- ===================================================== -->
+<!-- 🔽 SUBFILTRO DE BAIRROS POR CIDADE (dinâmico, depende da cidade) -->
+<!-- ===================================================== -->
+<div id="subfilter-bairros-cidades" style="display:none;margin-top:8px;gap:6px;flex-wrap:wrap;" class="subfilters">
+  
+  <!-- LINHARES -->
+  <div data-city-group="c-linhares" style="display:none;">
+    <button data-bairro="all" class="pill subfilter-bairro-btn active">Todos os bairros</button>
+    <button data-bairro="b-alphaville" class="pill subfilter-bairro-btn">Alphaville</button>
+    <button data-bairro="b-unique" class="pill subfilter-bairro-btn">Unique</button>
+    <button data-bairro="b-laguna" class="pill subfilter-bairro-btn">Jardim Laguna</button>
+    <button data-bairro="b-tresbarras" class="pill subfilter-bairro-btn">Três Barras</button>
+    <button data-bairro="b-interlagos" class="pill subfilter-bairro-btn">Interlagos</button>
+    <button data-bairro="b-bnh" class="pill subfilter-bairro-btn">BNH</button>
+    <button data-bairro="b-lagoadomeio" class="pill subfilter-bairro-btn">Lagoa do Meio</button>
+    <button data-bairro="b-conceicao" class="pill subfilter-bairro-btn">Conceição</button>
+    <button data-bairro="b-juparana" class="pill subfilter-bairro-btn">Juparanã</button>
+    <button data-bairro="b-colina" class="pill subfilter-bairro-btn">Colina</button>
+    <button data-bairro="b-centro" class="pill subfilter-bairro-btn">Centro</button>
+    <button data-bairro="b-shell" class="pill subfilter-bairro-btn">Shell</button>
+    <button data-bairro="b-rodriguesmaciel" class="pill subfilter-bairro-btn">Rodrigues Maciel</button>
+    <button data-bairro="b-planalto" class="pill subfilter-bairro-btn">Planalto</button>
   </div>
+
+  <!-- SÃO MATEUS -->
+  <div data-city-group="c-saomateus" style="display:none;">
+    <button data-bairro="all" class="pill subfilter-bairro-btn active">Todos os bairros</button>
+    <button data-bairro="b-centro" class="pill subfilter-bairro-btn">Centro</button>
+    <button data-bairro="b-guriri" class="pill subfilter-bairro-btn">Guriri</button>
+  </div>
+
+  <!-- Cidades com apenas centro -->
+  <div data-city-group="c-jaguare" style="display:none;">
+    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
+  </div>
+
+  <div data-city-group="c-riobananal" style="display:none;">
+    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
+  </div>
+
+  <div data-city-group="c-aracruz" style="display:none;">
+    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
+  </div>
+
+  <div data-city-group="c-sooretama" style="display:none;">
+    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
+  </div>
+
+</div>
+
 
 
       <div class="grid">
@@ -3621,36 +3665,54 @@ document.addEventListener('DOMContentLoaded', ()=> {
     btn.addEventListener('click', () => {
       const filter = btn.dataset.filter;
 
-      // LOTES → subfiltro antigo
+      // ===========================
+      // 1) FILTRO LOTES
+      // ===========================
       if (filter === 'lote') {
         sub.style.display = 'flex';
         document.getElementById('subfilter-cidades').style.display = 'none';
         document.getElementById('subfilter-bairros-cidades').style.display = 'none';
       } 
 
-      // OUTRAS CATEGORIAS → subfiltros novos
+      // ===========================
+      // 2) OUTRAS CATEGORIAS
+      // ===========================
       else {
         sub.style.display = 'none';
         document.getElementById('subfilter-cidades').style.display = 'flex';
         document.getElementById('subfilter-bairros-cidades').style.display = 'none';
 
-        // resetar LOTES
+        // resetar subfiltro de LOTES
         subBtns.forEach(b => b.classList.remove('active'));
         document.querySelector('#subfilter-bairros [data-bairro="all"]').classList.add('active');
+      }
+
+      // ===========================
+      // 3) RESET TOTAL quando clicar em "Todos"
+      // ===========================
+      if (filter === 'all') {
+
+        // mostrar todos os cards
+        document.querySelectorAll('#imoveis .card')
+          .forEach(c => c.style.display = '');
+
+        // resetar seleção de cidades
+        document.querySelectorAll('#subfilter-cidades .pill')
+          .forEach(b => b.classList.remove('active'));
+        document.querySelector('#subfilter-cidades [data-cidade="all"]')
+          .classList.add('active');
+
+        // esconder bairros por cidade
+        document.getElementById('subfilter-bairros-cidades').style.display = 'none';
+
+        // esconder subfiltro de LOTES
+        document.getElementById('subfilter-bairros').style.display = 'none';
       }
     });
   });
 
-  // === Clique no subfiltro (LOTE) ===
-  subBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      subBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applySubFilter(btn.dataset.bairro);
-    });
-  });
+}); // ← FECHAMENTO CORRETO DO DOMContentLoaded
 
-});
 </script>
 
 
