@@ -415,28 +415,47 @@
   <section id="imoveis">
     <div class="container">
       <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
-  <div class="filters" id="filters">
-  <button class="fbtn is-active" data-filter="all">Todos</button>
-  <button class="fbtn" data-filter="casa">Casas</button>
-  <button class="fbtn" data-filter="apartamento">Apartamentos</button>
-  <button class="fbtn" data-filter="lote">Lotes</button>
-  <button class="fbtn" data-filter="area">Áreas</button>
-  <button class="fbtn" data-filter="chacara">Chácaras</button> <!-- ✅ novo botão -->
-  <button class="fbtn" data-filter="fazenda">Fazendas</button>
-  <button class="fbtn" data-filter="comercial">Comercial</button>
-  <button class="fbtn" data-filter="vendido">Vendidos</button>
+    <div class="filters" id="filters">
+    <button class="fbtn is-active" data-filter="all">Todos</button>
+    <button class="fbtn" data-filter="casa">Casas</button>
+    <button class="fbtn" data-filter="apartamento">Apartamentos</button>
+    <button class="fbtn" data-filter="lote">Lotes</button>
+    <button class="fbtn" data-filter="area">Áreas</button>
+    <button class="fbtn" data-filter="chacara">Chácaras</button> <!-- ✅ novo botão -->
+    <button class="fbtn" data-filter="fazenda">Fazendas</button>
+    <button class="fbtn" data-filter="comercial">Comercial</button>
+    <button class="fbtn" data-filter="vendido">Vendidos</button>
   </div> <!-- fecha a barra de filtros -->
 
+  <!-- ===================================================== -->
+  <!-- 🔽 SUBFILTRO DE BAIRROS (só aparece quando FILTRO=LOTE) -->
+  <!-- ===================================================== -->
+  <div id="subfilter-bairros" style="display:none;margin-top:12px;gap:6px;flex-wrap:wrap;" class="subfilters">
+    <button data-bairro="all" class="pill subfilter-btn active">Todos</button>
+    <button data-bairro="alphaville" class="pill subfilter-btn">Alphaville</button>
+    <button data-bairro="unique" class="pill subfilter-btn">Unique</button>
+    <button data-bairro="laguna" class="pill subfilter-btn">Jardim Laguna</button>
+    <button data-bairro="tresbarras" class="pill subfilter-btn">Três Barras</button>
+    <button data-bairro="interlagos" class="pill subfilter-btn">Interlagos</button>
+    <button data-bairro="bnh" class="pill subfilter-btn">BNH</button>
+    <button data-bairro="lagoadomeio" class="pill subfilter-btn">Lagoa do Meio</button>
+    <button data-bairro="conceicao" class="pill subfilter-btn">Conceição</button>
+    <button data-bairro="juparana" class="pill subfilter-btn">Juparanã</button>
+    <button data-bairro="colina" class="pill subfilter-btn">Colina</button>
+    <button data-bairro="centro" class="pill subfilter-btn">Centro</button>
+    <button data-bairro="shell" class="pill subfilter-btn">Shell</button>
+    <button data-bairro="rodriguesmaciel" class="pill subfilter-btn">Rodrigues Maciel</button>
+  </div>
 
 
       <div class="grid">
 
         <!-- Casa em Alphaville (FIXA nos destaques) -->
-        <article class="card" id="casa-alphaville"
+       <article class="card" id="casa-alphaville"
   data-code="CI-CA-ALPH-217"
   data-type="casa"
   data-tags="casa"
-  data-geo="alphaville-casa-217">
+  data-geo="c-linhares b-alphaville alphaville-casa-217">
           <div class="thumb"><img src="assets/alphaville-casa-01.jpeg" alt="Casa em Alphaville, Linhares/ES" loading="lazy"></div>
           <div class="content">
             <h3>Casa 3Q (2 Suítes) – Alphaville</h3>
@@ -477,7 +496,11 @@
         </article>
 
         <!-- Casa Jardim Laguna -->
-        <article class="card" id="laguna" data-code="CI-CA-LAG-100" data-type="casa" data-tags="casa" data-geo="laguna">
+        <article class="card" id="laguna"
+  data-code="CI-CA-LAG-100"
+  data-type="casa"
+  data-tags="casa"
+  data-geo="c-linhares b-laguna laguna">
           <div class="thumb"><img src="assets/casa-rua-italia-01.jpeg" alt="Casa Linear - Jardim Laguna 2" loading="lazy"></div>
           <div class="content">
             <h3>Casa Linear 2Q (1 Suíte) – Jardim Laguna 2</h3>
@@ -530,7 +553,7 @@
   data-code="CI-LO-ALPH-437C"
   data-type="comercial"
   data-tags="lote,comercial"
-  data-geo="alphaville-lote-437c">
+  data-geo="c-linhares b-alphaville alphaville-lote-437c">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
           <div class="content">
             <h3>Lote Comercial 437m² – Terras Alphaville</h3>
@@ -554,7 +577,11 @@
         </article>
 
         <!-- Fazenda -->
-        <article class="card" id="fazenda-linhares" data-code="CI-FZ-LIN-290" data-type="fazenda" data-tags="fazenda" data-geo="fazenda-linhares">
+        <article class="card" id="fazenda-linhares"
+  data-code="CI-FZ-LIN-290"
+  data-type="fazenda"
+  data-tags="fazenda"
+  data-geo="c-linhares fazenda-linhares">
           <div class="thumb"><img src="assets/fazenda-linhares-01.jpeg" alt="Fazenda em Linhares ES" loading="lazy"></div>
           <div class="content">
             <h3>Fazenda – 290ha (60 alq) – Linhares ES</h3>
@@ -668,7 +695,7 @@
   data-code="CI-LO-ALPH-360"
   data-type="lote"
   data-tags="lote"
-  data-geo="alphaville-lote-360">
+  data-geo="c-linhares b-alphaville alphaville-lote-360">
           <div class="thumb"><img src="assets/lote-alphaville-360-01.jpeg" alt="Lote residencial 360 m²" loading="lazy"></div>
           <div class="content">
             <h3>Lote Residencial 360m² – Terras Alphaville</h3>
@@ -723,7 +750,7 @@
   data-code="CI-LO-ALPH-420"
   data-type="lote"
   data-tags="lote"
-  data-geo="alphaville-lote-420">
+  data-geo="c-linhares b-alphaville alphaville-lote-420">
           <div class="thumb"><img src="assets/lote-alphaville-420-01.jpeg" alt="Lote residencial 420 m²" loading="lazy"></div>
           <div class="content">
             <h3>Lote Residencial 420m² – Terras Alphaville</h3>
@@ -825,7 +852,11 @@
 
 
         <!-- Área Comercial 20.000 m² – Bairro Planalto (NOVO) -->
-        <article class="card" id="area-planalto-20000" data-code="CI-AR-PLAN-20000" data-type="comercial" data-tags="area, comercial" data-geo="area-planalto-20000">
+        <article class="card" id="area-planalto-20000"
+  data-code="CI-AR-PLAN-20000"
+  data-type="comercial"
+  data-tags="area, comercial"
+  data-geo="c-linhares b-planalto area-planalto-20000">
           <div class="thumb">
             <img src="assets/area-2000-planalto-01.jpeg" alt="Área 20.000m² no Bairro Planalto, Linhares/ES" loading="lazy">
           </div>
@@ -872,7 +903,7 @@
   data-code="CI-LO-ALPH-717"
   data-type="lote"
   data-tags="lote"
-  data-geo="alphaville-lote-717">
+  data-geo="c-linhares b-alphaville alphaville-lote-717">
           <div class="thumb">
             <img src="assets/lote-alphaville-717-01.jpeg" alt="Lote 717m² no Terras Alphaville, Linhares/ES" loading="lazy">
           </div>
@@ -928,7 +959,13 @@
         </article>
 
         <!-- Complexo Residencial Familiar – São Mateus ES (NOVO) -->
-        <article class="card" id="complexo-sao-mateus" data-code="CI-CO-SM-2000" data-type="comercial" data-tags="casa" data-geo="complexo-sao-mateus" data-discount data-featured>
+        <article class="card" id="complexo-sao-mateus"
+  data-code="CI-CO-SM-2000"
+  data-type="comercial"
+  data-tags="casa"
+  data-geo="c-saomateus b-guriri r-praia complexo-sao-mateus"
+  data-discount
+  data-featured>
           <div class="thumb">
             <img src="assets/Complexo-Residencial-SM-01.jpeg" alt="Complexo Residencial Familiar em São Mateus ES" loading="lazy">
           </div>
@@ -1030,7 +1067,7 @@
   data-code="CI-CA-ALPH-186"
   data-type="casa"
   data-tags="casa"
-  data-geo="alphaville-casa-186">
+  data-geo="c-linhares b-alphaville alphaville-casa-186">
   <div class="thumb">
     <img src="assets/casa-em-construcao-alphaville-01.jpeg" alt="Casa linear alto padrão em construção no Alphaville Linhares" loading="lazy">
   </div>
@@ -1086,7 +1123,11 @@
 </article>
 
         <!-- Lote 253m² c/ Casa Simples – Jardim Laguna (NOVO) -->
-<article class="card" id="casa-simples-laguna" data-code="CI-LO-LAG-253" data-type="lote" data-tags="lote, casa" data-geo="casa-simples-laguna">
+<article class="card" id="casa-simples-laguna" 
+  data-code="CI-LO-LAG-253" 
+  data-type="lote" 
+  data-tags="lote, casa" 
+  data-geo="c-linhares b-laguna casa-simples-laguna">
   <div class="thumb">
     <img src="assets/casa-simples-jardimlaguna-01.jpeg" alt="Lote 253m² com casa simples no Jardim Laguna, Linhares/ES" loading="lazy">
   </div>
@@ -1131,7 +1172,11 @@
 </article>
 
         <!-- Lote Residencial 390 m² – Terras Alphaville (NOVO) -->
-<article class="card" id="lote-alphaville-390" data-code="CI-LO-ALPH-390" data-type="lote" data-tags="lote" data-geo="alphaville-lote-390">
+<article class="card" id="lote-alphaville-390" 
+  data-code="CI-LO-ALPH-390" 
+  data-type="lote" 
+  data-tags="lote" 
+  data-geo="c-linhares b-alphaville alphaville-lote-390">
   <div class="thumb">
     <img src="assets/lote-alphaville-390-01.jpeg" alt="Lote 390m² no Terras Alphaville, Linhares/ES" loading="lazy">
   </div>
@@ -1195,8 +1240,7 @@
   data-code="CI-LO-UNIQ-655" 
   data-type="lote" 
   data-tags="lote" 
-  data-geo="unique">
-
+  data-geo="c-linhares b-unique lote-unique-655">
   <div class="thumb">
     <img src="assets/lote-unique-655-01.jpeg" 
          alt="Lote 655m² no Condomínio Unique, Linhares/ES" 
@@ -3555,6 +3599,115 @@ smartScrollToWithRetries(anchorEl);
   });
 </script>
 
+<!-- ===== Subfiltros de Bairros (funciona apenas para LOTES) ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', ()=> {
+
+  const sub = document.getElementById('subfilter-bairros');
+  const subBtns = document.querySelectorAll('#subfilter-bairros .subfilter-btn');
+  const mainFilterButtons = document.querySelectorAll('#filters [data-filter]');
+
+  // === Aplica o filtro do bairro (LOTE) ===
+  function applySubFilter(bairro) {
+    const cards = document.querySelectorAll('#imoveis .card');
+    cards.forEach(card => {
+      const geo = card.dataset.geo || '';
+      card.style.display = (bairro === 'all' || geo.includes(bairro)) ? '' : 'none';
+    });
+  }
+
+  // === Mostrar só quando filtro LOTES estiver ativo ===
+  mainFilterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+
+      // LOTES → subfiltro antigo
+      if (filter === 'lote') {
+        sub.style.display = 'flex';
+        document.getElementById('subfilter-cidades').style.display = 'none';
+        document.getElementById('subfilter-bairros-cidades').style.display = 'none';
+      } 
+
+      // OUTRAS CATEGORIAS → subfiltros novos
+      else {
+        sub.style.display = 'none';
+        document.getElementById('subfilter-cidades').style.display = 'flex';
+        document.getElementById('subfilter-bairros-cidades').style.display = 'none';
+
+        // resetar LOTES
+        subBtns.forEach(b => b.classList.remove('active'));
+        document.querySelector('#subfilter-bairros [data-bairro="all"]').classList.add('active');
+      }
+    });
+  });
+
+  // === Clique no subfiltro (LOTE) ===
+  subBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      subBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applySubFilter(btn.dataset.bairro);
+    });
+  });
+
+});
+</script>
+
+
+<!-- ===== NOVO SCRIPT — Subfiltro de CIDADES + BAIRROS ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+
+  const cityBar = document.getElementById('subfilter-cidades');
+  const bairroBar = document.getElementById('subfilter-bairros-cidades');
+  const cityBtns = document.querySelectorAll('#subfilter-cidades .subfilter-city-btn');
+  const bairrosGroups = document.querySelectorAll('#subfilter-bairros-cidades [data-city-group]');
+  const bairroBtns = document.querySelectorAll('.subfilter-bairro-btn');
+
+  function applyFilters(cidade, bairro){
+    const cards = document.querySelectorAll('#imoveis .card');
+    cards.forEach(card=>{
+      const geo = card.dataset.geo || "";
+      const matchCidade = (cidade === 'all') || geo.includes(cidade);
+      const matchBairro = (bairro === 'all') || geo.includes(bairro);
+      card.style.display = (matchCidade && matchBairro) ? '' : 'none';
+    });
+  }
+
+  // SELEÇÃO DE CIDADE
+  cityBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      cityBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cidade = btn.dataset.cidade;
+
+      // Mostra somente o grupo de bairros da cidade
+      bairrosGroups.forEach(group=>{
+        group.style.display = (group.dataset.cityGroup === cidade) ? 'flex' : 'none';
+      });
+
+      bairroBar.style.display = (cidade !== 'all') ? 'flex' : 'none';
+
+      applyFilters(cidade, 'all');
+    });
+  });
+
+  // SELEÇÃO DE BAIRRO
+  bairroBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      bairroBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cidade = document.querySelector('#subfilter-cidades .active').dataset.cidade;
+      const bairro = btn.dataset.bairro;
+
+      applyFilters(cidade, bairro);
+    });
+  });
+
+});
+</script>
 
 
 <!-- Aviso de coleta de dados / cookies -->
@@ -3570,8 +3723,6 @@ smartScrollToWithRetries(anchorEl);
     }
   }
 </style>
-
-
 
 </body>
 </html>
