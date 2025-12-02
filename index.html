@@ -647,7 +647,7 @@
         <!-- Lote Comercial -->
         <article class="card" id="lote-alphaville"
   data-code="CI-LO-ALPH-437C"
-  data-type="comercial"
+  data-type="lote"
   data-tags="lote,comercial"
   data-geo="c-linhares b-alphaville alphaville-lote-437c">
           <div class="thumb"><img src="assets/lote-alphaville-01.jpeg" alt="Lote comercial" loading="lazy"></div>
@@ -1058,7 +1058,7 @@
         <article class="card" id="complexo-sao-mateus"
   data-code="CI-CO-SM-2000"
   data-type="casa"
-  data-tags="casa, comercial"
+  data-tags="casa"
   data-geo="c-saomateus b-guriri r-praia complexo-sao-mateus"
   data-discount
   data-featured>
@@ -1221,8 +1221,8 @@
         <!-- Lote 253m² c/ Casa Simples – Jardim Laguna (NOVO) -->
 <article class="card" id="casa-simples-laguna" 
   data-code="CI-LO-LAG-253" 
-  data-type="lote" 
-  data-tags="lote, casa" 
+  data-type="casa" 
+  data-tags="casa, lote" 
   data-geo="c-linhares b-laguna casa-simples-laguna">
   <div class="thumb">
     <img src="assets/casa-simples-jardimlaguna-01.jpeg" alt="Lote 253m² com casa simples no Jardim Laguna, Linhares/ES" loading="lazy">
@@ -3766,6 +3766,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
         cidadesBtns.forEach(b=>b.classList.remove('active'));
         cidadesBtns[0].classList.add('active');
       }
+
+// ======================
+// FILTRO "VENDIDO"
+// ======================
+else if(tipo === 'vendido') {
+
+    // Mostrar SOMENTE vendidos
+    document.querySelectorAll('#imoveis .card').forEach(card => {
+        const price = card.querySelector('.price');
+        const isSold = price && price.classList.contains('sold');
+        card.style.display = isSold ? '' : 'none';
+    });
+
+    // ESCONDER todos os subfiltros
+    subCidades.style.display = 'none';
+    subBairrosCid.style.display = 'none';
+    document.getElementById('subfilter-bairros').style.display = 'none';
+
+    // RESET seleção de cidades
+    cidadesBtns.forEach(b=>b.classList.remove('active'));
+    if (cidadesBtns[0]) cidadesBtns[0].classList.add('active');
+
+    // RESET bairros por cidade
+    bairroBtns.forEach(b=>b.classList.remove('active'));
+
+    // RESET bairros de lotes
+    document.querySelectorAll('#subfilter-bairros .subfilter-btn')
+      .forEach(b=>b.classList.remove('active'));
+
+    // impede de cair no bloco "QUALQUER OUTRA CATEGORIA"
+    return;
+}
 
       // ======================
       // QUALQUER OUTRA CATEGORIA
