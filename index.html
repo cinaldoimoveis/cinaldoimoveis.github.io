@@ -375,8 +375,34 @@
   }
 </style>
 
+<!-- ⬇⬇ COLE AQUI O NOVO BLOCO DE ESTILOS ⬇⬇ -->
+<style>
+.subfilters .pill.active,
+.subfilter-city-btn.active,
+.subfilter-bairro-btn.active {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+
+.subfilters .pill,
+.subfilter-city-btn,
+.subfilter-bairro-btn {
+  background: #f2f2f2;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+</style>
+<!-- ⬆⬆ COLE AQUI O BLOCO ⬆⬆ -->
+
 </head>
 <body>
+
+  
   <header>
     <div class="container nav">
       <a href="#inicio" class="brand">
@@ -1027,8 +1053,8 @@
         <!-- Complexo Residencial Familiar – São Mateus ES (NOVO) -->
         <article class="card" id="complexo-sao-mateus"
   data-code="CI-CO-SM-2000"
-  data-type="comercial"
-  data-tags="casa"
+  data-type="casa"
+  data-tags="casa, comercial"
   data-geo="c-saomateus b-guriri r-praia complexo-sao-mateus"
   data-discount
   data-featured>
@@ -3675,11 +3701,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const filterBar      = document.getElementById('filters');
   const filterButtons  = filterBar.querySelectorAll('[data-filter]');
 
-  const subLotes       = document.getElementById('subfilter-bairros');           // apenas lotes
-  const subCidades     = document.getElementById('subfilter-cidades');           // todas categorias
-  const subBairrosCid  = document.getElementById('subfilter-bairros-cidades');   // dinâmica por cidade
+  const subCidades     = document.getElementById('subfilter-cidades');
+  const subBairrosCid  = document.getElementById('subfilter-bairros-cidades');
 
-  const lotesBtns      = document.querySelectorAll('#subfilter-bairros .subfilter-btn');
   const cidadesBtns    = document.querySelectorAll('#subfilter-cidades .subfilter-city-btn');
   const bairrosGroups  = document.querySelectorAll('#subfilter-bairros-cidades [data-city-group]');
   const bairroBtns     = document.querySelectorAll('#subfilter-bairros-cidades .subfilter-bairro-btn');
@@ -3701,33 +3725,37 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
 
   /* =============================
-     1) QUANDO CLICA NO FILTRO PRINCIPAL
+     1) FILTRO PRINCIPAL (Casas, Lotes, etc.)
   ==============================*/
   filterButtons.forEach(btn=>{
     btn.addEventListener('click', ()=>{
 
       const tipo = btn.dataset.filter;
 
-      // ativa visualmente
+      // ativar visualmente
       filterButtons.forEach(b=>b.classList.remove('is-active'));
       btn.classList.add('is-active');
 
+      // ======================
+      // FILTRO "LOTE"
+      // ======================
       if(tipo === 'lote') {
-        subLotes.style.display = 'flex';
-        subCidades.style.display = 'none';
+        subCidades.style.display = 'flex';
         subBairrosCid.style.display = 'none';
 
-        // reset lotes
-        lotesBtns.forEach(b=>b.classList.remove('active'));
-        document.querySelector('#subfilter-bairros [data-bairro="all"]').classList.add('active');
+        // reset cidade ativa
+        cidadesBtns.forEach(b=>b.classList.remove('active'));
+        cidadesBtns[0].classList.add('active');
 
         aplicarFiltros({ tipo:'lote', cidade:'all', bairro:'all' });
       }
 
+      // ======================
+      // FILTRO "TODOS"
+      // ======================
       else if(tipo === 'all') {
         aplicarFiltros({ tipo:'all', cidade:'all', bairro:'all' });
 
-        subLotes.style.display = 'none';
         subCidades.style.display = 'none';
         subBairrosCid.style.display = 'none';
 
@@ -3735,8 +3763,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
         cidadesBtns[0].classList.add('active');
       }
 
+      // ======================
+      // QUALQUER OUTRA CATEGORIA
+      // ======================
       else {
-        subLotes.style.display = 'none';
         subCidades.style.display = 'flex';
         subBairrosCid.style.display = 'none';
 
@@ -3750,22 +3780,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 
   /* =============================
-     2) SUBFILTRO — APENAS LOTES
-  ==============================*/
-  lotesBtns.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-
-      lotesBtns.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const bairro = btn.dataset.bairro;
-
-      aplicarFiltros({ tipo:'lote', cidade:'all', bairro });
-    });
-  });
-
-  /* =============================
-     3) SUBFILTRO — CIDADES
+     2) SUBFILTRO — CIDADES
   ==============================*/
   cidadesBtns.forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -3776,6 +3791,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const cidade = btn.dataset.cidade;
       const tipoAtivo = document.querySelector('#filters .is-active')?.dataset.filter || 'all';
 
+      // mostrar bairros da cidade
       bairrosGroups.forEach(group=>{
         group.style.display = (group.dataset.cityGroup === cidade) ? 'flex' : 'none';
       });
@@ -3787,7 +3803,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 
   /* =============================
-     4) SUBFILTRO — BAIRROS POR CIDADE
+     3) SUBFILTRO — BAIRROS POR CIDADE
   ==============================*/
   bairroBtns.forEach(btn=>{
     btn.addEventListener('click', ()=>{
