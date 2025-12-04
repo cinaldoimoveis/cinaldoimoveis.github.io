@@ -1221,8 +1221,8 @@
         <!-- Lote 253m² c/ Casa Simples – Jardim Laguna (NOVO) -->
 <article class="card" id="casa-simples-laguna" 
   data-code="CI-LO-LAG-253" 
-  data-type="casa, lote"
-  data-tags="casa, lote" 
+  data-type="casa"
+  data-tags="casa lote" 
   data-geo="c-linhares b-laguna casa-simples-laguna">
   <div class="thumb">
     <img src="assets/casa-simples-jardimlaguna-01.jpeg" alt="Lote 253m² com casa simples no Jardim Laguna, Linhares/ES" loading="lazy">
@@ -3254,9 +3254,18 @@ if (!bMap) {
   bMap.type = 'button';
   bMap.textContent = '📍 Ver localização aproximada';
   bMap.addEventListener('click', ()=>{
-    const key = card.getAttribute('data-geo');
-    openMap(key);
-  });
+  const raw = card.getAttribute('data-geo') || '';
+  
+  // quebra por espaços, tira vazios
+  const parts = raw.split(/\s+/).filter(Boolean);
+
+  // tenta achar a primeira parte que exista no GEO
+  let key = parts.find(p => GEO[p]) 
+          || parts[parts.length - 1] 
+          || raw;
+
+  openMap(key);
+});
   btnWrap.appendChild(bMap);
 }
 
