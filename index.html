@@ -3640,229 +3640,218 @@ smartScrollToWithRetries(anchorEl);
 })();
 </script>
 
-  <!-- Script que move vendidos, aplica estado e remove dos Destaques de hoje -->
-<script>
-  window.addEventListener('load', () => {
-    // 1) Garante que todo card com <p class="price sold"> ganhe .card.sold
-    document.querySelectorAll('#imoveis .grid article.card').forEach(card => {
-      const price = card.querySelector('.price');
-      if (price && price.classList.contains('sold')) {
-        card.classList.add('sold');
-      }
-    });
-
-   
-    // 3) Remove dos "Destaques de hoje" (qualquer coisa FORA de #imoveis)
-    //    Critério: links que apontem para hashes dos IDs vendidos (ex.: ?solo=1#apto-tres-barras ou #apto-tres-barras)
-    const soldIds = [...document.querySelectorAll('#imoveis .grid .card.sold')]
-      .map(c => c.id)
-      .filter(Boolean);
-
-    if (soldIds.length) {
-      // Procura QUALQUER link com hash correspondente, mas ignora tudo que estiver DENTRO de #imoveis
-      const allLinks = document.querySelectorAll('a[href*="#"]');
-      allLinks.forEach(a => {
-        // Ignora links dentro da seção principal
-        if (a.closest('#imoveis')) return;
-
-        const href = a.getAttribute('href') || '';
-        const m = href.match(/#([A-Za-z0-9_-]+)/);
-        if (!m) return;
-
-        const hashId = m[1];
-        if (!soldIds.includes(hashId)) return;
-
-        // Sobe até um "container de destaque" e remove
-        const container =
-          a.closest('.card, article, li, .mini-card, .item, .highlight, .destaque') ||
-          a.parentElement;
-
-        if (container) container.remove();
-      });
-
-      // Caso os destaques usem cards "espelhados" (sem links), mas com data-code igual:
-      const soldCodes = [...document.querySelectorAll('#imoveis .grid .card.sold')]
-        .map(c => c.getAttribute('data-code'))
-        .filter(Boolean);
-
-            if (soldCodes.length) {
-        // Remove quaisquer "cards de destaque" fora de #imoveis com mesmo data-code
-        const mirrorCards = document.querySelectorAll('article.card[data-code], .card[data-code]');
-        mirrorCards.forEach(mc => {
-          if (mc.closest('#imoveis')) return; // só fora da seção principal
-          const code = mc.getAttribute('data-code');
-          if (soldCodes.includes(code)) mc.remove();
-        });
-      }
-    }
-
-  });
-</script>
-
-<!-- ===== SUBFILTROS DEFINITIVOS (CIDADES + BAIRROS + LOTES) ===== -->
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
 
-  /* =============================
-     REFERÊNCIAS DOS ELEMENTOS
-  ==============================*/
   const filterBar      = document.getElementById('filters');
   const filterButtons  = filterBar.querySelectorAll('[data-filter]');
+  const cards          = [...document.querySelectorAll('#imoveis .card')];
 
   const subCidades     = document.getElementById('subfilter-cidades');
   const subBairrosCid  = document.getElementById('subfilter-bairros-cidades');
+  const subBairrosLote = document.getElementById('subfilter-bairros');
 
-  const cidadesBtns    = document.querySelectorAll('#subfilter-cidades .subfilter-city-btn');
-  const bairrosGroups  = document.querySelectorAll('#subfilter-bairros-cidades [data-city-group]');
-  const bairroBtns     = document.querySelectorAll('#subfilter-bairros-cidades .subfilter-bairro-btn');
+  const cidadesBtns    = [...document.querySelectorAll('#subfilter-cidades .subfilter-city-btn')];
+  const bairrosCidBtns = [...document.querySelectorAll('#subfilter-bairros-cidades .subfilter-bairro-btn')];
+  const bairrosLoteBtns= [...document.querySelectorAll('#subfilter-bairros .subfilter-btn')];
 
-  /* =============================
-     FUNÇÃO CENTRAL DE FILTRAGEM
-  ==============================*/
-  function aplicarFiltros({ tipo='all', cidade='all', bairro='all' }={}) {
-    document.querySelectorAll('#imoveis .card').forEach(card => {
-      const geo  = card.dataset.geo  || '';
-      const tipoCard = card.dataset.type || '';
+  /* ============================================
+     FUNÇÃO ÚNICA DE FILTRAGEM
+     ============================================*/
+  function filtrarTudo({ tipo='all', cidade='all', bairro='all', vendido=false }={}) {
 
-      const okTipo   = (tipo === 'all') || (tipoCard === tipo);
-      const okCidade = (cidade === 'all') || geo.includes(cidade);
-      const okBairro = (bairro === 'all') || geo.includes(bairro);
+    cards.forEach(card => {
 
+      const tipoCard   = (card.dataset.type || '').toLowerCase();
+      const tags       = (card.dataset.tags || '').toLowerCase().split(/[,\s]+/);
+      const geo        = (card.dataset.geo  || '').toLowerCase();
+      const isSold     = card.classList.contains('sold');
+
+      /* ======== Lógica de VENDIDOS ======== */
+      if (vendido) {
+        card.style.display = isSold ? '' : 'none';
+        return;
+      } else {
+        if (isSold) {
+          card.style.display = 'none';
+          return;
+        }
+      }
+
+      /* ======== Tipo (categoria principal) ======== */
+      const okTipo =
+        tipo === 'all' ||
+        tipoCard === tipo ||
+        tags.includes(tipo);
+
+      /* ======== Cidade ======== */
+      const okCidade =
+        cidade === 'all' ||
+        geo.includes(cidade);
+
+      /* ======== Bairro ======== */
+      const okBairro =
+        bairro === 'all' ||
+        geo.includes(bairro);
+
+      /* ======== Resultado final ======== */
       card.style.display = (okTipo && okCidade && okBairro) ? '' : 'none';
     });
+
+    /* ======== Ordenação dos vendidos (somente filtro vendido) ======== */
+    if (vendido) {
+      const grid = document.querySelector('#imoveis .grid');
+      const vendidos = [...grid.querySelectorAll('.card.sold')];
+
+      vendidos.sort((a,b)=>{
+        const da = a.dataset.sold || '0000-00-00';
+        const db = b.dataset.sold || '0000-00-00';
+        return db.localeCompare(da);
+      });
+
+      vendidos.forEach(card=>grid.appendChild(card));
+    }
+
+    /* ======== PIN DOS DESTAQUES ======== */
+    const grid = document.querySelector('#imoveis .grid');
+
+    const PIN_TOP_MAP = {
+      'all' : ['lote-unique-630', 'complexo-sao-mateus'],
+      'lote': ['lote-unique-630'],
+      'casa': ['complexo-sao-mateus']
+    };
+
+    if (!vendido) {
+      const pins = PIN_TOP_MAP[tipo] || [];
+      pins.forEach(id=>{
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.classList.contains('sold')) return;
+        if (el.style.display === 'none') return;
+        grid.prepend(el);
+      });
+    }
   }
 
-  /* =============================
-     1) FILTRO PRINCIPAL (Casas, Lotes, etc.)
-  ==============================*/
+  /* ============================================================== 
+     EVENTO DOS FILTROS PRINCIPAIS (CASAS, LOTES, COMERCIAL...)
+     ============================================================== */
   filterButtons.forEach(btn=>{
     btn.addEventListener('click', ()=>{
 
       const tipo = btn.dataset.filter;
 
-      // ativar visualmente
+      /* Visual do botão ativo */
       filterButtons.forEach(b=>b.classList.remove('is-active'));
       btn.classList.add('is-active');
 
-      // ======================
-      // FILTRO "LOTE"
-      // ======================
-      if(tipo === 'lote') {
-        subCidades.style.display = 'flex';
-        subBairrosCid.style.display = 'none';
+      /* Reset dos subfiltros */
+      cidadesBtns.forEach(b=>b.classList.remove('active'));
+      cidadesBtns[0].classList.add('active');
 
-        // reset cidade ativa
-        cidadesBtns.forEach(b=>b.classList.remove('active'));
-        cidadesBtns[0].classList.add('active');
+      bairrosCidBtns.forEach(b=>b.classList.remove('active'));
+      bairrosLoteBtns.forEach(b=>b.classList.remove('active'));
+      bairrosLoteBtns[0]?.classList.add('active');
 
-        aplicarFiltros({ tipo:'lote', cidade:'all', bairro:'all' });
+      /* ======== Caso "vendido" ======== */
+      if (tipo === 'vendido') {
+        subCidades.style.display     = 'none';
+        subBairrosCid.style.display  = 'none';
+        subBairrosLote.style.display = 'none';
+        filtrarTudo({ vendido:true });
+        return;
       }
 
-      // ======================
-      // FILTRO "TODOS"
-      // ======================
-      else if(tipo === 'all') {
-        aplicarFiltros({ tipo:'all', cidade:'all', bairro:'all' });
+      /* ======== Tipo LOTE ======== */
+      if (tipo === 'lote') {
+        subCidades.style.display     = 'flex';
+        subBairrosCid.style.display  = 'none';
+        subBairrosLote.style.display = 'flex';
 
-        subCidades.style.display = 'none';
-        subBairrosCid.style.display = 'none';
-
-        cidadesBtns.forEach(b=>b.classList.remove('active'));
-        cidadesBtns[0].classList.add('active');
+        filtrarTudo({ tipo:'lote', cidade:'all', bairro:'all' });
+        return;
       }
 
-// ======================
-// FILTRO "VENDIDO"
-// ======================
-else if(tipo === 'vendido') {
+      /* ======== Demais categorias ======== */
+      subCidades.style.display     = 'flex';
+      subBairrosCid.style.display  = 'none';
+      subBairrosLote.style.display = 'none';
 
-    // Mostrar SOMENTE vendidos
-    document.querySelectorAll('#imoveis .card').forEach(card => {
-        const price = card.querySelector('.price');
-        const isSold = price && price.classList.contains('sold');
-        card.style.display = isSold ? '' : 'none';
-    });
-
-    // ESCONDER todos os subfiltros
-    subCidades.style.display = 'none';
-    subBairrosCid.style.display = 'none';
-    document.getElementById('subfilter-bairros').style.display = 'none';
-
-    // RESET seleção de cidades
-    cidadesBtns.forEach(b=>b.classList.remove('active'));
-    if (cidadesBtns[0]) cidadesBtns[0].classList.add('active');
-
-    // RESET bairros por cidade
-    bairroBtns.forEach(b=>b.classList.remove('active'));
-
-    // RESET bairros de lotes
-    document.querySelectorAll('#subfilter-bairros .subfilter-btn')
-      .forEach(b=>b.classList.remove('active'));
-
-    // impede de cair no bloco "QUALQUER OUTRA CATEGORIA"
-    return;
-}
-
-      // ======================
-      // QUALQUER OUTRA CATEGORIA
-      // ======================
-      else {
-        subCidades.style.display = 'flex';
-        subBairrosCid.style.display = 'none';
-
-        cidadesBtns.forEach(b=>b.classList.remove('active'));
-        cidadesBtns[0].classList.add('active');
-
-        aplicarFiltros({ tipo, cidade:'all', bairro:'all' });
-      }
-
+      filtrarTudo({ tipo, cidade:'all', bairro:'all' });
     });
   });
 
-  /* =============================
-     2) SUBFILTRO — CIDADES
-  ==============================*/
+  /* ============================================================== 
+     SUBFILTRO — CIDADES
+     ============================================================== */
   cidadesBtns.forEach(btn=>{
     btn.addEventListener('click', ()=>{
 
       cidadesBtns.forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
 
-      const cidade = btn.dataset.cidade;
-      const tipoAtivo = document.querySelector('#filters .is-active')?.dataset.filter || 'all';
+      const cidade   = btn.dataset.cidade;
+      const tipoAtv  = document.querySelector('#filters .is-active')?.dataset.filter || 'all';
 
-      // mostrar bairros da cidade
-      bairrosGroups.forEach(group=>{
-        group.style.display = (group.dataset.cityGroup === cidade) ? 'flex' : 'none';
+      /* Mostrar bairros da cidade (subfiltro geral de cidades) */
+      const grupos = document.querySelectorAll('#subfilter-bairros-cidades [data-city-group]');
+      grupos.forEach(g=>{
+        g.style.display = (g.dataset.cityGroup === cidade) ? 'flex' : 'none';
       });
 
-      subBairrosCid.style.display = (cidade !== 'all') ? 'flex' : 'none';
+      if (cidade === 'all') subBairrosCid.style.display = 'none';
+      else subBairrosCid.style.display = 'flex';
 
-      aplicarFiltros({ tipo:tipoAtivo, cidade, bairro:'all' });
+      /* Subfiltro de LOTES continua funcionando independente */
+      const isLote = (tipoAtv === 'lote');
+
+      if (!isLote)
+        filtrarTudo({ tipo:tipoAtv, cidade, bairro:'all' });
+      else
+        filtrarTudo({ tipo:'lote', cidade, bairro:'all' });
     });
   });
 
-  /* =============================
-     3) SUBFILTRO — BAIRROS POR CIDADE
-  ==============================*/
-  bairroBtns.forEach(btn=>{
+  /* ============================================================== 
+     SUBFILTRO — BAIRROS POR CIDADE
+     ============================================================== */
+  bairrosCidBtns.forEach(btn=>{
     btn.addEventListener('click', ()=>{
 
-      bairroBtns.forEach(b=>b.classList.remove('active'));
+      bairrosCidBtns.forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
 
-      const bairro = btn.dataset.bairro;
-      const cidade = document.querySelector('#subfilter-cidades .active')?.dataset.cidade || 'all';
-      const tipoAtivo = document.querySelector('#filters .is-active')?.dataset.filter || 'all';
+      const bairro   = btn.dataset.bairro;
+      const cidade   = document.querySelector('#subfilter-cidades .active')?.dataset.cidade || 'all';
+      const tipoAtv  = document.querySelector('#filters .is-active')?.dataset.filter || 'all';
 
-      aplicarFiltros({ tipo:tipoAtivo, cidade, bairro });
+      filtrarTudo({ tipo:tipoAtv, cidade, bairro });
     });
   });
+
+  /* ============================================================== 
+     SUBFILTRO — BAIRROS (EXCLUSIVO LOTES)
+     ============================================================== */
+  bairrosLoteBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+
+      bairrosLoteBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const bairro   = btn.dataset.bairro;
+      const cidade   = document.querySelector('#subfilter-cidades .active')?.dataset.cidade || 'all';
+
+      filtrarTudo({ tipo:'lote', cidade, bairro });
+    });
+  });
+
+  /* ======== FILTRO INICIAL (Todos) ======== */
+  filtrarTudo({ tipo:'all', cidade:'all', bairro:'all' });
 
 });
 </script>
 
-
+    
 <!-- Aviso de coleta de dados / cookies -->
 <div class="cookie-info" style="text-align:center;font-size:13px;color:#555;margin:20px auto;max-width:600px;padding:8px 16px;border-top:1px solid #ddd;">
   Este site utiliza cookies e tecnologias semelhantes para melhorar sua experiência de navegação e coletar estatísticas de acesso (Google Analytics). 
