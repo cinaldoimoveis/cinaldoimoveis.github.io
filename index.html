@@ -2208,21 +2208,29 @@
   if(!bar || !grid) return;
 
   function getTags(card){
-    const raw = card.getAttribute('data-tags');
-    if(raw && raw.trim()){
-      return raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
-    }
-    const t = (card.getAttribute('data-type')||'').toLowerCase().trim();
-    return t ? [t] : [];
+  const raw = card.getAttribute('data-tags');
+  if(raw && raw.trim()){
+    return raw
+      .toLowerCase()
+      .split(/[,\s]+/)   // ← quebra por vírgula OU espaço
+      .map(s=>s.trim())
+      .filter(Boolean);
   }
+  const t = (card.getAttribute('data-type')||'').toLowerCase().trim();
+  return t ? [t] : [];
+}
 
   function applyFilter(type){
   grid.classList.add('filtering');
 
+  // 🔥 Reset de visibilidade para evitar sumiço permanente de cards
+  cards.forEach(c => c.hidden = false);
+
   const f = (type||'all').toLowerCase();
-   cards.forEach(card=>{
+  cards.forEach(card=>{
     const tags = getTags(card);
     const isSold = card.classList.contains('sold');
+
 
     // 🔹 Regras de exibição:
     // - "Vendidos": mostra apenas imóveis vendidos
