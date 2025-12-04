@@ -2221,29 +2221,27 @@
 }
 
   function applyFilter(type){
-  grid.classList.add('filtering');
 
-  // 🔥 Reset de visibilidade para evitar sumiço permanente de cards
+  // 🔥 Reset de visibilidade ANTES de ativar o modo filtering
   cards.forEach(c => c.hidden = false);
 
-  const f = (type||'all').toLowerCase();
-  cards.forEach(card=>{
+  grid.classList.add('filtering');
+
+  const f = (type || 'all').toLowerCase();
+
+  cards.forEach(card => {
     const tags = getTags(card);
     const isSold = card.classList.contains('sold');
 
-
     // 🔹 Regras de exibição:
-    // - "Vendidos": mostra apenas imóveis vendidos
-    // - Qualquer outro filtro: mostra apenas imóveis NÃO vendidos
-    // - "Todos": também mostra apenas imóveis NÃO vendidos
     const show =
-      (f === 'vendido' && isSold) ||                             // só vendidos
+      (f === 'vendido' && isSold) ||                              // só vendidos
       (f !== 'vendido' && !isSold && (f === 'all' || tags.includes(f))); // não vendidos
 
     card.hidden = !show;
   });
 
-      // 🆕 Ordenação correta dos VENDIDOS por data-sold (decrescente)
+  // 🆕 Ordenação correta dos VENDIDOS por data-sold (decrescente)
   if (f === 'vendido') {
     const soldCards = Array.from(grid.querySelectorAll('.card.sold'));
 
@@ -2256,36 +2254,25 @@
     soldCards.forEach(card => grid.appendChild(card));
   }
 
-
-
-    // Regras de PIN por filtro:
-  // - 'all'  → Unique 630 + Complexo São Mateus
-  // - 'lote' → Unique 630
-  // - 'casa' → Complexo São Mateus
+  // Regras de PIN por filtro:
   const PIN_TOP_MAP = {
     'all' : ['lote-unique-630', 'complexo-sao-mateus'],
     'lote': ['lote-unique-630'],
     'casa': ['complexo-sao-mateus']
   };
 
-    // aplica o pinning conforme o filtro atual,
-  // garantindo que vendidos nunca sejam fixados no topo
   const pinList = PIN_TOP_MAP[f] || [];
-  pinList.forEach(id=>{
+  pinList.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
 
     const isSold = el.classList.contains('sold');
     const isHidden = el.hidden;
 
-    // se estiver vendido OU oculto, ignora completamente
     if (isSold || isHidden) return;
 
-    // só então fixa no topo
     grid.prepend(el);
   });
-
-
 
   grid.classList.remove('filtering');
 }
