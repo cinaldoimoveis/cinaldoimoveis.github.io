@@ -457,90 +457,6 @@
     <button class="fbtn" data-filter="vendido">Vendidos</button>
   </div> <!-- fecha a barra de filtros -->
 
-<!-- ===================================================== -->
-<!-- 🔽 SUBFILTRO DE CIDADES (aparece para TODAS as categorias, exceto LOTES) -->
-<!-- ===================================================== -->
-<div id="subfilter-cidades" style="display:none;margin-top:12px;gap:6px;flex-wrap:wrap;" class="subfilters">
-  <button data-cidade="all" class="pill subfilter-city-btn active">Todas as cidades</button>
-  <button data-cidade="c-linhares" class="pill subfilter-city-btn">Linhares</button>
-  <button data-cidade="c-jaguare" class="pill subfilter-city-btn">Jaguaré</button>
-  <button data-cidade="c-saomateus" class="pill subfilter-city-btn">São Mateus</button>
-  <button data-cidade="c-riobananal" class="pill subfilter-city-btn">Rio Bananal</button>
-  <button data-cidade="c-aracruz" class="pill subfilter-city-btn">Aracruz</button>
-  <button data-cidade="c-sooretama" class="pill subfilter-city-btn">Sooretama</button>
-</div>
-
-<!-- ===================================================== -->
-<!-- 🔽 SUBFILTRO DE BAIRROS POR CIDADE (dinâmico) -->
-<!-- ===================================================== -->
-<div id="subfilter-bairros-cidades" style="display:none;margin-top:8px;gap:6px;flex-wrap:wrap;" class="subfilters">
-
-  <!-- LINHARES -->
-  <div data-city-group="c-linhares" style="display:none;">
-    <button data-bairro="all" class="pill subfilter-bairro-btn active">Todos os bairros</button>
-    <button data-bairro="b-alphaville" class="pill subfilter-bairro-btn">Alphaville</button>
-    <button data-bairro="b-unique" class="pill subfilter-bairro-btn">Unique</button>
-    <button data-bairro="b-laguna" class="pill subfilter-bairro-btn">Jardim Laguna</button>
-    <button data-bairro="b-tresbarras" class="pill subfilter-bairro-btn">Três Barras</button>
-    <button data-bairro="b-interlagos" class="pill subfilter-bairro-btn">Interlagos</button>
-    <button data-bairro="b-bnh" class="pill subfilter-bairro-btn">BNH</button>
-    <button data-bairro="b-lagoadomeio" class="pill subfilter-bairro-btn">Lagoa do Meio</button>
-    <button data-bairro="b-conceicao" class="pill subfilter-bairro-btn">Conceição</button>
-    <button data-bairro="b-juparana" class="pill subfilter-bairro-btn">Juparanã</button>
-    <button data-bairro="b-colina" class="pill subfilter-bairro-btn">Colina</button>
-    <button data-bairro="b-centro" class="pill subfilter-bairro-btn">Centro</button>
-    <button data-bairro="b-shell" class="pill subfilter-bairro-btn">Shell</button>
-    <button data-bairro="b-rodriguesmaciel" class="pill subfilter-bairro-btn">Rodrigues Maciel</button>
-    <button data-bairro="b-planalto" class="pill subfilter-bairro-btn">Planalto</button>
-  </div>
-
-  <!-- SÃO MATEUS -->
-  <div data-city-group="c-saomateus" style="display:none;">
-    <button data-bairro="all" class="pill subfilter-bairro-btn active">Todos os bairros</button>
-    <button data-bairro="b-centro" class="pill subfilter-bairro-btn">Centro</button>
-    <button data-bairro="b-guriri" class="pill subfilter-bairro-btn">Guriri</button>
-  </div>
-
-  <!-- Outras cidades -->
-  <div data-city-group="c-jaguare" style="display:none;">
-    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
-  </div>
-
-  <div data-city-group="c-riobananal" style="display:none;">
-    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
-  </div>
-
-  <div data-city-group="c-aracruz" style="display:none;">
-    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
-  </div>
-
-  <div data-city-group="c-sooretama" style="display:none;">
-    <button data-bairro="all" class="pill subfilter-bairro-btn active">Centro</button>
-  </div>
-
-</div>
-
-<!-- ===================================================== -->
-<!-- 🔽 SUBFILTRO DE BAIRROS EXCLUSIVO PARA LOTES -->
-<!-- ===================================================== -->
-<div id="subfilter-bairros" style="display:none;margin-top:12px;gap:6px;flex-wrap:wrap;" class="subfilters">
-  <button data-bairro="all" class="pill subfilter-btn active">Todos</button>
-  <button data-bairro="b-alphaville" class="pill subfilter-btn">Alphaville</button>
-  <button data-bairro="b-unique" class="pill subfilter-btn">Unique</button>
-  <button data-bairro="b-laguna" class="pill subfilter-btn">Jardim Laguna</button>
-  <button data-bairro="b-tresbarras" class="pill subfilter-btn">Três Barras</button>
-  <button data-bairro="b-interlagos" class="pill subfilter-btn">Interlagos</button>
-  <button data-bairro="b-bnh" class="pill subfilter-btn">BNH</button>
-  <button data-bairro="b-lagoadomeio" class="pill subfilter-btn">Lagoa do Meio</button>
-  <button data-bairro="b-conceicao" class="pill subfilter-btn">Conceição</button>
-  <button data-bairro="b-juparana" class="pill subfilter-btn">Juparanã</button>
-  <button data-bairro="b-colina" class="pill subfilter-btn">Colina</button>
-  <button data-bairro="b-centro" class="pill subfilter-btn">Centro</button>
-  <button data-bairro="b-shell" class="pill subfilter-btn">Shell</button>
-  <button data-bairro="b-rodriguesmaciel" class="pill subfilter-btn">Rodrigues Maciel</button>
-  <button data-bairro="b-planalto" class="pill subfilter-btn">Planalto</button>
-</div>
-
 <!-- AGORA SIM A GRID (APENAS OS CARDS AQUI) -->
 <div class="grid">
 
@@ -557,7 +473,7 @@
             <h3>Casa 3Q (2 Suítes) – Alphaville</h3>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="pill">217m² const.</span><span class="pill">Lote 420m²</span><span class="pill">3Q • 2 suítes</span><span class="pill">2 vagas</span><span class="pill">Sol da manhã</span>
-              <span class="pill">Ref: CI-CA-ALPH-217</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 1.900.000,00</p>
             <ul class="ul">
@@ -602,7 +518,7 @@
             <h3>Casa Linear 2Q (1 Suíte) – Jardim Laguna 2</h3>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="pill">100m² const.</span><span class="pill">Lote 380m²</span><span class="pill">2Q • 1 suíte</span><span class="pill">1 vaga coberta</span>
-              <span class="pill">Ref: CI-CA-LAG-100</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 700.000,00</p>
             <ul class="ul">
@@ -655,7 +571,7 @@
             <h3>Lote Comercial 437m² – Terras Alphaville</h3>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="pill">437m²</span><span class="pill">13,53m × 32,30m</span><span class="pill">Sol da manhã</span>
-              <span class="pill">Ref: CI-LO-ALPH-437C</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 200.000,00</p>
             <ul class="ul">
@@ -683,7 +599,7 @@
             <h3>Fazenda – 290ha (60 alq) – Linhares ES</h3>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="pill">290ha</span><span class="pill">Poço 100m</span><span class="pill">Caixa 30mil/L</span><span class="pill">Curral p/ 500 bois</span>
-              <span class="pill">Ref: CI-FZ-LIN-290</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 18.000.000,00</p>
             <ul class="ul">
@@ -742,7 +658,7 @@
             <h3>Apartamento 3Q (1 Suíte) – Três Barras</h3>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="pill">90,76m²</span><span class="pill">Varanda c/ gourmet</span><span class="pill">2 vagas</span>
-              <span class="pill">Ref: CI-AP-TB-90</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price ">Vendido</p>
             <ul class="ul">
@@ -797,7 +713,7 @@
             <h3>Lote Residencial 360m² – Terras Alphaville</h3>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="pill">360m²</span><span class="pill">12m × 30m</span><span class="pill">Quitado e escriturado</span>
-              <span class="pill">Ref: CI-LO-ALPH-360</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 470.000,00</p>
             <ul class="ul">
@@ -852,7 +768,7 @@
             <h3>Lote Residencial 420m² – Terras Alphaville</h3>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="pill">420m²</span><span class="pill">14m × 30m</span><span class="pill">Sol da manhã</span><span class="pill">Vista parcial lagoa</span>
-              <span class="pill">Ref: CI-LO-ALPH-420</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 440.000,00</p>
             <ul class="ul">
@@ -911,7 +827,7 @@
       <span class="pill">Acesso à Lagoa Juparanã</span>
       <span class="pill">Segurança 24h</span>
       <span class="pill">Lazer completo</span>
-      <span class="pill">Ref: CI-LO-UNIQ-630</span>
+      <span class="pill">Linhares ES</span>
     </div>
     <p class="price ">Vendido</p>
     <ul class="ul">
@@ -964,7 +880,7 @@
               <span class="pill">650m da BR-101 (Km 142)</span>
               <span class="pill">Terraplanado</span>
               <span class="pill">Acesso asfaltado</span>
-              <span class="pill">Ref: CI-AR-PLAN-20000</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 4.000.000,00</p>
             <ul class="ul">
@@ -1010,7 +926,7 @@
               <span class="pill">Sol da manhã</span>
               <span class="pill">Condomínio fechado</span>
               <span class="pill">Quitado</span>
-              <span class="pill">Ref: CI-LO-ALPH-717</span>
+              <span class="pill">Linhares ES</span>
             </div>
             <p class="price">R$ 717.000,00</p>
             <ul class="ul">
@@ -1072,7 +988,7 @@
               <span class="pill">4 moradias</span>
               <span class="pill">Piscina • Lazer completo</span>
               <span class="pill">Mobília inclusa</span>
-              <span class="pill">Ref: CI-CO-SM-2000</span>
+              <span class="pill">São Mateus ES</span>
             </div>
             <p class="price" data-old="R$ 3.500.000,00">R$ 2.999.000,00</p>
 
@@ -1175,7 +1091,7 @@
       <span class="pill">3Q • 1 suíte c/ closet</span>
       <span class="pill">Área gourmet</span>
       <span class="pill">Entrega ago/2026</span>
-      <span class="pill">Ref: CI-CA-ALPH-186</span>
+      <span class="pill">Linhares ES</span>
     </div>
     <p class="price">R$ 1.800.000,00</p>
     <ul class="ul">
@@ -1235,7 +1151,7 @@
       <span class="pill">11m x 23m</span>
       <span class="pill">Sol da manhã</span>
       <span class="pill">Casa simples 80m²</span>
-      <span class="pill">Ref: CI-CA-LAG-253</span>
+      <span class="pill">Linhares ES</span>
     </div>
     <p class="price sold">Vendido</p>
     <ul class="ul">
@@ -1284,7 +1200,7 @@
       <span class="pill">13m x 30m</span>
       <span class="pill">Sol da manhã</span>
       <span class="pill">Quitado</span>
-      <span class="pill">Ref: CI-LO-ALPH-390</span>
+      <span class="pill">Linhares ES</span>
     </div>
     <p class="price">R$ 400.000,00</p>
     <ul class="ul">
@@ -1352,7 +1268,7 @@
       <span class="pill">18,19m × 18m</span>
       <span class="pill">31,89m × 37,70m</span>
       <span class="pill">Sol da manhã</span>
-      <span class="pill">Ref: CI-LO-UNIQ-655</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price">R$ 691.000,00</p>
@@ -1423,7 +1339,7 @@
       <span class="pill">30m × 667m</span>
       <span class="pill">3km do balneário</span>
       <span class="pill">Cacau ~1.000 pés/ha</span>
-      <span class="pill">Ref: CI-CH-POV-20000</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1486,7 +1402,7 @@
       <span class="pill">Condomínio fechado</span>
       <span class="pill">Portaria 24h</span>
       <span class="pill">Clube completo</span>
-      <span class="pill">Ref: CI-LO-ALPHA-891</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <!-- 💰 Vendido -->
@@ -1528,7 +1444,7 @@
       <span class="pill">Condomínio Fechado</span>
       <span class="pill">Lazer completo</span>
       <span class="pill">Segurança 24h</span>
-      <span class="pill">Ref: CI-LO-ALPH-377</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1560,7 +1476,7 @@
       <span class="pill">Condomínio Fechado</span>
       <span class="pill">Lazer completo</span>
       <span class="pill">Segurança 24h</span>
-      <span class="pill">Ref: CI-LO-ALPH-653</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1587,7 +1503,7 @@
       <span class="pill">Com portão de correr</span>
       <span class="pill">Rua asfaltada</span>
       <span class="pill">Próximo ao Shopping PátioMix</span>
-      <span class="pill">Ref: CI-LO-MOV-142</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1633,7 +1549,7 @@
       <span class="pill">Móveis planejados</span>
       <span class="pill">Churrasqueira de alvenaria</span>
       <span class="pill">125m² de lote</span>
-      <span class="pill">Ref: CI-CA-BOAVISTA</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1692,7 +1608,7 @@
       <span class="pill">Casa sede 300m²</span>
       <span class="pill">Energia trifásica</span>
       <span class="pill">Represa e pomar</span>
-      <span class="pill">Ref: CI-AR-BR101-30000</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1754,7 +1670,7 @@
       <span class="pill">11m × 82,10m × 20,08m</span>
       <span class="pill">Próximo ao centro</span>
       <span class="pill">Documentação regular</span>
-      <span class="pill">Ref: CI-LO-COL-1244</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1800,7 +1716,7 @@
       <span class="pill">4 quartos (2 suítes)</span>
       <span class="pill">Amplo quintal</span>
       <span class="pill">Vista Linha Verde</span>
-      <span class="pill">Ref: CI-CA-LV-350</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1854,7 +1770,7 @@
       <span class="pill">Condomínio fechado</span>
       <span class="pill">Lazer completo</span>
       <span class="pill">Segurança 24h</span>
-      <span class="pill">Ref: CI-LO-ALPH-T118</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1909,7 +1825,7 @@
       <span class="pill">Condomínio fechado</span>
       <span class="pill">Lazer completo</span>
       <span class="pill">Segurança 24h</span>
-      <span class="pill">Ref: CI-LO-ALPH-T122</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -1963,7 +1879,7 @@
       <span class="pill">1 vaga</span>
       <span class="pill">Jardim privativo 13,09m²</span>
       <span class="pill">Sacada</span>
-      <span class="pill">Ref: CI-AP-MV-IRERE04</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -2017,7 +1933,7 @@
       <span class="pill">336m²</span>
       <span class="pill">Quadra 631</span>
       <span class="pill">Confronta com Av. Vasco F. Coutinho</span>
-      <span class="pill">Ref: CI-LO-IL-336</span>
+      <span class="pill">Linhares ES</span>
     </div>
 
     <p class="price sold">Vendido</p>
@@ -3648,27 +3564,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const filterButtons  = filterBar.querySelectorAll('[data-filter]');
   const cards          = [...document.querySelectorAll('#imoveis .card')];
 
-  const subCidades     = document.getElementById('subfilter-cidades');
-  const subBairrosCid  = document.getElementById('subfilter-bairros-cidades');
-  const subBairrosLote = document.getElementById('subfilter-bairros');
 
-  const cidadesBtns    = [...document.querySelectorAll('#subfilter-cidades .subfilter-city-btn')];
-  const bairrosCidBtns = [...document.querySelectorAll('#subfilter-bairros-cidades .subfilter-bairro-btn')];
-  const bairrosLoteBtns= [...document.querySelectorAll('#subfilter-bairros .subfilter-btn')];
-
-  /* ============================================
-     FUNÇÃO ÚNICA DE FILTRAGEM
+    /* ============================================
+     FUNÇÃO ÚNICA DE FILTRAGEM (SIMPLIFICADA)
      ============================================*/
-  function filtrarTudo({ tipo='all', cidade='all', bairro='all', vendido=false }={}) {
+  function filtrarTudo({ tipo='all', vendido=false }={}) {
 
     cards.forEach(card => {
 
-      const tipoCard   = (card.dataset.type || '').toLowerCase();
-      const tags       = (card.dataset.tags || '').toLowerCase().split(/[,\s]+/);
-      const geo        = (card.dataset.geo  || '').toLowerCase();
-      const isSold     = card.classList.contains('sold');
+      const tipoCard = (card.dataset.type || '').toLowerCase();
+      const tags     = (card.dataset.tags || '').toLowerCase().split(/[,\s]+/);
+      const isSold   = card.classList.contains('sold');
 
-      /* ======== Lógica de VENDIDOS ======== */
+      /* ======== VENDIDOS ======== */
       if (vendido) {
         card.style.display = isSold ? '' : 'none';
         return;
@@ -3679,27 +3587,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
       }
 
-      /* ======== Tipo (categoria principal) ======== */
+      /* ======== FILTRO POR TIPO ======== */
       const okTipo =
         tipo === 'all' ||
         tipoCard === tipo ||
         tags.includes(tipo);
 
-      /* ======== Cidade ======== */
-      const okCidade =
-        cidade === 'all' ||
-        geo.includes(cidade);
-
-      /* ======== Bairro ======== */
-      const okBairro =
-        bairro === 'all' ||
-        geo.includes(bairro);
-
-      /* ======== Resultado final ======== */
-      card.style.display = (okTipo && okCidade && okBairro) ? '' : 'none';
+      card.style.display = okTipo ? '' : 'none';
     });
 
-    /* ======== Ordenação dos vendidos (somente filtro vendido) ======== */
+    /* ======== ORDENAR VENDIDOS ======== */
     if (vendido) {
       const grid = document.querySelector('#imoveis .grid');
       const vendidos = [...grid.querySelectorAll('.card.sold')];
@@ -3734,120 +3631,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   }
 
+
   /* ============================================================== 
      EVENTO DOS FILTROS PRINCIPAIS (CASAS, LOTES, COMERCIAL...)
      ============================================================== */
-  filterButtons.forEach(btn=>{
+    filterButtons.forEach(btn=>{
     btn.addEventListener('click', ()=>{
 
       const tipo = btn.dataset.filter;
 
-      /* Visual do botão ativo */
       filterButtons.forEach(b=>b.classList.remove('is-active'));
       btn.classList.add('is-active');
 
-      /* Reset dos subfiltros */
-      cidadesBtns.forEach(b=>b.classList.remove('active'));
-      cidadesBtns[0].classList.add('active');
-
-      bairrosCidBtns.forEach(b=>b.classList.remove('active'));
-      bairrosLoteBtns.forEach(b=>b.classList.remove('active'));
-      bairrosLoteBtns[0]?.classList.add('active');
-
-      /* ======== Caso "vendido" ======== */
       if (tipo === 'vendido') {
-        subCidades.style.display     = 'none';
-        subBairrosCid.style.display  = 'none';
-        subBairrosLote.style.display = 'none';
-        filtrarTudo({ vendido:true });
-        return;
+        filtrarTudo({ vendido: true });
+      } else {
+        filtrarTudo({ tipo });
       }
 
-      /* ======== Tipo LOTE ======== */
-      if (tipo === 'lote') {
-        subCidades.style.display     = 'flex';
-        subBairrosCid.style.display  = 'none';
-        subBairrosLote.style.display = 'flex';
-
-        filtrarTudo({ tipo:'lote', cidade:'all', bairro:'all' });
-        return;
-      }
-
-      /* ======== Demais categorias ======== */
-      subCidades.style.display     = 'flex';
-      subBairrosCid.style.display  = 'none';
-      subBairrosLote.style.display = 'none';
-
-      filtrarTudo({ tipo, cidade:'all', bairro:'all' });
     });
   });
 
-  /* ============================================================== 
-     SUBFILTRO — CIDADES
-     ============================================================== */
-  cidadesBtns.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
 
-      cidadesBtns.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const cidade   = btn.dataset.cidade;
-      const tipoAtv  = document.querySelector('#filters .is-active')?.dataset.filter || 'all';
-
-      /* Mostrar bairros da cidade (subfiltro geral de cidades) */
-      const grupos = document.querySelectorAll('#subfilter-bairros-cidades [data-city-group]');
-      grupos.forEach(g=>{
-        g.style.display = (g.dataset.cityGroup === cidade) ? 'flex' : 'none';
-      });
-
-      if (cidade === 'all') subBairrosCid.style.display = 'none';
-      else subBairrosCid.style.display = 'flex';
-
-      /* Subfiltro de LOTES continua funcionando independente */
-      const isLote = (tipoAtv === 'lote');
-
-      if (!isLote)
-        filtrarTudo({ tipo:tipoAtv, cidade, bairro:'all' });
-      else
-        filtrarTudo({ tipo:'lote', cidade, bairro:'all' });
-    });
-  });
-
-  /* ============================================================== 
-     SUBFILTRO — BAIRROS POR CIDADE
-     ============================================================== */
-  bairrosCidBtns.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-
-      bairrosCidBtns.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const bairro   = btn.dataset.bairro;
-      const cidade   = document.querySelector('#subfilter-cidades .active')?.dataset.cidade || 'all';
-      const tipoAtv  = document.querySelector('#filters .is-active')?.dataset.filter || 'all';
-
-      filtrarTudo({ tipo:tipoAtv, cidade, bairro });
-    });
-  });
-
-  /* ============================================================== 
-     SUBFILTRO — BAIRROS (EXCLUSIVO LOTES)
-     ============================================================== */
-  bairrosLoteBtns.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-
-      bairrosLoteBtns.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const bairro   = btn.dataset.bairro;
-      const cidade   = document.querySelector('#subfilter-cidades .active')?.dataset.cidade || 'all';
-
-      filtrarTudo({ tipo:'lote', cidade, bairro });
-    });
-  });
 
   /* ======== FILTRO INICIAL (Todos) ======== */
-  filtrarTudo({ tipo:'all', cidade:'all', bairro:'all' });
+  filtrarTudo({ tipo: 'all' });
 
 });
 </script>
