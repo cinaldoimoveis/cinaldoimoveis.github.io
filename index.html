@@ -3625,16 +3625,23 @@ smartScrollToWithRetries(anchorEl);
     let ignoreNextHashScroll = false;
 
   function scrollToHashSmart(){
-    if (ignoreNextHashScroll) {
-      ignoreNextHashScroll = false;
-      return;
-    }
-    if (isSolo()) return;
-    if (!location.hash) return;
-    const el = document.querySelector(location.hash);
-    if (!el) return;
-    smartScrollToWithRetries(el);
+  if (ignoreNextHashScroll) {
+    ignoreNextHashScroll = false;
+    return;
   }
+  if (isSolo()) return;
+  if (!location.hash) return;
+
+  const section = document.querySelector(location.hash);
+  if (!section) return;
+
+  const el =
+    section.querySelector('.container > h2') ||
+    section.querySelector('.container') ||
+    section;
+
+  smartScrollToWithRetries(el);
+}
 
   window.addEventListener('hashchange', scrollToHashSmart, { passive: true });
   window.addEventListener('load', scrollToHashSmart, { passive: true });
@@ -3645,7 +3652,12 @@ smartScrollToWithRetries(anchorEl);
     linkImoveis.addEventListener('click', (e) => {
       e.preventDefault();
 
-                  const el = document.querySelector('#imoveis');
+  const section = document.getElementById('imoveis');
+const el =
+  section?.querySelector('.container > h2') ||
+  section?.querySelector('.container') ||
+  section;
+
       if (!el) return;
 
       // evita duplo scroll via hashchange
