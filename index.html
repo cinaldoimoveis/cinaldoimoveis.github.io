@@ -3622,16 +3622,42 @@ smartScrollToWithRetries(anchorEl);
 
   const isSolo = () => new URLSearchParams(location.search).get('solo') === '1';
 
+    let ignoreNextHashScroll = false;
+
   function scrollToHashSmart(){
-  if (isSolo()) return;
-  if(!location.hash) return;
-  const el = document.querySelector(location.hash);
-  if(!el) return;
-  smartScrollToWithRetries(el);
-}
+    if (ignoreNextHashScroll) {
+      ignoreNextHashScroll = false;
+      return;
+    }
+    if (isSolo()) return;
+    if (!location.hash) return;
+    const el = document.querySelector(location.hash);
+    if (!el) return;
+    smartScrollToWithRetries(el);
+  }
 
   window.addEventListener('hashchange', scrollToHashSmart, { passive: true });
   window.addEventListener('load', scrollToHashSmart, { passive: true });
+
+    // Intercepta clique no menu "Imóveis" para usar scroll inteligente
+  const linkImoveis = document.querySelector('a[href="#imoveis"]');
+  if (linkImoveis) {
+    linkImoveis.addEventListener('click', (e) => {
+      e.preventDefault();
+
+                  const el = document.querySelector('#imoveis');
+      if (!el) return;
+
+      // evita duplo scroll via hashchange
+      ignoreNextHashScroll = true;
+
+      // Atualiza hash sem scroll nativo
+      history.pushState(null, '', '#imoveis');
+
+      // Usa a MESMA lógica do botão "Todos"
+      smartScrollToWithRetries(el);
+    });
+  }
 
 })();
 </script>
