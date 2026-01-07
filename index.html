@@ -2138,9 +2138,8 @@
     line-height:1.5;
     padding:30px 0;
   ">
-    <div style="font-size:.9rem;color:#666;">
-      © 2019-2026 <span style="color:#222;">Cinaldo Imóveis</span> • Linhares – ES
-    </div>
+    <div id="footer-copy" style="font-size:.9rem;color:#666;"></div>
+
   </div>
 </footer>
 
@@ -3793,6 +3792,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   }
 </style>
+
+    <script>
+(function () {
+  const startYear = 2019;
+  const currentYear = new Date().getFullYear();
+
+  const yearText =
+    startYear === currentYear
+      ? startYear
+      : `${startYear}-${currentYear}`;
+
+  const el = document.getElementById('footer-copy');
+  if (el) {
+    el.innerHTML = `© ${yearText} <span style="color:#222;">Cinaldo Imóveis</span> • Linhares – ES`;
+  }
+})();
+</script>
+
+    <script src="/assets/js/main.js"></script>
 
 </body>
 </html>
