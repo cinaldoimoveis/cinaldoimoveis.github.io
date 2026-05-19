@@ -4279,11 +4279,17 @@ if (me) me.remove();
 // restaura URL apontando para a seção de imóveis
 history.replaceState(null, '', location.pathname + '#imoveis');
 
-// aciona o filtro "Todos"
-const btnTodos = document.querySelector('#filters [data-filter="all"]');
-if (btnTodos) btnTodos.click();
+// mostra todos os cards diretamente, sem acionar clique no filtro
+document.querySelectorAll('#imoveis .card').forEach(card => {
+  card.hidden = false;
+});
 
-// faz scroll inteligente para a seção
+// marca visualmente o botão "Todos", se existir
+document.querySelectorAll('#filters [data-filter]').forEach(btn => {
+  btn.classList.toggle('active', btn.dataset.filter === 'all');
+});
+
+// faz scroll inteligente para a seção de imóveis depois que os cards reaparecem
 const section = document.getElementById('imoveis');
 
 const el =
@@ -4292,9 +4298,9 @@ const el =
   section;
 
 if (el) {
-  setTimeout(() => {
-    smartScrollToWithRetries(el);
-  }, 30);
+  setTimeout(() => smartScrollToWithRetries(el), 80);
+  setTimeout(() => smartScrollToWithRetries(el), 300);
+  setTimeout(() => smartScrollToWithRetries(el), 800);
 }
 });
 
