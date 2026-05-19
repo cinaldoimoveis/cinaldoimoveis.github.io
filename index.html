@@ -4308,8 +4308,12 @@ title.insertAdjacentElement('afterend', exit);
 }
 
 setTimeout(()=>{
-  // mantém apenas ?solo=1 para que o modo solo continue funcionando
-  history.replaceState(null, '', location.pathname + '?solo=1');
+  // mantém o hash da seção para evitar salto para o topo
+  history.replaceState(
+    null,
+    '',
+    location.pathname + '?solo=1#imoveis'
+  );
 }, 20);
 
     const anchorEl =
