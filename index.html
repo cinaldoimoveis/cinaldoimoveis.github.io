@@ -4298,9 +4298,21 @@ const el =
   section;
 
 if (el) {
-  setTimeout(() => smartScrollToWithRetries(el), 80);
-  setTimeout(() => smartScrollToWithRetries(el), 300);
-  setTimeout(() => smartScrollToWithRetries(el), 800);
+
+  requestAnimationFrame(() => {
+
+    const y =
+      el.getBoundingClientRect().top +
+      window.pageYOffset -
+      getHeaderOffset();
+
+    window.scrollTo({
+      top: y,
+      behavior: 'auto'
+    });
+
+  });
+
 }
 });
 
