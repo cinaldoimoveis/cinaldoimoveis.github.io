@@ -4320,12 +4320,14 @@ title.insertAdjacentElement('afterend', exit);
 }
 
 setTimeout(()=>{
-  // mantém o hash da seção para evitar salto para o topo
+
+  // preserva o hash ORIGINAL do imóvel
   history.replaceState(
     null,
     '',
-    location.pathname + '?solo=1#imoveis'
+    location.pathname + location.search + location.hash
   );
+
 }, 20);
 
     const anchorEl =
