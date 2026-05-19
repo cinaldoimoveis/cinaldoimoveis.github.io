@@ -4276,12 +4276,26 @@ btnSite.addEventListener('click', () => {
 const me = document.getElementById('exit-solo');
 if (me) me.remove();
 
-// limpa URL totalmente (sem hash)
-history.replaceState(null, '', location.pathname);
+// restaura URL apontando para a seção de imóveis
+history.replaceState(null, '', location.pathname + '#imoveis');
 
 // aciona o filtro "Todos"
 const btnTodos = document.querySelector('#filters [data-filter="all"]');
 if (btnTodos) btnTodos.click();
+
+// faz scroll inteligente para a seção
+const section = document.getElementById('imoveis');
+
+const el =
+  section?.querySelector('.container > h2') ||
+  section?.querySelector('.container') ||
+  section;
+
+if (el) {
+  setTimeout(() => {
+    smartScrollToWithRetries(el);
+  }, 30);
+}
 });
 
 title.insertAdjacentElement('afterend', exit);
