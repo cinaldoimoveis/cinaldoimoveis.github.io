@@ -3077,8 +3077,10 @@ Ver fotos
       if (exit) exit.remove();
       const filtersBar = document.getElementById('filters');
       if (filtersBar) filtersBar.style.display = '';
-      document.querySelectorAll('#imoveis .grid .card').forEach(c=> c.hidden = false);
-    }
+     document.querySelectorAll('#imoveis .grid .card').forEach(c=> {
+  c.hidden = false;
+  c.style.display = '';
+});
 
     // aplica o filtro selecionado
     applyFilter(type);
