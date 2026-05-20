@@ -4377,58 +4377,20 @@ btnSite.addEventListener('click', () => {
       exit.className = 'btn';
       exit.href = location.pathname + '#imoveis';
       exit.textContent = '← Ver todos os imóveis';
-      exit.addEventListener('click', ev=>{
+      exit.addEventListener('click', ev => {
   ev.preventDefault();
 
-  // sai do modo solo
   document.body.classList.remove('solo');
 
-  // mostra novamente a barra de filtros
   if (filtersBar) filtersBar.style.display = '';
 
-  // remove o botão de saída
-const me = document.getElementById('exit-solo');
-if (me) me.remove();
+  const me = document.getElementById('exit-solo');
+  if (me) me.remove();
 
-// restaura URL apontando para a seção de imóveis
-history.replaceState(null, '', location.pathname + '#imoveis');
+  history.replaceState(null, '', location.pathname + '#imoveis');
 
-// mostra todos os cards diretamente, sem acionar clique no filtro
-document.querySelectorAll('#imoveis .card').forEach(card => {
-  card.hidden = false;
-  card.style.display = '';
-});
-
-// marca visualmente o botão "Todos", se existir
-document.querySelectorAll('#filters [data-filter]').forEach(btn => {
-  btn.classList.toggle('active', btn.dataset.filter === 'all');
-});
-
-// faz scroll inteligente para a seção de imóveis depois que os cards reaparecem
-const section = document.getElementById('imoveis');
-
-const el =
-  section?.querySelector('.container > h2') ||
-  section?.querySelector('.container') ||
-  section;
-
-if (el) {
-
-  requestAnimationFrame(() => {
-
-    const y =
-      el.getBoundingClientRect().top +
-      window.pageYOffset -
-      getHeaderOffset();
-
-    window.scrollTo({
-      top: y,
-      behavior: 'auto'
-    });
-
-  });
-
-}
+  const btnTodos = document.querySelector('#filters [data-filter="all"]');
+  if (btnTodos) btnTodos.click();
 });
 
 title.insertAdjacentElement('afterend', exit);
