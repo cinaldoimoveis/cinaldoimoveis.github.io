@@ -3089,21 +3089,23 @@ Ver fotos
     const hash = (type === 'all') ? '' : '#tipo=' + type;
     history.replaceState(null, '', location.pathname + location.search + hash);
 
-    // rolagem idêntica ao botão "Destaques de hoje" (sempre rola, inclusive "Todos")
-    const section = document.getElementById('imoveis');
-    const anchor =
-      section?.querySelector('.container > h2') ||
-      section?.querySelector('.container') ||
-      section;
+    // só rola se NÃO estiver saindo do modo solo
+    if (!document.body.classList.contains('leaving-solo')) {
+      const section = document.getElementById('imoveis');
+      const anchor =
+        section?.querySelector('.container > h2') ||
+        section?.querySelector('.container') ||
+        section;
 
-    if (anchor) {
-      if (typeof smartScrollToWithRetries === 'function') {
-        smartScrollToWithRetries(anchor);
-      } else if (typeof getHeaderOffset === 'function') {
-        const top = window.pageYOffset + anchor.getBoundingClientRect().top - getHeaderOffset(anchor);
-        window.scrollTo({ top, behavior: 'smooth' });
-      } else {
-        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (anchor) {
+        if (typeof smartScrollToWithRetries === 'function') {
+          smartScrollToWithRetries(anchor);
+        } else if (typeof getHeaderOffset === 'function') {
+          const top = window.pageYOffset + anchor.getBoundingClientRect().top - getHeaderOffset(anchor);
+          window.scrollTo({ top, behavior: 'smooth' });
+        } else {
+          anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     }
   });
@@ -4380,7 +4382,8 @@ btnSite.addEventListener('click', () => {
       exit.addEventListener('click', ev => {
   ev.preventDefault();
 
-  document.body.classList.remove('solo');
+ document.body.classList.add('leaving-solo');
+document.body.classList.remove('solo');
 
   if (filtersBar) filtersBar.style.display = '';
 
@@ -4395,6 +4398,8 @@ const btnTodos = document.querySelector('#filters [data-filter="all"]');
 if (btnTodos) btnTodos.click();
 });
 
+      document.body.classList.remove('leaving-solo');
+      
 title.insertAdjacentElement('afterend', exit);
 }
 
