@@ -3072,16 +3072,16 @@ Ver fotos
 
     // Se estiver no modo solo (?solo=1), sai do solo antes de filtrar (mesma ideia do "Destaques de hoje")
     if (document.body.classList.contains('solo')) {
-      document.body.classList.remove('solo');
-      const exit = document.getElementById('exit-solo');
-      if (exit) exit.remove();
-      const filtersBar = document.getElementById('filters');
-      if (filtersBar) filtersBar.style.display = '';
-     document.querySelectorAll('#imoveis .grid .card').forEach(c=> {
-  c.hidden = false;
-  c.style.display = '';
-});
-
+  document.body.classList.remove('solo');
+  const exit = document.getElementById('exit-solo');
+  if (exit) exit.remove();
+  const filtersBar = document.getElementById('filters');
+  if (filtersBar) filtersBar.style.display = '';
+  document.querySelectorAll('#imoveis .grid .card').forEach(c=> {
+    c.hidden = false;
+    c.style.display = '';
+  });
+} 
     // aplica o filtro selecionado
     applyFilter(type);
 
@@ -4396,6 +4396,7 @@ history.replaceState(null, '', location.pathname + '#imoveis');
 // mostra todos os cards diretamente, sem acionar clique no filtro
 document.querySelectorAll('#imoveis .card').forEach(card => {
   card.hidden = false;
+  card.style.display = '';
 });
 
 // marca visualmente o botão "Todos", se existir
