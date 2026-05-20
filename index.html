@@ -4387,10 +4387,12 @@ btnSite.addEventListener('click', () => {
   const me = document.getElementById('exit-solo');
   if (me) me.remove();
 
-  history.replaceState(null, '', location.pathname + '#imoveis');
+  ignoreNextHashScroll = true;
 
-  const btnTodos = document.querySelector('#filters [data-filter="all"]');
-  if (btnTodos) btnTodos.click();
+history.replaceState(null, '', location.pathname + '#imoveis');
+
+const btnTodos = document.querySelector('#filters [data-filter="all"]');
+if (btnTodos) btnTodos.click();
 });
 
 title.insertAdjacentElement('afterend', exit);
