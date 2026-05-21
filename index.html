@@ -3291,40 +3291,38 @@ Ver fotos
     modal.addEventListener('click',(e)=>{ if(e.target.hasAttribute('data-close')) closeModal(); });
     document.addEventListener('keydown',(e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
-    // CLICK em "Ver fotos"
+    // CLICK em "Ver fotos" ou na imagem de capa
     document.addEventListener('click', (e)=>{
       const btn = e.target.closest('.btn-fotos');
-      if(!btn) return;
+      const thumb = e.target.closest('.card .thumb img');
 
-      const prefix     = btn.dataset.galleryPrefix;
-      const count      = parseInt(btn.dataset.galleryCount || '0', 10);
-      const extDefault = btn.dataset.galleryExt || '.jpeg';
-      const extFirst   = btn.dataset.galleryExtFirst || extDefault;
+      if(!btn && !thumb) return;
 
+      const source = btn || thumb.closest('.card').querySelector('.btn-fotos');
+      if(!source) return;
+
+      const prefix     = source.dataset.galleryPrefix;
+      const count      = parseInt(source.dataset.galleryCount || '0', 10);
+      const extDefault = source.dataset.galleryExt || '.jpeg';
+      const extFirst   = source.dataset.galleryExtFirst || extDefault;
       imgs = [];
       grid.innerHTML = '';
-
       for (let i = 1; i <= count; i++) {
         const nn     = String(i).padStart(2,'0');
         const extUse = (i === 1 ? extFirst : extDefault);
         const src    = `assets/${prefix}${nn}${extUse}`;
         const k      = i - 1;
-
         imgs.push(src);
-
         const a = document.createElement('a');
         a.href = src; a.target = '_blank'; a.rel = 'noopener';
-
         const img = document.createElement('img');
         img.loading = 'lazy';
         img.alt = `Foto ${i}`;
         img.src = src;
-
         a.addEventListener('click', (ev)=>{ ev.preventDefault(); openViewer(k); });
         a.appendChild(img);
         grid.appendChild(a);
       }
-
       openModal();
     });
   })();
