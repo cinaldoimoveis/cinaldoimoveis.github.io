@@ -4380,30 +4380,25 @@ btnSite.addEventListener('click', () => {
       exit.href = location.pathname + '#imoveis';
       exit.textContent = '← Ver todos os imóveis';
       exit.addEventListener('click', ev => {
-  ev.preventDefault();
+        ev.preventDefault();
+        document.body.classList.add('leaving-solo');
+        document.body.classList.remove('solo');
+        if (filtersBar) filtersBar.style.display = '';
+        const me = document.getElementById('exit-solo');
+        if (me) me.remove();
+        ignoreNextHashScroll = true;
+        history.replaceState(null, '', location.pathname + '#imoveis');
+        const btnTodos = document.querySelector('#filters [data-filter="all"]');
+        if (btnTodos) btnTodos.click();
+        setTimeout(() => {
+          document.body.classList.remove('leaving-solo');
+        }, 1600);
+      });   // ← fecha o addEventListener aqui
 
- document.body.classList.add('leaving-solo');
-document.body.classList.remove('solo');
+      title.insertAdjacentElement('afterend', exit);
+    }
 
-  if (filtersBar) filtersBar.style.display = '';
-
-  const me = document.getElementById('exit-solo');
-  if (me) me.remove();
-
-  ignoreNextHashScroll = true;
-
-history.replaceState(null, '', location.pathname + '#imoveis');
-
-const btnTodos = document.querySelector('#filters [data-filter="all"]');
-if (btnTodos) btnTodos.click();
-setTimeout(() => {
-  document.body.classList.remove('leaving-solo');
-}, 1600);
-      
-title.insertAdjacentElement('afterend', exit);
-}
-
-setTimeout(()=>{
+    setTimeout(()=>{
 
   // preserva o hash ORIGINAL do imóvel
   history.replaceState(
