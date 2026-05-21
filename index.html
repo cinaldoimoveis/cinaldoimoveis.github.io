@@ -4396,9 +4396,9 @@ history.replaceState(null, '', location.pathname + '#imoveis');
 
 const btnTodos = document.querySelector('#filters [data-filter="all"]');
 if (btnTodos) btnTodos.click();
-});
-
-      document.body.classList.remove('leaving-solo');
+setTimeout(() => {
+  document.body.classList.remove('leaving-solo');
+}, 1600);
       
 title.insertAdjacentElement('afterend', exit);
 }
