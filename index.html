@@ -4382,23 +4382,19 @@ btnSite.addEventListener('click', () => {
       exit.addEventListener('click', ev => {
         ev.preventDefault();
         document.body.classList.add('leaving-solo');
-        document.body.classList.remove('solo');
-        if (filtersBar) filtersBar.style.display = '';
-        const me = document.getElementById('exit-solo');
-        if (me) me.remove();
-        ignoreNextHashScroll = true;
-        history.replaceState(null, '', location.pathname + '#imoveis');
-        const btnTodos = document.querySelector('#filters [data-filter="all"]');
-        if (btnTodos) btnTodos.click();
-        setTimeout(() => {
-          document.body.classList.remove('leaving-solo');
-        }, 1600);
-      });   // ← fecha o addEventListener aqui
-
-      title.insertAdjacentElement('afterend', exit);
-    }
-
-    setTimeout(()=>{
+document.body.classList.remove('solo');
+  if (filtersBar) filtersBar.style.display = '';
+  const me = document.getElementById('exit-solo');
+  if (me) me.remove();
+  ignoreNextHashScroll = true;
+history.replaceState(null, '', location.pathname + '#imoveis');
+const btnTodos = document.querySelector('#filters [data-filter="all"]');
+if (btnTodos) btnTodos.click();
+        document.body.classList.remove('leaving-solo');
+});
+title.insertAdjacentElement('afterend', exit);
+}
+setTimeout(()=>{
 
   // preserva o hash ORIGINAL do imóvel
   history.replaceState(
