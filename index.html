@@ -4344,15 +4344,24 @@ btnSite.addEventListener('click', () => {
     window.scrollTo({ top, behavior });
   }
 
-  function smartScrollToWithRetries(el){
-    scrollToElOnce(el, 'auto');
-    const delays = [60, 250, 700, 1400];
-    delays.forEach(d=> setTimeout(()=> scrollToElOnce(el, 'auto'), d));
-    el.querySelectorAll('img').forEach(img=>{
-      if(img.complete) return;
-      img.addEventListener('load', ()=> scrollToElOnce(el, 'auto'), { once:true });
-    });
-  }
+  let cancelSmartScroll = false;
+
+function smartScrollToWithRetries(el){
+  cancelSmartScroll = false;
+  scrollToElOnce(el, 'auto');
+  const delays = [60, 250, 700, 1400];
+  delays.forEach(d=> setTimeout(()=>{ 
+    if(cancelSmartScroll) return;
+    scrollToElOnce(el, 'auto'); 
+  }, d));
+  el.querySelectorAll('img').forEach(img=>{
+    if(img.complete) return;
+    img.addEventListener('load', ()=>{ 
+      if(cancelSmartScroll) return;
+      scrollToElOnce(el, 'auto'); 
+    }, { once:true });
+  });
+}
 
 
   (function activateSoloMode(){
@@ -4381,8 +4390,9 @@ btnSite.addEventListener('click', () => {
       exit.textContent = '← Ver todos os imóveis';
       exit.addEventListener('click', ev => {
         ev.preventDefault();
+        cancelSmartScroll = true;
         document.body.classList.add('leaving-solo');
-document.body.classList.remove('solo');
+        document.body.classList.remove('solo');
   if (filtersBar) filtersBar.style.display = '';
   const me = document.getElementById('exit-solo');
   if (me) me.remove();
