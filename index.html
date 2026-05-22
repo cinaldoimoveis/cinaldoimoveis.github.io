@@ -4321,7 +4321,7 @@ document.head.appendChild(css);
     shareBtn.setAttribute('title', 'Compartilhar este imóvel');
 
     shareBtn.addEventListener('click', ()=>{
-  const url = `${location.origin}/imoveis/${card.id}.html?v=${Date.now()}`;
+  const url = `${location.origin}/imoveis/${card.id}.html?preview=${Date.now()}`;
   const rawTitle = (card.querySelector('h3')?.textContent || 'Imóvel').trim();
 
   const title = rawTitle;
