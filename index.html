@@ -4352,7 +4352,7 @@ if (bar && !bar.querySelector('.share-cat')) {
     const url = makeUrl(hash);
     const title = f && f !== 'all' ? `Imóveis – ${f}` : 'Imóveis em destaque';
     const text  = 'Veja esta seleção no site Cinaldo Imóveis';
-    shareOrCopy({ title, text, url, button: btnCat });
+    shareOrCopy({ title, url, button: btnCat });
   });
 
   // sincroniza visibilidade do botão E aplica classe para esconder a borda do header
