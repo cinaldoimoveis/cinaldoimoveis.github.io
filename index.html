@@ -4325,9 +4325,9 @@ document.head.appendChild(css);
   const rawTitle = (card.querySelector('h3')?.textContent || 'Imóvel').trim();
 
   const title = rawTitle;
-  const text  = rawTitle;
+  const text  = '';
 
-  shareOrCopy({ title, text, url, button: shareBtn });
+  shareOrCopy({ title, url, button: shareBtn });
 });
 
     actionsRow.appendChild(shareBtn);
