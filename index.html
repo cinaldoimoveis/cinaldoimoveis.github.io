@@ -4321,14 +4321,14 @@ document.head.appendChild(css);
     shareBtn.setAttribute('title', 'Compartilhar este imóvel');
 
     shareBtn.addEventListener('click', ()=>{
-      const url = `${location.origin}/imoveis/${card.id}.html?v=10`;
-      const rawTitle = (card.querySelector('h3')?.textContent || 'Imóvel').trim();
-// para compatibilidade entre apps, envio o mesmo texto em title e text:
-const title = rawTitle;                         // ex.: "Casa no Jardim Laguna 2"
-const text  = rawTitle;                         // idem
-shareOrCopy({ title, text, url, button: shareBtn });
+  const url = `${location.origin}/imoveis/${card.id}.html?v=${Date.now()}`;
+  const rawTitle = (card.querySelector('h3')?.textContent || 'Imóvel').trim();
 
-    });
+  const title = rawTitle;
+  const text  = rawTitle;
+
+  shareOrCopy({ title, text, url, button: shareBtn });
+});
 
     actionsRow.appendChild(shareBtn);
   });
