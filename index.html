@@ -443,21 +443,23 @@
   </main>
 
   <section id="imoveis">
-    <div class="container">
-      <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
+  <div class="container">
+    <h2 class="title" style="font-size:28px">Imóveis em destaque</h2>
+
     <div class="filters" id="filters">
-  <button class="fbtn is-active" data-filter="all">Todos</button>
-  <button class="fbtn" data-filter="casa">Casas</button>
-  <button class="fbtn" data-filter="apartamento">Apartamentos</button>
-  <button class="fbtn" data-filter="lote">Lotes</button>
-  <button class="fbtn" data-filter="area">Áreas</button>
-  <button class="fbtn" data-filter="chacara">Chácaras</button>
-  <button class="fbtn" data-filter="sitio">Sítios</button>
-  <button class="fbtn" data-filter="fazenda">Fazendas</button>
-  <button class="fbtn" data-filter="comercial">Comercial</button>
-  <button class="fbtn" data-filter="lagoas">Lagoas</button>
-  <button class="fbtn" data-filter="vendido">Vendidos</button>
-</div>
+      <button class="fbtn is-active" data-filter="all">Todos</button>
+      <button class="fbtn" data-filter="casa">Casas</button>
+      <button class="fbtn" data-filter="apartamento">Apartamentos</button>
+      <button class="fbtn" data-filter="lote">Lotes</button>
+      <button class="fbtn" data-filter="area">Áreas</button>
+      <button class="fbtn" data-filter="chacara">Chácaras</button>
+      <button class="fbtn" data-filter="sitio">Sítios</button>
+      <button class="fbtn" data-filter="fazenda">Fazendas</button>
+      <button class="fbtn" data-filter="comercial">Comercial</button>
+      <button class="fbtn" data-filter="galpao">Galpões</button>
+      <button class="fbtn" data-filter="lagoas">Lagoas</button>
+      <button class="fbtn" data-filter="vendido">Vendidos</button>
+    </div>
 
 
 <!-- AGORA SIM A GRID (APENAS OS CARDS AQUI) -->
@@ -610,7 +612,7 @@
 <article class="card" id="galpao-tres-barras"
 data-code="CI-GA-3B-1320"
 data-type="comercial"
-data-tags="galpao tres barras linhares comercial industrial aeroporto br101 investimento"
+data-tags="comercial galpao industrial tres barras linhares aeroporto br101 investimento"
 data-geo="galpao-tres-barras">
 
 <div class="thumb">
@@ -3503,6 +3505,22 @@ Ver fotos
     }
   });
 
+   // Esconde filtros que não possuem imóveis ativos
+bar.querySelectorAll('.fbtn').forEach(btn => {
+  const filter = (btn.dataset.filter || '').toLowerCase();
+
+  // "Todos" e "Vendidos" permanecem sempre visíveis
+  if (filter === 'all' || filter === 'vendido') return;
+
+  const hasActiveProperty = Array.from(cards).some(card => {
+    const isSold = card.classList.contains('sold');
+    const tags = getTags(card);
+
+    return !isSold && tags.includes(filter);
+  });
+
+  btn.style.display = hasActiveProperty ? '' : 'none';
+});
 
   const m = location.hash.match(/tipo=([\w-]+)/i);
   const startType = m ? m[1].toLowerCase() : 'all';
