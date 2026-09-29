@@ -3634,6 +3634,14 @@ bar.querySelectorAll('.fbtn').forEach(btn => {
     // Por enquanto apenas guarda o ID do vídeo
     btnVideo.dataset.videoId = videoId;
 
+    btnVideo.addEventListener('click', () => {
+    window.open(
+        `https://www.youtube.com/watch?v=${videoId}`,
+        '_blank',
+        'noopener'
+    );
+});
+
     // Coloca o botão depois de "Ver fotos"
     const btnFotos = actionsRow.querySelector('.btn-fotos');
 
@@ -4256,10 +4264,29 @@ bar.querySelectorAll('.fbtn').forEach(btn => {
   /* Os dois botões de baixo preenchem suas colunas
      (alinhando as bordas esquerda/direita com a linha acima) */
   #imoveis .card .content p:last-of-type .btn-fotos,
-  #imoveis .card .content p:last-of-type .btn.btn-whats{
+#imoveis .card .content p:last-of-type .btn-video,
+#imoveis .card .content p:last-of-type .btn.btn-whats{
     width: 100%;
     text-align: center;
-  }
+}
+
+    /* Botão de vídeo */
+#imoveis .card .content p:last-of-type .btn-video{
+    display: inline-block;
+    padding: .60rem .9rem;
+    border: 1px solid #111;
+    border-radius: .5rem;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Quando existir vídeo, Agendar visita ocupa a linha inteira */
+#imoveis .card[data-video] .content p:last-of-type .btn-whats{
+    grid-column: 1 / -1;
+}
 
   /* Opcional: se existir um terceiro botão (ex.: share) nessa linha,
      ele cai sozinho na próxima linha ocupando só 1 coluna */
