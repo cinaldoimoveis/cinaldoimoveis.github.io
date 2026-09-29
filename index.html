@@ -763,7 +763,8 @@
 data-code="CI-GA-3B-1320"
 data-type="comercial"
 data-tags="comercial galpao industrial tres barras linhares aeroporto br101 investimento"
-data-geo="galpao-tres-barras">
+data-geo="galpao-tres-barras"
+data-video="KSa42RPepao">
 
 <div class="thumb">
 <img src="assets/galpao-tres-barras/galpao-tres-barras-01.jpeg" alt="Galpão comercial com 1.320m² à venda no bairro Três Barras em Linhares ES" loading="lazy">
@@ -3609,7 +3610,43 @@ bar.querySelectorAll('.fbtn').forEach(btn => {
   }
 })();
 </script>
- 
+
+    <!-- Botão "Ver vídeo" automático para imóveis com data-video -->
+<script>
+(function(){
+
+  document.querySelectorAll('article.card[data-video]').forEach(card => {
+
+    const videoId = (card.getAttribute('data-video') || '').trim();
+    if (!videoId) return;
+
+    const actionsRow = card.querySelector('.content p:last-of-type');
+    if (!actionsRow) return;
+
+    // Evita criar o botão mais de uma vez
+    if (actionsRow.querySelector('.btn-video')) return;
+
+    const btnVideo = document.createElement('button');
+    btnVideo.type = 'button';
+    btnVideo.className = 'btn-video';
+    btnVideo.textContent = '▶️ Ver vídeo';
+
+    // Por enquanto apenas guarda o ID do vídeo
+    btnVideo.dataset.videoId = videoId;
+
+    // Coloca o botão depois de "Ver fotos"
+    const btnFotos = actionsRow.querySelector('.btn-fotos');
+
+    if (btnFotos) {
+      btnFotos.insertAdjacentElement('afterend', btnVideo);
+    } else {
+      actionsRow.appendChild(btnVideo);
+    }
+
+  });
+
+})();
+</script>
 
   <!-- Galeria: grade empilhada + visor com zoom (mobile e desktop) -->
   <script>
